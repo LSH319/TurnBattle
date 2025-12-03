@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+#include "Blueprint/UserWidget.h"
+#include "LshPF_PrimaryLayout.generated.h"
+
+class ULshPF_WidgetSwitcher;
+/**
+ * 
+ */
+UCLASS()
+class LSHPF_API ULshPF_PrimaryLayout : public UUserWidget
+{
+	GENERATED_BODY()
+
+public:
+	ULshPF_WidgetSwitcher* FindWidgetSwitcherByTag(const FGameplayTag InTag);
+	
+protected:
+	UFUNCTION(BlueprintCallable)
+	void RegisterWidgetSwitcher(UPARAM(meta = (Categories = "LshPF.WidgetStack")) FGameplayTag InTag, ULshPF_WidgetSwitcher* InSwitcher);
+	
+private:
+	UPROPERTY()
+	TMap<FGameplayTag, ULshPF_WidgetSwitcher*> RegisterWidgetSwitcherMap;
+};
