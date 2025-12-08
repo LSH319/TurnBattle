@@ -40,7 +40,7 @@ void ULshPF_PushSoftWidget::Activate()
 		PushedWidget->SetOwningPlayer(CachedOwningPC.Get());
 		if (bCachedFocusOnNewlyPushedWidget)
 		{
-			if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusWidget())
+			if (UWidget* WidgetToFocus = PushedWidget->GetFocusWidget())
 			{
 				WidgetToFocus->SetFocus();
 			}

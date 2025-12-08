@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "LshPF_FocusableWidgetBase.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
 /**
  * 
  */
@@ -13,11 +14,15 @@ UCLASS()
 class LSHPF_API ULshPF_FocusableWidgetBase : public UUserWidget
 {
 	GENERATED_BODY()
-
+	
 public:
 	UFUNCTION(BlueprintCallable)
-	UWidget* GetDesiredFocusWidget();
+	UWidget* GetFocusWidget();
+
+	UFUNCTION(BlueprintCallable)
+	bool RemoveFromParentStack();
 	
+	FOnWidgetDestroyed OnWidgetDestroyed;
 protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
@@ -36,4 +41,6 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Get Desired Focus Widget"))
 	UWidget* BP_GetDesiredFocusWidget();
+
+	void BeforeDestroyedEvent();
 };

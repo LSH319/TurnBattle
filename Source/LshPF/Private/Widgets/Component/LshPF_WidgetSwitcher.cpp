@@ -22,7 +22,16 @@ ULshPF_FocusableWidgetBase* ULshPF_WidgetSwitcher::NativeAddWidgetToStack(TSoftC
 		ULshPF_FocusableWidgetBase* CreatedWidget = CreateWidget<ULshPF_FocusableWidgetBase>(GetOwningPlayer(), InSoftWidgetClass.Get());
 		AddChild(CreatedWidget);
 		SetActiveWidgetIndex(GetChildrenCount() - 1);
-		
+		CreatedWidget->OnWidgetDestroyed.BindUObject(this, &ThisClass::ChildWidgetDestroyed);
+				
 		return CreatedWidget;
+	}
+}
+
+void ULshPF_WidgetSwitcher::ChildWidgetDestroyed(int32 ChildIndex)
+{
+	if (GetActiveWidgetIndex() == ChildIndex)
+	{
+		SetActiveWidgetIndex(ChildIndex - 1);
 	}
 }

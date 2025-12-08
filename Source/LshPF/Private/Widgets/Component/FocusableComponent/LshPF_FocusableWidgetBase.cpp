@@ -3,9 +3,20 @@
 
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
-UWidget* ULshPF_FocusableWidgetBase::GetDesiredFocusWidget()
+#include "Components/PanelWidget.h"
+#include "Subsystems/LshPF_UISubsystem.h"
+
+
+UWidget* ULshPF_FocusableWidgetBase::GetFocusWidget()
 {
 	return NativeGetDesiredFocusWidget();
+}
+
+bool ULshPF_FocusableWidgetBase::RemoveFromParentStack()
+{
+	BeforeDestroyedEvent();
+	
+	return GetParent()->RemoveChild(this);
 }
 
 UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusWidget()
@@ -21,9 +32,26 @@ UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusWidget()
 	return FocusWidget;
 }
 
+void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
+{
+	int32 Index = GetParent()->GetChildIndex(this);
+	
+	if (OnWidgetDestroyed.IsBound())
+	{
+		OnWidgetDestroyed.Execute(Index);
+	}
+
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		if (HasFocusedDescendants() && UISubsystem->FindNewFocusWidget.IsBound())
+		{
+			UISubsystem->FindNewFocusWidget.Execute();
+		}
+	}
+}
+
 void ULshPF_FocusableWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
-
 	SetIsFocusable(true);
 }

@@ -20,10 +20,21 @@ public:
 	ULshPF_WidgetSwitcher* FindWidgetSwitcherByTag(const FGameplayTag InTag);
 	
 protected:
+	//~ Begin UUserWidget Interface
+    virtual void NativeConstruct() override;
+    //~ Begin UUserWidget Interface
+	
 	UFUNCTION(BlueprintCallable)
 	void RegisterWidgetSwitcher(UPARAM(meta = (Categories = "LshPF.WidgetStack")) FGameplayTag InTag, ULshPF_WidgetSwitcher* InSwitcher);
+
 	
 private:
+	UFUNCTION()
+	void SetFocusToPriorityWidget();
+	
 	UPROPERTY()
 	TMap<FGameplayTag, ULshPF_WidgetSwitcher*> RegisterWidgetSwitcherMap;
+
+	UPROPERTY()
+	TArray<FGameplayTag> TagPriorityArray;
 };

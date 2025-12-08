@@ -42,7 +42,7 @@ void ULshPF_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidget
 
 				ULshPF_WidgetSwitcher* FoundWidgetStack = CreatedPrimaryLayout->FindWidgetSwitcherByTag(InWidgetStackTag);
 				ULshPF_FocusableWidgetBase* CreatedWidget = FoundWidgetStack->AddWidgetToStack(SoftLoadedWidgetClass);
-
+				
 				AsyncPushStateCallback(CreatedWidget);
 			}
 		)

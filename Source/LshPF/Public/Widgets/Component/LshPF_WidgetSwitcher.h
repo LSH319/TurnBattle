@@ -24,4 +24,8 @@ protected:
 	
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Add Widget To Stack"))
 	ULshPF_FocusableWidgetBase* BP_AddWidgetToStack(TSoftClassPtr<ULshPF_FocusableWidgetBase>& InSoftWidgetClass);
+
+private:
+	UFUNCTION()
+	void ChildWidgetDestroyed(int32 ChildIndex);
 };
