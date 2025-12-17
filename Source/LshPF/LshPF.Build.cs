@@ -16,7 +16,9 @@ public class LshPF : ModuleRules
 			"InputCore", 
 			"EnhancedInput",
 			"UMG",
-			"GameplayTags"
+			"GameplayTags",
+			"Slate", 
+			"SlateCore"
 		});
 	}
 }
