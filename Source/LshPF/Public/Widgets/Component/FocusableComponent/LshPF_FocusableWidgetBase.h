@@ -17,7 +17,7 @@ class LSHPF_API ULshPF_FocusableWidgetBase : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	UWidget* GetFocusWidget();
+	UWidget* GetDesiredFocusTarget();
 
 	UFUNCTION(BlueprintCallable)
 	bool RemoveFromParentStack();
@@ -30,17 +30,17 @@ protected:
 	
 	/** 
 	 * Desired Focus Widget 반환.
-	 * BP_GetDesiredFocusWidget 함수가 구현되었을 경우 우선적용.
+	 * BP_GetDesiredFocusTarget 함수가 구현되었을 경우 우선적용.
 	 *
 	 */
-	virtual UWidget* NativeGetDesiredFocusWidget();
+	virtual UWidget* NativeGetDesiredFocusTarget();
 
 	/** 
-	 * 반환되는 Desired Focus Widget 을 이벤트그래프에서 수정하기 위한 함수.
+	 * 반환되는 Desired Focus Target 을 이벤트그래프에서 수정하기 위한 함수.
 	 *
 	 */
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Get Desired Focus Widget"))
-	UWidget* BP_GetDesiredFocusWidget();
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Get Desired Focus Target"))
+	UWidget* BP_GetDesiredFocusTarget();
 
 	void BeforeDestroyedEvent();
 };

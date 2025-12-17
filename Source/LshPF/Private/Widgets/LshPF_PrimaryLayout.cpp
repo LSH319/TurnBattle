@@ -48,7 +48,7 @@ void ULshPF_PrimaryLayout::SetFocusToPriorityWidget()
 			{
 				if (LshPF_FocusableWidgetBase->IsFocusable())
 				{
-					if (UWidget* WidgetToFocus = LshPF_FocusableWidgetBase->GetFocusWidget())
+					if (UWidget* WidgetToFocus = LshPF_FocusableWidgetBase->GetDesiredFocusTarget())
 					{
 						WidgetToFocus->SetFocus();
 						break;

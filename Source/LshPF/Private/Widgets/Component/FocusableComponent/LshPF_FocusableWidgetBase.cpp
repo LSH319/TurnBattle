@@ -7,9 +7,9 @@
 #include "Subsystems/LshPF_UISubsystem.h"
 
 
-UWidget* ULshPF_FocusableWidgetBase::GetFocusWidget()
+UWidget* ULshPF_FocusableWidgetBase::GetDesiredFocusTarget()
 {
-	return NativeGetDesiredFocusWidget();
+	return NativeGetDesiredFocusTarget();
 }
 
 bool ULshPF_FocusableWidgetBase::RemoveFromParentStack()
@@ -19,9 +19,9 @@ bool ULshPF_FocusableWidgetBase::RemoveFromParentStack()
 	return GetParent()->RemoveChild(this);
 }
 
-UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusWidget()
+UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
 {
-	UWidget* FocusWidget = BP_GetDesiredFocusWidget();
+	UWidget* FocusWidget = BP_GetDesiredFocusTarget();
 
 	//BP_GetDesiredFocusWidget 우선적용
 	if (!FocusWidget)
