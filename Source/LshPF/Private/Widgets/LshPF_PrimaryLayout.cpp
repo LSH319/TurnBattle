@@ -50,6 +50,7 @@ void ULshPF_PrimaryLayout::SetFocusToPriorityWidget()
 				{
 					if (UWidget* WidgetToFocus = LshPF_FocusableWidgetBase->GetDesiredFocusTarget())
 					{
+						UE_LOG(LogTemp, Warning, TEXT("포커스 재 탐색"));
 						WidgetToFocus->SetFocus();
 						break;
 					}

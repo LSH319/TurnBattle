@@ -17,7 +17,7 @@ void ALshPF_PlayerControllerBase::SetFocusedButton(UButton* FocusedButton)
 void ALshPF_PlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
+	
 	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
@@ -34,9 +34,12 @@ void ALshPF_PlayerControllerBase::SetupInputComponent()
 
 void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
 {
-	if (FocusedButtonWidget.IsValid())
+	/*if (FocusedButtonWidget.IsValid())
 	{
 		FocusedButtonWidget.Get()->SetFocus();
 		FocusedButtonWidget.Get()->OnClicked.Broadcast();
-	}
+	}*/
+	
+	TSharedPtr<SWidget> FocusedWidget = FSlateApplication::Get().GetUserFocusedWidget(GetPlatformUserId());
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FocusedWidget->GetTypeAsString());
 }

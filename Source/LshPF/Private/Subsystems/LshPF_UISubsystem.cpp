@@ -47,4 +47,4 @@ void ULshPF_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidget
 			}
 		)
 	);
-}
+} 

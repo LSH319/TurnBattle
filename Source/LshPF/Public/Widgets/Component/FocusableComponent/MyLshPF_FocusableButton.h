@@ -19,7 +19,7 @@ public:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
 	virtual void NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent) override;
-	//~ Begin UUserWidget Interface
+	//~ End UUserWidget Interface
 
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText& Text);

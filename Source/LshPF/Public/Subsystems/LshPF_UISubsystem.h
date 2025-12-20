@@ -11,6 +11,8 @@ DECLARE_DELEGATE(FFindNewFocusWidget)
 
 class ULshPF_FocusableWidgetBase;
 class ULshPF_PrimaryLayout;
+
+
 /**
  * 
  */
@@ -26,8 +28,9 @@ public:
 	void RegisterCreatedPrimaryLayoutWidget(ULshPF_PrimaryLayout* InCreatedWidget);
 
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<ULshPF_FocusableWidgetBase> InSoftWidgetClass, TFunction<void(ULshPF_FocusableWidgetBase*)> AsyncPushStateCallback);
-
+	
 	FFindNewFocusWidget FindNewFocusWidget;
+	
 private:
 	UPROPERTY()
 	ULshPF_PrimaryLayout* CreatedPrimaryLayout;
