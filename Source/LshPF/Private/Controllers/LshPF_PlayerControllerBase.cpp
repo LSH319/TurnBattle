@@ -63,10 +63,13 @@ void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback()
 	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetPlatformUserId());
 	FString Device = HardwareDeviceIdentifier.PrimaryDeviceType == EHardwareDevicePrimaryType::KeyboardAndMouse ? "KeyboardAndMouse" : "Gamepad";
 	UE_LOG(LogTemp, Warning, TEXT("Clicked by %s"), *Device);
-	//1 -> 키보드 2-> 패드
-	/*
-	 * 버튼으로 입력 컨슘 > 버튼에서 직접 디바이스 전송
-	 * 아닐경우 PC 에서 아무키 바인딩한 IA 를 통해 디바이스 전송
-	 * SButton 쪽에서 Virtual Accept 로 키를 Handle 해버림.이 방식이 아니면  Sbutton을 커스텀해서 사용필요
-	 */
+	
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		if (ULshPF_FocusableWidgetBase* FocusTarget = Cast<ULshPF_FocusableWidgetBase>(UISubsystem->GetFocusTargetWidget()))
+		{
+			FocusTarget->SetFocus();
+		}
+	}
+	
 }
