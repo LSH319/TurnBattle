@@ -7,6 +7,7 @@
 #include "LshPF_FocusableWidgetBase.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
+
 /**
  * 
  */
@@ -30,6 +31,10 @@ public:
 	//~ End ULshPF_FocusableWidgetBase Interface
 	
 	FOnWidgetDestroyed OnWidgetDestroyed;
+
+	DECLARE_MULTICAST_DELEGATE_OneParam(FOnFocusWidgetChanged, ULshPF_FocusableWidgetBase*)
+	FOnFocusWidgetChanged OnFocusWidgetChanged;
+	
 protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
@@ -49,5 +54,15 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Get Desired Focus Target"))
 	UWidget* BP_GetDesiredFocusTarget();
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Bind Child Widget Get Focus"))
+	void BP_BindChildWidgetGetFocus(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
+	
 	void BeforeDestroyedEvent();
+
+	UPROPERTY(BlueprintReadOnly)
+	ULshPF_FocusableWidgetBase* DesiredFocusTarget;
+
+private:
+	UFUNCTION()
+	void SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
 };

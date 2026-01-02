@@ -36,10 +36,24 @@ UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
 	//BP_GetDesiredFocusWidget 우선적용
 	if (!FocusWidget)
 	{
+		if (DesiredFocusTarget)
+		{
+			return DesiredFocusTarget;
+		}
 		return GetDesiredFocusWidget();
 	}
 
 	return FocusWidget;
+}
+
+void ULshPF_FocusableWidgetBase::BP_BindChildWidgetGetFocus(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
+{
+	InFocusTargetWidget->OnFocusWidgetChanged.AddUObject(this, &ThisClass::SetDesiredFocusTarget);
+
+	if (!DesiredFocusTarget && InFocusTargetWidget)
+	{
+		DesiredFocusTarget = InFocusTargetWidget;
+	}
 }
 
 void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
@@ -57,6 +71,14 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 		{
 			UISubsystem->FindNewFocusWidget.Execute();
 		}
+	}
+}
+
+void ULshPF_FocusableWidgetBase::SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
+{
+	if (InFocusTargetWidget)
+	{
+		DesiredFocusTarget = InFocusTargetWidget;
 	}
 }
 

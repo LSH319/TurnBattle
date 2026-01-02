@@ -6,19 +6,16 @@
 #include "Components/TextBlock.h"
 #include "Widgets/Component/LshPF_Button.h"
 
-
-void UMyLshPF_FocusableButton::NativeConstruct()
+void UMyLshPF_FocusableButton::NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent)
 {
-	Super::NativeConstruct();
+	Super::NativeOnAddedToFocusPath(InFocusEvent);
 
-	if (ButtonWidget)
-	{
-		ButtonWidget->OnClicked.AddDynamic(this, &ThisClass::UMyLshPF_FocusableButton::WidgetConfirmAction);
-	}
+	OnFocusWidgetChanged.Broadcast(this);
 }
 
 void UMyLshPF_FocusableButton::WidgetConfirmAction()
 {
+	ButtonWidget->OnClicked.Broadcast();
 	UE_LOG(LogTemp, Warning, TEXT("%s::WidgetConfirmAction"), *GetName());
 }
 

@@ -19,8 +19,7 @@ class LSHPF_API ALshPF_PlayerControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
-	void InputDeviceCheckAction_Callback();
-	
+
 protected:
 	virtual void SetupInputComponent() override;
 	
@@ -42,4 +41,5 @@ private:
 	
 	void DefaultConfirmAction_Callback();
 	void DefaultBackAction_Callback();
+	void InputDeviceCheckAction_Callback();
 };

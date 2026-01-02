@@ -1,5 +1,7 @@
 ﻿#include "Widgets/SlateWidgets/LshPF_SButton.h"
 
+#include "GameFramework/InputDeviceSubsystem.h"
+
 void LshPF_SButton::Construct(const FArguments& InArgs)
 {
 	SButton::Construct(InArgs._InnerButton);
@@ -18,6 +20,26 @@ void LshPF_SButton::Construct(const FArguments& InArgs)
 
 FReply LshPF_SButton::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
 {
+	EUINavigation UINavigationAction = FSlateApplication::Get().GetNavigationDirectionFromKey(InKeyEvent);
+	if (UINavigationAction == EUINavigation::Left ||
+		UINavigationAction == EUINavigation::Right ||
+		UINavigationAction == EUINavigation::Up ||
+		UINavigationAction == EUINavigation::Down)
+	{
+		UWorld* World = nullptr;
+		if (GEngine && GEngine->GameViewport)
+		{
+			World = GEngine->GameViewport->GetWorld();
+		}
+		if (World)
+		{
+			APlayerController* PC = World->GetFirstPlayerController();
+			FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(PC->GetPlatformUserId());
+	        FString Device = HardwareDeviceIdentifier.PrimaryDeviceType == EHardwareDevicePrimaryType::KeyboardAndMouse ? "KeyboardAndMouse" : "Gamepad";
+	        UE_LOG(LogTemp, Warning, TEXT("Clicked by %s"), *Device);
+		}
+	}
+	
 	return FReply::Unhandled();
 	// FSlateApplication::Get().GetNavigationActionFromKey(InKeyEvent) == EUINavigationAction::Accept 조건식 수정
 	/*FReply Reply = FReply::Unhandled();

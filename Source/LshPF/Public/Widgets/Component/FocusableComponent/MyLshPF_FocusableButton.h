@@ -17,7 +17,7 @@ class LSHPF_API UMyLshPF_FocusableButton : public ULshPF_FocusableWidgetBase
 	GENERATED_BODY()
 public:
 	//~ Begin UUserWidget Interface
-	virtual void NativeConstruct() override;
+	virtual void NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent) override;
 	//~ End UUserWidget Interface
 
 	//~ Begin ULshPF_FocusableWidgetBase Interface
