@@ -18,6 +18,7 @@ class LSHPF_API ULshPF_PrimaryLayout : public UUserWidget
 
 public:
 	ULshPF_WidgetSwitcher* FindWidgetSwitcherByTag(const FGameplayTag InTag);
+	UWidget* GetFocusTargetInFocusWidgetSwitcher();
 	
 protected:
 	//~ Begin UUserWidget Interface
@@ -29,6 +30,9 @@ protected:
 
 	
 private:
+	ULshPF_WidgetSwitcher* FindFocusWidgetSwitcher();
+	UWidget* GetFocusTargetInWidgetSwitcher(ULshPF_WidgetSwitcher* InWidgetSwitcher);
+	
 	UFUNCTION()
 	void SetFocusToPriorityWidget();
 	

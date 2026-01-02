@@ -21,12 +21,19 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool RemoveFromParentStack();
+
+	//~ Begin ULshPF_FocusableWidgetBase Interface
+	UFUNCTION(BlueprintCallable)
+	virtual void WidgetConfirmAction();
+	UFUNCTION(BlueprintCallable)
+	virtual void WidgetBackAction();
+	//~ End ULshPF_FocusableWidgetBase Interface
 	
 	FOnWidgetDestroyed OnWidgetDestroyed;
 protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
-	//~ Begin UUserWidget Interface
+	//~ End UUserWidget Interface
 	
 	/** 
 	 * Desired Focus Widget 반환.

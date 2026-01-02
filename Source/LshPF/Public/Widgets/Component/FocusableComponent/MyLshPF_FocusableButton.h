@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
+#include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h" 
 #include "MyLshPF_FocusableButton.generated.h"
 
 class UTextBlock;
@@ -18,9 +18,13 @@ class LSHPF_API UMyLshPF_FocusableButton : public ULshPF_FocusableWidgetBase
 public:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
-	virtual void NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent) override;
 	//~ End UUserWidget Interface
 
+	//~ Begin ULshPF_FocusableWidgetBase Interface
+	virtual void WidgetConfirmAction() override;
+	virtual void WidgetBackAction() override;
+	//~ End ULshPF_FocusableWidgetBase Interface
+	
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText& Text);
 	
@@ -32,7 +36,4 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ButtonText;
     //***** Bound Widgets ***** //
-
-	UFUNCTION()
-	void OnButtonClicked();
 };

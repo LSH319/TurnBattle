@@ -15,5 +15,7 @@ class LSHPF_API ULshPF_Button : public UButton
 	GENERATED_BODY()
 
 protected:
+	//~ Begin UWidget Interface
 	virtual TSharedRef<SWidget> RebuildWidget() override;
+	//~ End UWidget Interface
 };

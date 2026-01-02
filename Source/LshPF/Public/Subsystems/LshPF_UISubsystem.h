@@ -7,6 +7,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LshPF_UISubsystem.generated.h"
 
+class UWidget;
 DECLARE_DELEGATE(FFindNewFocusWidget)
 
 class ULshPF_FocusableWidgetBase;
@@ -28,6 +29,7 @@ public:
 	void RegisterCreatedPrimaryLayoutWidget(ULshPF_PrimaryLayout* InCreatedWidget);
 
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<ULshPF_FocusableWidgetBase> InSoftWidgetClass, TFunction<void(ULshPF_FocusableWidgetBase*)> AsyncPushStateCallback);
+	UWidget* GetFocusTargetWidget();
 	
 	FFindNewFocusWidget FindNewFocusWidget;
 	

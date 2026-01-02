@@ -19,19 +19,27 @@ class LSHPF_API ALshPF_PlayerControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
-	void SetFocusedButton(UButton* FocusedButton);
+	void InputDeviceCheckAction_Callback();
 	
 protected:
 	virtual void SetupInputComponent() override;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UInputMappingContext> InputDeviceCheckMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UInputAction> InputDeviceCheckAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UInputMappingContext> DefaultMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UInputAction> DefaultConfirmAction;
 
-	TWeakObjectPtr<UButton> FocusedButtonWidget;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UInputAction> DefaultBackAction;
 	
 	void DefaultConfirmAction_Callback();
+	void DefaultBackAction_Callback();
 };
