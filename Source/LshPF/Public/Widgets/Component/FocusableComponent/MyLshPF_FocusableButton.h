@@ -7,7 +7,7 @@
 #include "MyLshPF_FocusableButton.generated.h"
 
 class UTextBlock;
-class UButton;
+class ULshPF_Button;
 /**
  * 
  */
@@ -27,7 +27,7 @@ public:
 private:
 	//***** Bound Widgets ***** //
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess))
-    UButton* ButtonWidget;
+    ULshPF_Button* ButtonWidget;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ButtonText;

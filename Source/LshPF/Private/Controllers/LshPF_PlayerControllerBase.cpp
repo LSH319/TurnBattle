@@ -34,12 +34,9 @@ void ALshPF_PlayerControllerBase::SetupInputComponent()
 
 void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
 {
-	/*if (FocusedButtonWidget.IsValid())
+	if (FocusedButtonWidget.IsValid())
 	{
 		FocusedButtonWidget.Get()->SetFocus();
 		FocusedButtonWidget.Get()->OnClicked.Broadcast();
-	}*/
-	
-	TSharedPtr<SWidget> FocusedWidget = FSlateApplication::Get().GetUserFocusedWidget(GetPlatformUserId());
-	UE_LOG(LogTemp, Log, TEXT("%s"), *FocusedWidget->GetTypeAsString());
+	}
 }

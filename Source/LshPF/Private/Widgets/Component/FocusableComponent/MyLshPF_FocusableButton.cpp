@@ -3,10 +3,10 @@
 
 #include "Widgets/Component/FocusableComponent/MyLshPF_FocusableButton.h"
 
-#include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "GameFramework/InputDeviceSubsystem.h"
+#include "Widgets/Component/LshPF_Button.h"
 
 
 void UMyLshPF_FocusableButton::NativeConstruct()
@@ -25,7 +25,6 @@ void UMyLshPF_FocusableButton::NativeOnAddedToFocusPath(const FFocusEvent& InFoc
 	
 	ALshPF_PlayerControllerBase* LshPF_PlayerController = Cast<ALshPF_PlayerControllerBase>(ButtonText->GetOwningPlayer());
 	LshPF_PlayerController->SetFocusedButton(ButtonWidget);
-	UE_LOG(LogTemp, Warning, TEXT("NativeOnAddedToFocusPath : %s"), *ButtonText->GetText().ToString());
 }
 
 void UMyLshPF_FocusableButton::SetButtonText(FText& Text)
@@ -35,11 +34,10 @@ void UMyLshPF_FocusableButton::SetButtonText(FText& Text)
 
 void UMyLshPF_FocusableButton::OnButtonClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s Button Clicked"), *ButtonText->GetText().ToString());
 	
 	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetOwningPlayer()->GetPlatformUserId());
 	
-	UE_LOG(LogTemp, Warning, TEXT("Clicked by %d"), HardwareDeviceIdentifier.PrimaryDeviceType);
+	//UE_LOG(LogTemp, Warning, TEXT("Clicked by %d"), HardwareDeviceIdentifier.PrimaryDeviceType);
 	//1 -> 키보드 2-> 패드
 	/*
 	 * 버튼으로 입력 컨슘 > 버튼에서 직접 디바이스 전송
