@@ -35,7 +35,7 @@ void ULshPF_PushConfirmScreen::Activate()
 		CachedScreenType,
 		CachedScreenTitle,
 		CachedScreenMessage,
-		[this](EConfirmScreenButtonType ClickedButtonType)
+		[this](EButtonType ClickedButtonType)
 		{
 			OnButtonClicked.Broadcast(ClickedButtonType);
 			SetReadyToDestroy();

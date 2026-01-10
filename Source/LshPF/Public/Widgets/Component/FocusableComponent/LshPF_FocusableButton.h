@@ -26,7 +26,7 @@ public:
 	//~ End ULshPF_FocusableWidgetBase Interface
 	
 	UFUNCTION(BlueprintCallable)
-	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText& Text);
+	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText Text);
 	
 private:
 	//***** Bound Widgets ***** //

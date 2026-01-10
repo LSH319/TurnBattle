@@ -8,7 +8,7 @@
 #include "LshPF_PushConfirmScreen.generated.h"
 
 class ULshPF_ConfirmScreen;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnConfirmScreenButtonClickedDelegate, EConfirmScreenButtonType,
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnConfirmScreenButtonClickedDelegate, EButtonType,
                                             ClickedButtonType);
 
 /**

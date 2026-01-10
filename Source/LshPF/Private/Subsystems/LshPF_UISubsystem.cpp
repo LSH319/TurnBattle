@@ -53,7 +53,7 @@ void ULshPF_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidget
 
 void ULshPF_UISubsystem::PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> InConfirmScreenClass,
 	EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg,
-	TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
+	TFunction<void(EButtonType)> ButtonClickedCallback)
 {
 	PushSoftWidgetToStackAsync(
 		LshPF_GameplayTags::LshPF_WidgetStack_Test2,//todo : Test용 태그, 변경 필요
@@ -63,6 +63,7 @@ void ULshPF_UISubsystem::PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> I
 			if (ULshPF_ConfirmScreen* ConfirmScreen = dynamic_cast<ULshPF_ConfirmScreen*>(PushedWidget))
 			{
 				ConfirmScreen->InitConfirmScreen(InScreenType, InScreenTitle, InScreenMsg, ButtonClickedCallback);
+				ConfirmScreen->SetFocus();
 			}
 		}
 	);

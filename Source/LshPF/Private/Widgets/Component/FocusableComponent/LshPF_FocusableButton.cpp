@@ -24,7 +24,7 @@ void ULshPF_FocusableButton::WidgetBackAction()
 	UE_LOG(LogTemp, Warning, TEXT("%s::WidgetBackAction"), *GetName());
 }
 
-void ULshPF_FocusableButton::SetButtonText(FText& Text)
+void ULshPF_FocusableButton::SetButtonText(FText Text)
 {
 	ButtonText->SetText(Text);
 }

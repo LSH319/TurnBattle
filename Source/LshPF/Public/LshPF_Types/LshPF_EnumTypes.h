@@ -9,7 +9,7 @@ enum class EConfirmScreenType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EConfirmScreenButtonType : uint8
+enum class EButtonType : uint8
 {
 	OkOrYes,
 	No,

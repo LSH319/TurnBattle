@@ -18,9 +18,22 @@ class LSHPF_API ULshPF_ConfirmScreen : public ULshPF_FocusableWidgetBase
 	GENERATED_BODY()
 
 public:
-	void InitConfirmScreen(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback);
+	void InitConfirmScreen(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EButtonType)> ButtonClickedCallback);
+
+	//~ Begin ULshPF_FocusableWidgetBase Interface
+	virtual void WidgetConfirmAction() override;
+	virtual void WidgetBackAction() override;
+	//~ End ULshPF_FocusableWidgetBase Interface
 	
 private:
+	UFUNCTION()
+	void ButtonClickedCallback_Yes();
+
+	UFUNCTION()
+	void ButtonClickedCallback_No();
+	
+	TFunction<void(EButtonType)> CachedCallbackFunction;
+	
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextBlock_Title;
 
