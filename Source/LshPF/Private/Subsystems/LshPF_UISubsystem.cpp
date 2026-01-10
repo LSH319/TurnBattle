@@ -3,9 +3,11 @@
 
 #include "Subsystems/LshPF_UISubsystem.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Engine/AssetManager.h"
 #include "Widgets/LshPF_PrimaryLayout.h"
 #include "Widgets/Component/LshPF_WidgetSwitcher.h"
+#include "Widgets/Component/FocusableComponent/LshPF_ConfirmScreen.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
 ULshPF_UISubsystem* ULshPF_UISubsystem::Get(const UObject* WorldContextObject)
@@ -46,6 +48,23 @@ void ULshPF_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidget
 				AsyncPushStateCallback(CreatedWidget);
 			}
 		)
+	);
+}
+
+void ULshPF_UISubsystem::PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> InConfirmScreenClass,
+	EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg,
+	TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
+{
+	PushSoftWidgetToStackAsync(
+		LshPF_GameplayTags::LshPF_WidgetStack_Test2,//todo : Test용 태그, 변경 필요
+		InConfirmScreenClass,
+		[InScreenType, InScreenTitle, InScreenMsg, ButtonClickedCallback](ULshPF_FocusableWidgetBase* PushedWidget)
+		{
+			if (ULshPF_ConfirmScreen* ConfirmScreen = dynamic_cast<ULshPF_ConfirmScreen*>(PushedWidget))
+			{
+				ConfirmScreen->InitConfirmScreen(InScreenType, InScreenTitle, InScreenMsg, ButtonClickedCallback);
+			}
+		}
 	);
 }
 

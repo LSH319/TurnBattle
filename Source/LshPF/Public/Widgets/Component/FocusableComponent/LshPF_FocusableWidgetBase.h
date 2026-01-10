@@ -11,7 +11,7 @@ DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class LSHPF_API ULshPF_FocusableWidgetBase : public UUserWidget
 {
 	GENERATED_BODY()

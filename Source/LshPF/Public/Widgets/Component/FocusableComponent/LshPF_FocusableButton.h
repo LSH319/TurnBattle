@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h" 
-#include "MyLshPF_FocusableButton.generated.h"
+#include "LshPF_FocusableButton.generated.h"
 
 class UTextBlock;
 class ULshPF_Button;
 /**
  * 
  */
-UCLASS()
-class LSHPF_API UMyLshPF_FocusableButton : public ULshPF_FocusableWidgetBase
+UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
+class LSHPF_API ULshPF_FocusableButton : public ULshPF_FocusableWidgetBase
 {
 	GENERATED_BODY()
 public:

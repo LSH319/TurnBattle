@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "LshPF_Types/LshPF_EnumTypes.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LshPF_UISubsystem.generated.h"
 
+class ULshPF_ConfirmScreen;
 class UWidget;
 DECLARE_DELEGATE(FFindNewFocusWidget)
 
@@ -29,6 +31,8 @@ public:
 	void RegisterCreatedPrimaryLayoutWidget(ULshPF_PrimaryLayout* InCreatedWidget);
 
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<ULshPF_FocusableWidgetBase> InSoftWidgetClass, TFunction<void(ULshPF_FocusableWidgetBase*)> AsyncPushStateCallback);
+	void PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> InConfirmScreenClass, EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback);
+	
 	UWidget* GetFocusTargetWidget();
 	
 	FFindNewFocusWidget FindNewFocusWidget;
