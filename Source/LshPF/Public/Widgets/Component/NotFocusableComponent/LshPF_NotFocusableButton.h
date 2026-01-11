@@ -22,6 +22,7 @@ class LSHPF_API ULshPF_NotFocusableButton : public ULshPF_NotFocusableWidgetBase
 public:
 	UButton* GetButton();
 
+	void SetBindKeys(TArray<FKey> InBindKeys);
 	void SetButtonText(FText Text);
 
 	void SetButtonType(EButtonType InButtonType);
@@ -29,6 +30,7 @@ public:
 	
 private:
 	EButtonType ButtonType = EButtonType::Unknown; 
+	TArray<FKey> BindKeys;
 	
 	//***** Bound Widgets ***** //
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess))

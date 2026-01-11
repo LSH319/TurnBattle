@@ -10,6 +10,29 @@
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
+TArray<FKey> ALshPF_PlayerControllerBase::GetDefaultConfirmKeys()
+{
+	return GetKeysByInputAction(DefaultConfirmAction.Get());
+}
+
+TArray<FKey> ALshPF_PlayerControllerBase::GetDefaultBackKeys()
+{
+	return GetKeysByInputAction(DefaultBackAction.Get());
+}
+
+TArray<FKey> ALshPF_PlayerControllerBase::GetKeysByInputAction(const UInputAction* InAction)
+{
+	TArray<FKey> ReturnKeys;
+	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			ReturnKeys = InputSystem->QueryKeysMappedToAction(InAction);
+		}
+	}
+	return ReturnKeys;
+}
+
 void ALshPF_PlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();

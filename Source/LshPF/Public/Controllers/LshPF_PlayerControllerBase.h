@@ -19,7 +19,10 @@ class LSHPF_API ALshPF_PlayerControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
-
+	TArray<FKey> GetDefaultConfirmKeys();
+	TArray<FKey> GetDefaultBackKeys();
+	TArray<FKey> GetKeysByInputAction(const UInputAction* InAction);
+	
 protected:
 	virtual void SetupInputComponent() override;
 	

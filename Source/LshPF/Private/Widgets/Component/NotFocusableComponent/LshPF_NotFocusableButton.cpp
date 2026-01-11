@@ -11,6 +11,11 @@ UButton* ULshPF_NotFocusableButton::GetButton()
 	return ButtonWidget;
 }
 
+void ULshPF_NotFocusableButton::SetBindKeys(TArray<FKey> InBindKeys)
+{
+	BindKeys = InBindKeys;
+}
+
 void ULshPF_NotFocusableButton::SetButtonText(FText Text)
 {
 	ButtonText->SetText(Text);
