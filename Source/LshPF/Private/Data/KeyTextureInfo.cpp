@@ -3,7 +3,7 @@
 
 #include "Data/KeyTextureInfo.h"
 
-UTexture2D* UKeyTextureInfo::GetTextureByKey(FKey InKey)
+TSoftObjectPtr<UTexture2D> UKeyTextureInfo::GetTextureByKey(const FKey& InKey)
 {
 	return KeyTextureMap.FindChecked(InKey);
 }

@@ -16,12 +16,10 @@ void ULshPF_FocusableButton::NativeOnAddedToFocusPath(const FFocusEvent& InFocus
 void ULshPF_FocusableButton::WidgetConfirmAction()
 {
 	ButtonWidget->OnClicked.Broadcast();
-	UE_LOG(LogTemp, Warning, TEXT("%s::WidgetConfirmAction"), *GetName());
 }
 
 void ULshPF_FocusableButton::WidgetBackAction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s::WidgetBackAction"), *GetName());
 }
 
 void ULshPF_FocusableButton::SetButtonText(FText Text)

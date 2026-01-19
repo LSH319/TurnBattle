@@ -15,8 +15,8 @@ class LSHPF_API UKeyTextureInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UTexture2D* GetTextureByKey(FKey InKey);
+	TSoftObjectPtr<UTexture2D> GetTextureByKey(const FKey& InKey);
 	
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FKey, UTexture2D*> KeyTextureMap;
+	TMap<FKey, TSoftObjectPtr<UTexture2D>> KeyTextureMap;
 };

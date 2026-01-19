@@ -25,7 +25,6 @@ FReply LshPF_SButton::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& In
 			APlayerController* PC = World->GetFirstPlayerController();
 			FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(PC->GetPlatformUserId());
 	        FString Device = HardwareDeviceIdentifier.PrimaryDeviceType == EHardwareDevicePrimaryType::KeyboardAndMouse ? "KeyboardAndMouse" : "Gamepad";
-	        UE_LOG(LogTemp, Warning, TEXT("Clicked by %s"), *Device);
 		}
 	}
 	

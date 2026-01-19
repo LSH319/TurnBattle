@@ -21,12 +21,12 @@ bool ULshPF_FocusableWidgetBase::RemoveFromParentStack()
 
 void ULshPF_FocusableWidgetBase::WidgetConfirmAction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ULshPF_FocusableWidgetBase::WidgetConfirmAction"));
+
 }
 
 void ULshPF_FocusableWidgetBase::WidgetBackAction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ULshPF_FocusableWidgetBase::WidgetBackAction"));
+
 }
 
 UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
