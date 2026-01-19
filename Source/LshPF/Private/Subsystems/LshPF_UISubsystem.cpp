@@ -5,6 +5,7 @@
 
 #include "LshPF_GameplayTags.h"
 #include "Engine/AssetManager.h"
+#include "GameFramework/InputSettings.h"
 #include "Widgets/LshPF_PrimaryLayout.h"
 #include "Widgets/Component/LshPF_WidgetSwitcher.h"
 #include "Widgets/Component/FocusableComponent/LshPF_ConfirmScreen.h"
@@ -67,6 +68,35 @@ void ULshPF_UISubsystem::PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> I
 			}
 		}
 	);
+}
+
+EInputDeviceType ULshPF_UISubsystem::GetRecentlyInputDeviceType()
+{
+	return RecentlyInputDeviceType;
+}
+
+void ULshPF_UISubsystem::SetRecentlyInputDeviceType(EInputDeviceType InRecentlyInputDeviceType)
+{
+	if (RecentlyInputDeviceType != InRecentlyInputDeviceType)
+	{
+		RecentlyInputDeviceType = InRecentlyInputDeviceType;
+		InputDeviceChange.Broadcast(RecentlyInputDeviceType);
+	}
+}
+
+void ULshPF_UISubsystem::SetRecentlyInputDeviceType(EHardwareDevicePrimaryType InEHardwareDevicePrimaryType)
+{
+	switch(InEHardwareDevicePrimaryType)
+	{
+		case EHardwareDevicePrimaryType::KeyboardAndMouse:
+			SetRecentlyInputDeviceType(EInputDeviceType::KeyboardAndMouse);
+			break;
+		case EHardwareDevicePrimaryType::Gamepad:
+			SetRecentlyInputDeviceType(EInputDeviceType::Gamepad);
+			break;
+		default:
+			break;
+	}
 }
 
 UWidget* ULshPF_UISubsystem::GetFocusTargetWidget()

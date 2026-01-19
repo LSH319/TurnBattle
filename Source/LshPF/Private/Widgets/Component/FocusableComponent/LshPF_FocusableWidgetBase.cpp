@@ -4,6 +4,8 @@
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
 #include "Components/PanelWidget.h"
+#include "GameFramework/InputDeviceSubsystem.h"
+#include "GameFramework/InputSettings.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 
 
@@ -74,6 +76,16 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 	}
 }
 
+void ULshPF_FocusableWidgetBase::UpdateInputDevice()
+{
+	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetOwningPlayer()->GetPlatformUserId());
+
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		UISubsystem->SetRecentlyInputDeviceType(HardwareDeviceIdentifier.PrimaryDeviceType);
+	}
+}
+
 void ULshPF_FocusableWidgetBase::SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
 {
 	if (InFocusTargetWidget)
@@ -86,4 +98,25 @@ void ULshPF_FocusableWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
 	SetIsFocusable(true);
+}
+
+FReply ULshPF_FocusableWidgetBase::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	FKey Key = InKeyEvent.GetKey();
+	if (Key == EKeys::Gamepad_DPad_Up||
+		Key == EKeys::Gamepad_DPad_Down ||
+		Key == EKeys::Gamepad_DPad_Right ||
+		Key == EKeys::Gamepad_DPad_Left)
+	{
+		UpdateInputDevice();
+	}
+	
+	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
+}
+
+FReply ULshPF_FocusableWidgetBase::NativeOnMouseButtonDown(const FGeometry& InGeometry,
+	const FPointerEvent& InMouseEvent)
+{
+	UpdateInputDevice();
+	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 }

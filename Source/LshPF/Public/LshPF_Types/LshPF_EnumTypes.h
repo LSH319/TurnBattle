@@ -15,3 +15,11 @@ enum class EButtonType : uint8
 	No,
 	Unknown UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class EInputDeviceType : uint8
+{
+	KeyboardAndMouse,
+	Gamepad,
+	Unknown UMETA(Hidden)
+};

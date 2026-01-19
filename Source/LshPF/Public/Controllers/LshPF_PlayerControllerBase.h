@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "LshPF_PlayerControllerBase.generated.h"
 
+struct FInputActionValue;
 class UButton;
 class UInputAction;
 class UInputMappingContext;
@@ -42,7 +43,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UInputAction> DefaultBackAction;
 	
-	void DefaultConfirmAction_Callback();
-	void DefaultBackAction_Callback();
-	void InputDeviceCheckAction_Callback();
+	void DefaultConfirmAction_Callback(const FInputActionValue& Value);
+	void DefaultBackAction_Callback(const FInputActionValue& Value);
+	void InputDeviceCheckAction_Callback(const FInputActionValue& Value);
 };

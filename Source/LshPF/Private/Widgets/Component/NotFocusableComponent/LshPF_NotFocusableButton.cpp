@@ -10,6 +10,7 @@
 #include "Data/KeyTextureInfo.h"
 #include "DeveloperSettings/LshPF_ImageSetting.h"
 #include "Engine/AssetManager.h"
+#include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/LshPF_Button.h"
 
 UButton* ULshPF_NotFocusableButton::GetButton()
@@ -28,6 +29,11 @@ void ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
 	BindInputAction = InInputAction;
 
 	InitImage();
+
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
+	}
 }
 
 void ULshPF_NotFocusableButton::InitImage()
@@ -69,12 +75,44 @@ void ULshPF_NotFocusableButton::CacheKeyImage(TSoftObjectPtr<UTexture2D> CacheTa
 				if (InKey.IsGamepadKey())
 				{
 					CachedGamepadImage = CacheTarget.Get();
+					ChangeImageWithInputDeviceType();
 				}
 				else
 				{
 					CachedKeyboardImage = CacheTarget.Get();
+					ChangeImageWithInputDeviceType();
 				}
 			}
 		)
 	);
+}
+
+void ULshPF_NotFocusableButton::ChangeImageWithInputDeviceType()
+{
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		EInputDeviceType InputDeviceType = UISubsystem->GetRecentlyInputDeviceType();
+		RecentlyInputDeviceChangedCallback(InputDeviceType);
+	}
+}
+
+void ULshPF_NotFocusableButton::RecentlyInputDeviceChangedCallback(EInputDeviceType RecentlyInputDeviceType)
+{
+	switch (RecentlyInputDeviceType)
+	{
+		case EInputDeviceType::KeyboardAndMouse:
+			if (CachedKeyboardImage)
+			{
+				ButtonImage->SetBrushFromTexture(CachedKeyboardImage);
+			}
+			break;
+		case EInputDeviceType::Gamepad:
+			if (CachedGamepadImage)
+			{
+				ButtonImage->SetBrushFromTexture(CachedGamepadImage);
+			}
+			break;
+		default:
+			break;
+	}
 }

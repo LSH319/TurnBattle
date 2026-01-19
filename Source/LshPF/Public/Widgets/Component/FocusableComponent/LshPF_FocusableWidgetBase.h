@@ -38,6 +38,8 @@ public:
 protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
+	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	//~ End UUserWidget Interface
 	
 	/** 
@@ -58,7 +60,8 @@ protected:
 	void BP_BindChildWidgetGetFocus(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
 	
 	void BeforeDestroyedEvent();
-
+	void UpdateInputDevice();
+	
 	UPROPERTY(BlueprintReadOnly)
 	ULshPF_FocusableWidgetBase* DesiredFocusTarget;
 

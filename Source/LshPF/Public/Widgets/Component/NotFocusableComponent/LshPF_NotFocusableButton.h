@@ -32,6 +32,10 @@ private:
 
 	void InitImage();
 	void CacheKeyImage(TSoftObjectPtr<UTexture2D> CacheTarget, FKey InKey);
+	void ChangeImageWithInputDeviceType();
+
+	UFUNCTION()
+	void RecentlyInputDeviceChangedCallback(EInputDeviceType RecentlyInputDeviceType);
 	
 	UPROPERTY()
 	UTexture2D* CachedKeyboardImage;

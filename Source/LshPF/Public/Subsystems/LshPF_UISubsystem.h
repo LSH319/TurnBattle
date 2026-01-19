@@ -8,13 +8,15 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LshPF_UISubsystem.generated.h"
 
+enum class EHardwareDevicePrimaryType : uint8;
+struct FHardwareDeviceIdentifier;
 class ULshPF_ConfirmScreen;
 class UWidget;
-DECLARE_DELEGATE(FFindNewFocusWidget)
-
 class ULshPF_FocusableWidgetBase;
 class ULshPF_PrimaryLayout;
 
+DECLARE_DELEGATE(FFindNewFocusWidget)
+DECLARE_MULTICAST_DELEGATE_OneParam(FInputDeviceChange, EInputDeviceType)
 
 /**
  * 
@@ -32,12 +34,19 @@ public:
 
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<ULshPF_FocusableWidgetBase> InSoftWidgetClass, TFunction<void(ULshPF_FocusableWidgetBase*)> AsyncPushStateCallback);
 	void PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> InConfirmScreenClass, EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EButtonType)> ButtonClickedCallback);
+
+	EInputDeviceType GetRecentlyInputDeviceType();
+	void SetRecentlyInputDeviceType(EInputDeviceType InRecentlyInputDeviceType);
+	void SetRecentlyInputDeviceType(EHardwareDevicePrimaryType InEHardwareDevicePrimaryType);
 	
 	UWidget* GetFocusTargetWidget();
 	
 	FFindNewFocusWidget FindNewFocusWidget;
+	FInputDeviceChange InputDeviceChange;
 	
 private:
+	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::Unknown;
+	
 	UPROPERTY()
 	ULshPF_PrimaryLayout* CreatedPrimaryLayout;
 };

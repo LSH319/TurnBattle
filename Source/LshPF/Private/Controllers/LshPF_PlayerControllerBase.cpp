@@ -59,7 +59,7 @@ void ALshPF_PlayerControllerBase::SetupInputComponent()
 	EnhancedInputComponent->BindAction(DefaultBackAction.LoadSynchronous(), ETriggerEvent::Started, this, &ThisClass::DefaultBackAction_Callback);
 }
 
-void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
+void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback(const FInputActionValue& Value)
 {
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
@@ -70,7 +70,7 @@ void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
 	}
 }
 
-void ALshPF_PlayerControllerBase::DefaultBackAction_Callback()
+void ALshPF_PlayerControllerBase::DefaultBackAction_Callback(const FInputActionValue& Value)
 {
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
@@ -81,17 +81,16 @@ void ALshPF_PlayerControllerBase::DefaultBackAction_Callback()
 	}
 }
 
-void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback()
+void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback(const FInputActionValue& Value)
 {
 	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetPlatformUserId());
-	FString Device = HardwareDeviceIdentifier.PrimaryDeviceType == EHardwareDevicePrimaryType::KeyboardAndMouse ? "KeyboardAndMouse" : "Gamepad";
-	
+
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
+		UISubsystem->SetRecentlyInputDeviceType(HardwareDeviceIdentifier.PrimaryDeviceType);
 		if (ULshPF_FocusableWidgetBase* FocusTarget = Cast<ULshPF_FocusableWidgetBase>(UISubsystem->GetFocusTargetWidget()))
 		{
 			FocusTarget->SetFocus();
 		}
 	}
-	
 }
