@@ -3,6 +3,7 @@
 
 #include "Widgets/Component/FocusableComponent/LshPF_ConfirmScreen.h"
 
+#include "InputAction.h"
 #include "Components/Button.h"
 #include "Components/DynamicEntryBox.h"
 #include "Components/TextBlock.h"
@@ -15,6 +16,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 	TextBlock_Title->SetText(InScreenTitle);
 	TextBlock_Message->SetText(InScreenMsg);
 	CachedCallbackFunction = ButtonClickedCallback;
+	CachedConfirmScreenType = InScreenType;
 	
 	//이미 생성되어 있는 버튼이 있으면 리셋
 	if (DynamicEntryBox_Buttons->GetNumEntries() != 0)
@@ -30,10 +32,9 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 			{
 				ULshPF_NotFocusableButton* OkButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				OkButton->SetButtonText(FText::FromString(TEXT("OK")));
-				OkButton->SetButtonType(EButtonType::OkOrYes);
 				if (LshPF_PlayerController)
 				{
-					OkButton->SetBindKeys(LshPF_PlayerController->GetDefaultConfirmKeys());
+					OkButton->SetBindInputAction(LshPF_PlayerController->GetDefaultConfirmAction().Get());
 				}
 				OkButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 				break;
@@ -42,19 +43,17 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 			{
 				ULshPF_NotFocusableButton* YesButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				YesButton->SetButtonText(FText::FromString(TEXT("YES")));
-				YesButton->SetButtonType(EButtonType::OkOrYes);
 				if (LshPF_PlayerController)
 				{
-					YesButton->SetBindKeys(LshPF_PlayerController->GetDefaultConfirmKeys());
+					YesButton->SetBindInputAction(LshPF_PlayerController->GetDefaultConfirmAction().Get());
 				}
 				YesButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 
 				ULshPF_NotFocusableButton* NoButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				NoButton->SetButtonText(FText::FromString(TEXT("NO")));
-				NoButton->SetButtonType(EButtonType::No);
 				if (LshPF_PlayerController)
 				{
-					NoButton->SetBindKeys(LshPF_PlayerController->GetDefaultBackKeys());
+					NoButton->SetBindInputAction(LshPF_PlayerController->GetDefaultBackAction().Get());
 				}
 				NoButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_No);
 
@@ -84,6 +83,18 @@ void ULshPF_ConfirmScreen::ButtonClickedCallback_Yes()
 
 void ULshPF_ConfirmScreen::ButtonClickedCallback_No()
 {
-	CachedCallbackFunction(EButtonType::No);
+	switch (CachedConfirmScreenType)
+	{
+		case EConfirmScreenType::Ok:
+			CachedCallbackFunction(EButtonType::OkOrYes);
+			break;
+		case EConfirmScreenType::YesNo:
+			CachedCallbackFunction(EButtonType::No);
+			break;
+		case EConfirmScreenType::Unknown:
+		default:
+			break;
+	}
+	
 	RemoveFromParentStack();
 }

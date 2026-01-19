@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "LshPF_NotFocusableWidgetBase.generated.h"
 
+class ALshPF_PlayerControllerBase;
 /**
  * 
  */
@@ -18,4 +19,6 @@ protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
 	//~ End UUserWidget Interface
+
+	ALshPF_PlayerControllerBase* GetLshPF_PlayerController();
 };

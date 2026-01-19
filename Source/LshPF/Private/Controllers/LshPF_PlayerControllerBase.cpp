@@ -10,14 +10,14 @@
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
-TArray<FKey> ALshPF_PlayerControllerBase::GetDefaultConfirmKeys()
+TSoftObjectPtr<UInputAction> ALshPF_PlayerControllerBase::GetDefaultConfirmAction()
 {
-	return GetKeysByInputAction(DefaultConfirmAction.Get());
+	return DefaultConfirmAction;
 }
 
-TArray<FKey> ALshPF_PlayerControllerBase::GetDefaultBackKeys()
+TSoftObjectPtr<UInputAction> ALshPF_PlayerControllerBase::GetDefaultBackAction()
 {
-	return GetKeysByInputAction(DefaultBackAction.Get());
+	return DefaultBackAction;
 }
 
 TArray<FKey> ALshPF_PlayerControllerBase::GetKeysByInputAction(const UInputAction* InAction)
@@ -85,7 +85,6 @@ void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback()
 {
 	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetPlatformUserId());
 	FString Device = HardwareDeviceIdentifier.PrimaryDeviceType == EHardwareDevicePrimaryType::KeyboardAndMouse ? "KeyboardAndMouse" : "Gamepad";
-	UE_LOG(LogTemp, Warning, TEXT("Clicked by %s"), *Device);
 	
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{

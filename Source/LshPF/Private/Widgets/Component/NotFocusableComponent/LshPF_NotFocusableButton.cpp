@@ -3,7 +3,13 @@
 
 #include "Widgets/Component/NotFocusableComponent/LshPF_NotFocusableButton.h"
 
+#include "InputAction.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Controllers/LshPF_PlayerControllerBase.h"
+#include "Data/KeyTextureInfo.h"
+#include "DeveloperSettings/LshPF_ImageSetting.h"
+#include "Engine/AssetManager.h"
 #include "Widgets/Component/LshPF_Button.h"
 
 UButton* ULshPF_NotFocusableButton::GetButton()
@@ -11,22 +17,64 @@ UButton* ULshPF_NotFocusableButton::GetButton()
 	return ButtonWidget;
 }
 
-void ULshPF_NotFocusableButton::SetBindKeys(TArray<FKey> InBindKeys)
-{
-	BindKeys = InBindKeys;
-}
-
 void ULshPF_NotFocusableButton::SetButtonText(FText Text)
 {
 	ButtonText->SetText(Text);
 }
 
-void ULshPF_NotFocusableButton::SetButtonType(EButtonType InButtonType)
+void ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
 {
-	ButtonType = InButtonType;
+	BindInputAction.Reset();
+	BindInputAction = InInputAction;
+
+	InitImage();
 }
 
-EButtonType ULshPF_NotFocusableButton::GetButtonType()
+void ULshPF_NotFocusableButton::InitImage()
 {
-	return ButtonType;
+	ALshPF_PlayerControllerBase* LshPF_PlayerController = GetLshPF_PlayerController();
+	
+	if (BindInputAction.IsValid())
+	{
+		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(BindInputAction.Get()));
+		if (!BindKeys.IsEmpty())
+		{
+			const ULshPF_ImageSetting* LshPF_ImageSetting = GetDefault<ULshPF_ImageSetting>();
+			for (FKey TargetKey : BindKeys)
+			{
+				TSoftObjectPtr<UKeyTextureInfo> KeyTextureSoftPtr = TargetKey.IsGamepadKey() ? LshPF_ImageSetting->GamepadImage : LshPF_ImageSetting->KeyboardMouseImage;
+				
+				UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+					KeyTextureSoftPtr.ToSoftObjectPath(),
+					FStreamableDelegate::CreateLambda(
+						[this, TargetKey, KeyTextureSoftPtr]
+						{
+							TSoftObjectPtr<UTexture2D> SoftTexture2D = KeyTextureSoftPtr.Get()->GetTextureByKey(TargetKey);
+							CacheKeyImage(SoftTexture2D, TargetKey);
+						}
+					)
+				);
+			}
+		}
+	}
+}
+
+void ULshPF_NotFocusableButton::CacheKeyImage(TSoftObjectPtr<UTexture2D> CacheTarget, FKey InKey)
+{
+	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+		CacheTarget.ToSoftObjectPath(),
+		FStreamableDelegate::CreateLambda(
+			[this, InKey, CacheTarget]
+			{
+				if (InKey.IsGamepadKey())
+				{
+					CachedGamepadImage = CacheTarget.Get();
+				}
+				else
+				{
+					CachedKeyboardImage = CacheTarget.Get();
+				}
+			}
+		)
+	);
 }

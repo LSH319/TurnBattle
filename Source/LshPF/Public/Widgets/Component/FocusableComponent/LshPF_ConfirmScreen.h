@@ -33,6 +33,7 @@ private:
 	void ButtonClickedCallback_No();
 	
 	TFunction<void(EButtonType)> CachedCallbackFunction;
+	EConfirmScreenType CachedConfirmScreenType;
 	
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextBlock_Title;
