@@ -4,8 +4,6 @@
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
 #include "Components/PanelWidget.h"
-#include "GameFramework/InputDeviceSubsystem.h"
-#include "GameFramework/InputSettings.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 
 
@@ -78,11 +76,9 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 
 void ULshPF_FocusableWidgetBase::UpdateInputDevice()
 {
-	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetOwningPlayer()->GetPlatformUserId());
-
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
-		UISubsystem->SetRecentlyInputDeviceType(HardwareDeviceIdentifier.PrimaryDeviceType);
+		UISubsystem->SetRecentlyInputDeviceType();
 	}
 }
 

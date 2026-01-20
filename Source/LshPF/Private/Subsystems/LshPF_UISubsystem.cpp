@@ -5,6 +5,8 @@
 
 #include "LshPF_GameplayTags.h"
 #include "Engine/AssetManager.h"
+#include "GameFramework/GameSession.h"
+#include "GameFramework/InputDeviceSubsystem.h"
 #include "GameFramework/InputSettings.h"
 #include "Widgets/LshPF_PrimaryLayout.h"
 #include "Widgets/Component/LshPF_WidgetSwitcher.h"
@@ -84,9 +86,11 @@ void ULshPF_UISubsystem::SetRecentlyInputDeviceType(EInputDeviceType InRecentlyI
 	}
 }
 
-void ULshPF_UISubsystem::SetRecentlyInputDeviceType(EHardwareDevicePrimaryType InEHardwareDevicePrimaryType)
+void ULshPF_UISubsystem::SetRecentlyInputDeviceType()
 {
-	switch(InEHardwareDevicePrimaryType)
+	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetGameInstance()->GetPrimaryPlayerController()->GetPlatformUserId());
+
+	switch(HardwareDeviceIdentifier.PrimaryDeviceType)
 	{
 		case EHardwareDevicePrimaryType::KeyboardAndMouse:
 			SetRecentlyInputDeviceType(EInputDeviceType::KeyboardAndMouse);

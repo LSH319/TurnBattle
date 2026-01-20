@@ -37,7 +37,7 @@ public:
 
 	EInputDeviceType GetRecentlyInputDeviceType();
 	void SetRecentlyInputDeviceType(EInputDeviceType InRecentlyInputDeviceType);
-	void SetRecentlyInputDeviceType(EHardwareDevicePrimaryType InEHardwareDevicePrimaryType);
+	void SetRecentlyInputDeviceType();
 	
 	UWidget* GetFocusTargetWidget();
 	

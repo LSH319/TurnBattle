@@ -1,6 +1,5 @@
 ﻿#include "Widgets/SlateWidgets/LshPF_SButton.h"
 
-#include "GameFramework/InputDeviceSubsystem.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 
 void LshPF_SButton::Construct(const FArguments& InArgs)
@@ -42,11 +41,9 @@ void LshPF_SButton::UpdateRecentlyInputDevice()
 	}
 	if (World)
 	{
-		APlayerController* PC = World->GetFirstPlayerController();
-		FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(PC->GetPlatformUserId());
 		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(World))
 		{
-			UISubsystem->SetRecentlyInputDeviceType(HardwareDeviceIdentifier.PrimaryDeviceType);
+			UISubsystem->SetRecentlyInputDeviceType();
 		}
 	}
 }

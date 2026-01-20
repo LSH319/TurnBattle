@@ -6,7 +6,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
-#include "GameFramework/InputDeviceSubsystem.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
@@ -83,11 +82,9 @@ void ALshPF_PlayerControllerBase::DefaultBackAction_Callback(const FInputActionV
 
 void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback(const FInputActionValue& Value)
 {
-	FHardwareDeviceIdentifier HardwareDeviceIdentifier = UInputDeviceSubsystem::Get()->GetMostRecentlyUsedHardwareDevice(GetPlatformUserId());
-
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
-		UISubsystem->SetRecentlyInputDeviceType(HardwareDeviceIdentifier.PrimaryDeviceType);
+		UISubsystem->SetRecentlyInputDeviceType();
 		if (ULshPF_FocusableWidgetBase* FocusTarget = Cast<ULshPF_FocusableWidgetBase>(UISubsystem->GetFocusTargetWidget()))
 		{
 			FocusTarget->SetFocus();
