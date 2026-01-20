@@ -8,6 +8,8 @@
 
 TSharedRef<SWidget> ULshPF_Button::RebuildWidget()
 {
+	//Slate Widget 을 커스텀하여 사용하기 위한 override
+	//기본 기능을 사용하기 위해 SButton 의 Arguments 를 전달
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	SButton::FArguments ButtonArgs = SButton::FArguments()
 		.OnClicked(BIND_UOBJECT_DELEGATE(FOnClicked, SlateHandleClicked))

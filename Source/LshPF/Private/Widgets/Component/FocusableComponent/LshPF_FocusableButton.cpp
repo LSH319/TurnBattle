@@ -10,6 +10,7 @@ void ULshPF_FocusableButton::NativeOnAddedToFocusPath(const FFocusEvent& InFocus
 {
 	Super::NativeOnAddedToFocusPath(InFocusEvent);
 
+	//Focus 를 흭득한 경우 Self 를 Broadcast
 	OnFocusWidgetChanged.Broadcast(this);
 }
 

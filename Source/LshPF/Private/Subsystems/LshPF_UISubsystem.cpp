@@ -80,7 +80,7 @@ EInputDeviceType ULshPF_UISubsystem::GetRecentlyInputDeviceType()
 void ULshPF_UISubsystem::SetRecentlyInputDeviceType(EInputDeviceType InRecentlyInputDeviceType)
 {
 	if (RecentlyInputDeviceType != InRecentlyInputDeviceType)
-	{
+	{//InputDevice 가 변경된 경우에만 Broadcast
 		RecentlyInputDeviceType = InRecentlyInputDeviceType;
 		InputDeviceChange.Broadcast(RecentlyInputDeviceType);
 	}

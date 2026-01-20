@@ -29,20 +29,53 @@ class LSHPF_API ULshPF_UISubsystem : public UGameInstanceSubsystem
 public:
 	static ULshPF_UISubsystem* Get(const UObject* WorldContextObject);
 
+	/**
+	 * PrimaryLayoutWidget 을 UISubsystem 에 저장
+	 * @param InCreatedWidget 생성된 PrimaryLayoutWidget
+	 */
 	UFUNCTION(BlueprintCallable)
 	void RegisterCreatedPrimaryLayoutWidget(ULshPF_PrimaryLayout* InCreatedWidget);
 
+	/**
+	 * InWidgetStackTag 를 통해 Widget 이 추가될 WidgetSwitcher 지정
+	 * 지정된 WidgetSwitcher 에 Widget 을 추가
+	 * @param InWidgetStackTag WidgetSwitcher 탐색을 위한 Tag
+	 * @param InSoftWidgetClass 추가할 Widget Class
+	 * @param AsyncPushStateCallback 위젯 추가 후 호출될 함수
+	 */
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<ULshPF_FocusableWidgetBase> InSoftWidgetClass, TFunction<void(ULshPF_FocusableWidgetBase*)> AsyncPushStateCallback);
+
+	/**
+	 * ConfirmScreen 추가를 위한 함수
+	 * ConfirmScreen 은 가장 전면의 WidgetSwitcher 에 추가
+	 * @param InConfirmScreenClass 추가할 Widget Class
+	 * @param InScreenType ConfirmScreen 의 Button 생성시 Type
+	 * @param InScreenTitle ConfirmScreen 의 Title Text
+	 * @param InScreenMsg ConfirmScreen 의 Msg
+	 * @param ButtonClickedCallback 위젯 추가 후 호출될 함수
+	 */
 	void PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> InConfirmScreenClass, EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EButtonType)> ButtonClickedCallback);
 
 	EInputDeviceType GetRecentlyInputDeviceType();
+	/**
+	 * InputDeviceType 을 직접 전달하여 설정
+	 */
 	void SetRecentlyInputDeviceType(EInputDeviceType InRecentlyInputDeviceType);
+	/**
+	 * InputDeviceType 을 UISubsystem 에서 확인해서 사용
+	 */
 	void SetRecentlyInputDeviceType();
-	
+
+	/**
+	 * PrimaryLayoutWidget 에서 Focus 를 받아야 하는 Widget 을 탐색하여 반환
+	 * @return Focus 를 받아야 하는 Widget
+	 */
 	UWidget* GetFocusTargetWidget();
-	
+
+	//Focus Widget 재탐색 관련 Delegate
 	FFindNewFocusWidget FindNewFocusWidget;
-	FInputDeviceChange InputDeviceChange;
+	//Input Device 변경 관련 Delegate
+ 	FInputDeviceChange InputDeviceChange;
 	
 private:
 	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::Unknown;

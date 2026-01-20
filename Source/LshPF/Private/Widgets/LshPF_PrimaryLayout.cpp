@@ -30,6 +30,7 @@ void ULshPF_PrimaryLayout::NativeConstruct()
 
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
+		//UISubsystem 에서 Focus 재설정이 필요할 경우 호출되는 Delegate
 		UISubsystem->FindNewFocusWidget.BindUObject(this, &ThisClass::SetFocusToPriorityWidget);
 	}
 }
@@ -49,6 +50,7 @@ void ULshPF_PrimaryLayout::RegisterWidgetSwitcher(FGameplayTag InStackTag, ULshP
 
 ULshPF_WidgetSwitcher* ULshPF_PrimaryLayout::FindFocusWidgetSwitcher()
 {
+	//TagPriorityArray 를 역순으로 탐색하여 ActiveWidget 이 있는 WidgetSwitcher 발견 시 Return
 	for (auto It = TagPriorityArray.rbegin(); It != TagPriorityArray.rend(); ++It)
 	{
 		const FGameplayTag& Tag = *It;
@@ -78,9 +80,8 @@ UWidget* ULshPF_PrimaryLayout::GetFocusTargetInWidgetSwitcher(ULshPF_WidgetSwitc
 
 void ULshPF_PrimaryLayout::SetFocusToPriorityWidget()
 {
-	ULshPF_WidgetSwitcher* FocusWidgetSwitcher = FindFocusWidgetSwitcher();
-	if (UWidget* FocusTargetWidget = GetFocusTargetInWidgetSwitcher(FocusWidgetSwitcher))
+	if(UWidget* TargetWidget = GetFocusTargetInFocusWidgetSwitcher())
 	{
-		FocusTargetWidget->SetFocus();
+		TargetWidget->SetFocus();
 	}
 }

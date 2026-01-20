@@ -48,8 +48,10 @@ UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
 
 void ULshPF_FocusableWidgetBase::BP_BindChildWidgetGetFocus(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
 {
+	//자식이 Focus 를 받은 경우 호출되는 Delegate
 	InFocusTargetWidget->OnFocusWidgetChanged.AddUObject(this, &ThisClass::SetDesiredFocusTarget);
 
+	//DesiredFocusTarget 이 null 일경우 처음 호출한 Widget 을 사용
 	if (!DesiredFocusTarget && InFocusTargetWidget)
 	{
 		DesiredFocusTarget = InFocusTargetWidget;
@@ -62,6 +64,8 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 	
 	if (OnWidgetDestroyed.IsBound())
 	{
+		//저장된 Switcher 에 Index 전달
+		//Widget 전달 시 올바르지 않은 값이 전달되는 경우 발생
 		OnWidgetDestroyed.Execute(Index);
 	}
 
@@ -69,6 +73,7 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 	{
 		if (HasFocusedDescendants() && UISubsystem->FindNewFocusWidget.IsBound())
 		{
+			//삭제되는 Widget 이 Focus 를 가지고 있는 경우 새로운 Focus Target 을 찾아 설정하도록 호출
 			UISubsystem->FindNewFocusWidget.Execute();
 		}
 	}
@@ -104,6 +109,8 @@ FReply ULshPF_FocusableWidgetBase::NativeOnKeyDown(const FGeometry& InGeometry, 
 		Key == EKeys::Gamepad_DPad_Right ||
 		Key == EKeys::Gamepad_DPad_Left)
 	{
+		//GamePad 의 DPad 입력시 InputDevice 가 Update 되도록 추가
+		//별도 처리 없이 사용할 경우 DPad 입력시 Enhanced Input 까지 전달되지 않아 추가한 코드
 		UpdateInputDevice();
 	}
 	

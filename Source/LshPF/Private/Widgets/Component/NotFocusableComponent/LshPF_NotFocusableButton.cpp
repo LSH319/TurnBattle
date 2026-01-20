@@ -32,6 +32,7 @@ void ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
 
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
+		//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
 		UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
 	}
 }
@@ -42,14 +43,17 @@ void ULshPF_NotFocusableButton::InitImage()
 	
 	if (BindInputAction.IsValid())
 	{
+		//IA 에 바인딩 된 Keys
 		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(BindInputAction.Get()));
 		if (!BindKeys.IsEmpty())
 		{
+			//UDeveloperSettings 을 상속한 세팅
 			const ULshPF_ImageSetting* LshPF_ImageSetting = GetDefault<ULshPF_ImageSetting>();
 			for (FKey TargetKey : BindKeys)
 			{
 				TSoftObjectPtr<UKeyTextureInfo> KeyTextureSoftPtr = TargetKey.IsGamepadKey() ? LshPF_ImageSetting->GamepadImage : LshPF_ImageSetting->KeyboardMouseImage;
-				
+
+				//UKeyTextureInfo 가 SoftObjectPtr 이므로 Load 후 처리를 위한 함수
 				UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
 					KeyTextureSoftPtr.ToSoftObjectPath(),
 					FStreamableDelegate::CreateLambda(
@@ -67,11 +71,13 @@ void ULshPF_NotFocusableButton::InitImage()
 
 void ULshPF_NotFocusableButton::CacheKeyImage(TSoftObjectPtr<UTexture2D> CacheTarget, FKey InKey)
 {
+	//CacheTarget 이 SoftObjectPtr 이므로 Load 후 처리를 위한 함수
 	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
 		CacheTarget.ToSoftObjectPath(),
 		FStreamableDelegate::CreateLambda(
 			[this, InKey, CacheTarget]
 			{
+				//InKey 의 Type 에 따라 올바른 변수에 저장
 				if (InKey.IsGamepadKey())
 				{
 					CachedGamepadImage = CacheTarget.Get();

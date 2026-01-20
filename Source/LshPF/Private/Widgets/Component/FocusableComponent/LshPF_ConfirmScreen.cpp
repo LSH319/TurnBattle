@@ -15,6 +15,8 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 {
 	TextBlock_Title->SetText(InScreenTitle);
 	TextBlock_Message->SetText(InScreenMsg);
+	
+	//필요한 데이터 저장
 	CachedCallbackFunction = ButtonClickedCallback;
 	CachedConfirmScreenType = InScreenType;
 	
@@ -29,7 +31,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 	switch (InScreenType)
 	{
 		case EConfirmScreenType::Ok:
-			{
+			{//버튼 생성 로직
 				ULshPF_NotFocusableButton* OkButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				OkButton->SetButtonText(FText::FromString(TEXT("OK")));
 				if (LshPF_PlayerController)
@@ -40,7 +42,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 				break;
 			}
 		case EConfirmScreenType::YesNo:
-			{
+			{//버튼 생성 로직
 				ULshPF_NotFocusableButton* YesButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				YesButton->SetButtonText(FText::FromString(TEXT("YES")));
 				if (LshPF_PlayerController)
@@ -83,6 +85,7 @@ void ULshPF_ConfirmScreen::ButtonClickedCallback_Yes()
 
 void ULshPF_ConfirmScreen::ButtonClickedCallback_No()
 {
+	//EConfirmScreenType 에 따라 반환값 설정을 위한 코드
 	switch (CachedConfirmScreenType)
 	{
 		case EConfirmScreenType::Ok:

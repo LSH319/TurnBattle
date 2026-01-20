@@ -36,7 +36,7 @@ void ULshPF_PushConfirmScreen::Activate()
 		CachedScreenTitle,
 		CachedScreenMessage,
 		[this](EButtonType ClickedButtonType)
-		{
+		{//버튼 클릭시 호출될 함수
 			OnButtonClicked.Broadcast(ClickedButtonType);
 			SetReadyToDestroy();
 		}

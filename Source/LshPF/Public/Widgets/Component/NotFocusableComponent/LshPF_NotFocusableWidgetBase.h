@@ -20,5 +20,9 @@ protected:
 	virtual void NativeConstruct() override;
 	//~ End UUserWidget Interface
 
+	/**
+	 * GetOwningPlayer 를 ALshPF_PlayerControllerBase 로 캐스팅 하여 return
+	 * @return GetOwningPlayer 를 ALshPF_PlayerControllerBase 로 캐스팅한 결과물
+	 */
 	ALshPF_PlayerControllerBase* GetLshPF_PlayerController();
 };

@@ -6,6 +6,7 @@
 class LshPF_SButton : public SButton
 {
 public:
+	//SButton 의 기능 사용을 위해 InnerButton 을 ARGUMENT로 사용 
 	SLATE_BEGIN_ARGS(LshPF_SButton) : _InnerButton()
 	{}
 	SLATE_ARGUMENT(SButton::FArguments, InnerButton)
@@ -21,5 +22,8 @@ public:
 	//~ SWidget
 
 private:
+	/**
+	 * UISubsystem 에 InputDevice Update 요청
+	 */
 	void UpdateRecentlyInputDevice();
 };

@@ -18,6 +18,9 @@ class LSHPF_API ULshPF_ConfirmScreen : public ULshPF_FocusableWidgetBase
 	GENERATED_BODY()
 
 public:
+	/**
+	 * ConfirmScreen 생성 시 처리하기 위한 함수
+	 */
 	void InitConfirmScreen(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EButtonType)> ButtonClickedCallback);
 
 	//~ Begin ULshPF_FocusableWidgetBase Interface
@@ -34,7 +37,8 @@ private:
 	
 	TFunction<void(EButtonType)> CachedCallbackFunction;
 	EConfirmScreenType CachedConfirmScreenType;
-	
+
+	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextBlock_Title;
 
@@ -43,4 +47,5 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UDynamicEntryBox* DynamicEntryBox_Buttons;
+	//***** Bound Widgets ***** //
 };

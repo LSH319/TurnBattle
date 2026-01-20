@@ -36,12 +36,12 @@ void ULshPF_PushSoftWidget::Activate()
 
 	UISubsystem->PushSoftWidgetToStackAsync(CachedWidgetStackTag, CachedSoftWidgetClass,
 		[this](ULshPF_FocusableWidgetBase* PushedWidget)
-	{
+	{//Widget 추가 완료 후 호출될 함수
 		PushedWidget->SetOwningPlayer(CachedOwningPC.Get());
 		if (bCachedFocusOnNewlyPushedWidget)
 		{
 			if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusTarget())
-			{
+			{//Focus 설정이 필요한 경우 설정
 				WidgetToFocus->SetFocus();
 			}
 		}

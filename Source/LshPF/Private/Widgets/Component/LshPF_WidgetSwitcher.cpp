@@ -13,15 +13,14 @@ ULshPF_FocusableWidgetBase* ULshPF_WidgetSwitcher::AddWidgetToStack(TSoftClassPt
 ULshPF_FocusableWidgetBase* ULshPF_WidgetSwitcher::NativeAddWidgetToStack(TSoftClassPtr<ULshPF_FocusableWidgetBase>& InSoftWidgetClass)
 {
 	if (GetClass()->IsFunctionImplementedInScript(GET_FUNCTION_NAME_CHECKED(ULshPF_WidgetSwitcher, BP_AddWidgetToStack)))
-	{
+	{//BP_AddWidgetToStack 가 블루프린트에서 로직을 설정한 경우 해당 함수 호출
 		return BP_AddWidgetToStack(InSoftWidgetClass);
 	}
 	else
 	{
-		//Todo : AddWidgetToStack 로직 추가
 		ULshPF_FocusableWidgetBase* CreatedWidget = CreateWidget<ULshPF_FocusableWidgetBase>(GetOwningPlayer(), InSoftWidgetClass.Get());
 		AddChild(CreatedWidget);
-		SetActiveWidgetIndex(GetChildrenCount() - 1);
+		SetActiveWidget(CreatedWidget);
 		CreatedWidget->OnWidgetDestroyed.BindUObject(this, &ThisClass::ChildWidgetDestroyed);
 				
 		return CreatedWidget;
