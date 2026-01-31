@@ -59,7 +59,7 @@ void ULshPF_UISubsystem::PushConfirmScreen(TSoftClassPtr<ULshPF_ConfirmScreen> I
 	TFunction<void(EButtonType)> ButtonClickedCallback)
 {
 	PushSoftWidgetToStackAsync(
-		LshPF_GameplayTags::LshPF_WidgetStack_Test2,//todo : Test용 태그, 변경 필요
+		LshPF_GameplayTags::LshPF_WidgetStack_Modal,
 		InConfirmScreenClass,
 		[InScreenType, InScreenTitle, InScreenMsg, ButtonClickedCallback](ULshPF_FocusableWidgetBase* PushedWidget)
 		{

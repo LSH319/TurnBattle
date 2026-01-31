@@ -64,6 +64,7 @@ public:
 	/**
 	 * InputDeviceType 을 UISubsystem 에서 확인해서 사용
 	 */
+	UFUNCTION(BlueprintCallable)
 	void SetRecentlyInputDeviceType();
 
 	/**

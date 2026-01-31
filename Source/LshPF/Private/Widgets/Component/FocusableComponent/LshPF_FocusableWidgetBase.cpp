@@ -40,7 +40,14 @@ UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
 		{
 			return DesiredFocusTarget;
 		}
-		return GetDesiredFocusWidget();
+		if (GetDesiredFocusWidget())
+		{
+			return GetDesiredFocusWidget();
+		}
+		else
+		{
+			return this;
+		}
 	}
 
 	return FocusWidget;
