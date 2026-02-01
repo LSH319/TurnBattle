@@ -17,6 +17,7 @@ class ULshPF_PrimaryLayout;
 
 DECLARE_DELEGATE(FFindNewFocusWidget)
 DECLARE_MULTICAST_DELEGATE_OneParam(FInputDeviceChange, EInputDeviceType)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdatedDelegate, ULshPF_FocusableButton*, BroadcastingButton, FText, DescriptionText);
 
 /**
  * 
@@ -77,6 +78,9 @@ public:
 	FFindNewFocusWidget FindNewFocusWidget;
 	//Input Device 변경 관련 Delegate
  	FInputDeviceChange InputDeviceChange;
+	//Description Text 변경을 위한 Delegate
+	UPROPERTY(BlueprintAssignable)
+	FOnButtonDescriptionTextUpdatedDelegate OnButtonDescriptionTextUpdated;
 	
 private:
 	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::KeyboardAndMouse;
