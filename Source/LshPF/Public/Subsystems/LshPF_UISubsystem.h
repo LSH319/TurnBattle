@@ -79,7 +79,7 @@ public:
  	FInputDeviceChange InputDeviceChange;
 	
 private:
-	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::Unknown;
+	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::KeyboardAndMouse;
 	
 	UPROPERTY()
 	ULshPF_PrimaryLayout* CreatedPrimaryLayout;

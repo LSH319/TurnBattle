@@ -9,4 +9,8 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_WidgetStack_GameMenu, "LshPF.WidgetStack.GameMenu");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_WidgetStack_GameHud, "LshPF.WidgetStack.GameHud");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_WidgetStack_Frontend, "LshPF.WidgetStack.Frontend");
+
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_ConfirmScreenBase, "LshPF.Widget.ConfirmScreenBase");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_PressAnyKey, "LshPF.Widget.PressAnyKey");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_MainMenu, "LshPF.Widget.MainMenu");
 }
