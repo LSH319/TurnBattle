@@ -20,8 +20,10 @@ class LSHPF_API ALshPF_PlayerControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
-	TSoftObjectPtr<UInputAction> GetDefaultConfirmAction();
-	TSoftObjectPtr<UInputAction> GetDefaultBackAction();
+	UFUNCTION(BlueprintCallable)
+	UInputAction* GetDefaultConfirmAction();
+	UFUNCTION(BlueprintCallable)
+	UInputAction* GetDefaultBackAction();
 	TArray<FKey> GetKeysByInputAction(const UInputAction* InAction);
 	
 protected:
@@ -29,19 +31,19 @@ protected:
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TSoftObjectPtr<UInputMappingContext> InputDeviceCheckMappingContext;
+	UInputMappingContext* InputDeviceCheckMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TSoftObjectPtr<UInputAction> InputDeviceCheckAction;
+	UInputAction* InputDeviceCheckAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TSoftObjectPtr<UInputMappingContext> DefaultMappingContext;
+	UInputMappingContext* DefaultMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TSoftObjectPtr<UInputAction> DefaultConfirmAction;
+	UInputAction* DefaultConfirmAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TSoftObjectPtr<UInputAction> DefaultBackAction;
+	UInputAction* DefaultBackAction;
 	
 	void DefaultConfirmAction_Callback(const FInputActionValue& Value);
 	void DefaultBackAction_Callback(const FInputActionValue& Value);

@@ -9,12 +9,12 @@
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
-TSoftObjectPtr<UInputAction> ALshPF_PlayerControllerBase::GetDefaultConfirmAction()
+UInputAction* ALshPF_PlayerControllerBase::GetDefaultConfirmAction()
 {
 	return DefaultConfirmAction;
 }
 
-TSoftObjectPtr<UInputAction> ALshPF_PlayerControllerBase::GetDefaultBackAction()
+UInputAction* ALshPF_PlayerControllerBase::GetDefaultBackAction()
 {
 	return DefaultBackAction;
 }
@@ -40,22 +40,22 @@ void ALshPF_PlayerControllerBase::SetupInputComponent()
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			if (!InputDeviceCheckMappingContext.IsNull())
+			if (InputDeviceCheckMappingContext)
 			{
-				InputSystem->AddMappingContext(InputDeviceCheckMappingContext.LoadSynchronous(), 99);
+				InputSystem->AddMappingContext(InputDeviceCheckMappingContext, 99);
 			}
-			if (!DefaultMappingContext.IsNull())
+			if (DefaultMappingContext)
 			{
-				InputSystem->AddMappingContext(DefaultMappingContext.LoadSynchronous(), 5);
+				InputSystem->AddMappingContext(DefaultMappingContext, 5);
 			}
 		}
 	}
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
 	
-	EnhancedInputComponent->BindAction(InputDeviceCheckAction.LoadSynchronous(), ETriggerEvent::Started, this, &ThisClass::InputDeviceCheckAction_Callback);
+	EnhancedInputComponent->BindAction(InputDeviceCheckAction, ETriggerEvent::Started, this, &ThisClass::InputDeviceCheckAction_Callback);
 	
-	EnhancedInputComponent->BindAction(DefaultConfirmAction.LoadSynchronous(), ETriggerEvent::Started, this, &ThisClass::DefaultConfirmAction_Callback);
-	EnhancedInputComponent->BindAction(DefaultBackAction.LoadSynchronous(), ETriggerEvent::Started, this, &ThisClass::DefaultBackAction_Callback);
+	EnhancedInputComponent->BindAction(DefaultConfirmAction, ETriggerEvent::Started, this, &ThisClass::DefaultConfirmAction_Callback);
+	EnhancedInputComponent->BindAction(DefaultBackAction, ETriggerEvent::Started, this, &ThisClass::DefaultBackAction_Callback);
 }
 
 void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback(const FInputActionValue& Value)

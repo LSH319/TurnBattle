@@ -22,6 +22,7 @@ class LSHPF_API ULshPF_NotFocusableButton : public ULshPF_NotFocusableWidgetBase
 
 public:
 	UButton* GetButton();
+	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText Text);
 
 	/**
@@ -29,6 +30,7 @@ public:
 	 * UISubsystem 의 Delegate 에 Bind하는 코드를 포함하므로 여러번 호출 시 주의 필요
 	 * @param InInputAction 버튼에 Bind 될 IA
 	 */
+	UFUNCTION(BlueprintCallable)
 	void SetBindInputAction(UInputAction* InInputAction);
 	
 private:
