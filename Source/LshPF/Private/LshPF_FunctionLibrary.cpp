@@ -3,6 +3,7 @@
 
 #include "LshPF_FunctionLibrary.h"
 
+#include "DeveloperSettings/LshPF_LevelSetting.h"
 #include "DeveloperSettings/LshPF_WidgetMapSetting.h"
 
 TSoftClassPtr<ULshPF_FocusableWidgetBase> ULshPF_FunctionLibrary::GetSoftFocusableWidgetBaseClassByTag(
@@ -12,4 +13,12 @@ TSoftClassPtr<ULshPF_FocusableWidgetBase> ULshPF_FunctionLibrary::GetSoftFocusab
 	checkf(LshPFDeveloperSettings->LshPF_WidgetMap.Contains(InWidgetTag), TEXT("Could not find the corresponding widget under the tag %s"), *InWidgetTag.ToString());
 
 	return LshPFDeveloperSettings->LshPF_WidgetMap.FindRef(InWidgetTag);
+}
+
+TSoftObjectPtr<UWorld> ULshPF_FunctionLibrary::GetSoftLevelByTag(FGameplayTag InTag)
+{
+	const ULshPF_LevelSetting* LshPFDeveloperSettings = GetDefault<ULshPF_LevelSetting>();
+	checkf(LshPFDeveloperSettings->LshPF_LevelMap.Contains(InTag), TEXT("Could not find the corresponding level under the tag %s"), *InTag.ToString());
+
+	return LshPFDeveloperSettings->LshPF_LevelMap.FindRef(InTag);
 }

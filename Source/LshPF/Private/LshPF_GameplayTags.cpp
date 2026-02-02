@@ -13,4 +13,7 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_ConfirmScreenBase, "LshPF.Widget.ConfirmScreenBase");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_PressAnyKey, "LshPF.Widget.PressAnyKey");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_MainMenu, "LshPF.Widget.MainMenu");
+
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_MainMenu, "LshPF.Level.MainMenu");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_Battle, "LshPF.Level.Battle");
 }

@@ -5,7 +5,6 @@
 
 #include "LshPF_GameplayTags.h"
 #include "Engine/AssetManager.h"
-#include "GameFramework/GameSession.h"
 #include "GameFramework/InputDeviceSubsystem.h"
 #include "GameFramework/InputSettings.h"
 #include "Widgets/LshPF_PrimaryLayout.h"

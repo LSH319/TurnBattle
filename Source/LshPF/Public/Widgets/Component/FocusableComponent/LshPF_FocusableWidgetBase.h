@@ -7,6 +7,7 @@
 #include "LshPF_FocusableWidgetBase.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFocusDelegate);
 
 /**
  * 
@@ -17,6 +18,11 @@ class LSHPF_API ULshPF_FocusableWidgetBase : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	//~ Begin UUserWidget Interface
+    virtual void NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent) override;
+    virtual void NativeOnRemovedFromFocusPath(const FFocusEvent& InFocusEvent) override;
+    //~ End UUserWidget Interface
+	
 	/** 
 	 * Desired Focus Widget 반환
 	 */
@@ -49,6 +55,12 @@ public:
 	//Child Widget 이 Focus 흭득 시 해당 위젯을 저장해두기 위한 Delegate
 	DECLARE_MULTICAST_DELEGATE_OneParam(FOnFocusWidgetChanged, ULshPF_FocusableWidgetBase*)
 	FOnFocusWidgetChanged OnFocusWidgetChanged;
+
+	//focus 흭득 관련 Delegate
+	UPROPERTY(BlueprintAssignable)
+	FOnFocusDelegate OnGetFocusDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnFocusDelegate OnRemoveFocusDelegate;
 	
 protected:
 	//~ Begin UUserWidget Interface

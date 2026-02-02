@@ -9,8 +9,6 @@
 class UTextBlock;
 class ULshPF_Button;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnButtonGetFocusDelegate, FName, ViewTargetCameraTag);
-
 /**
  * 
  */
@@ -31,9 +29,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText Text);
-
-	UPROPERTY(BlueprintAssignable)
-	FOnButtonGetFocusDelegate OnButtonGetFocusDelegate;
 	
 private:
 	//~ Begin UUserWidget Interface
@@ -60,6 +55,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LshPF FocusableButton", meta = (AllowPrivateAccess = "true"))
 	FText ButtonDescriptionText;
 
-	UPROPERTY(EditAnywhere, Category = "LshPF FocusableButton", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LshPF FocusableButton", meta = (AllowPrivateAccess = "true"))
 	FName ViewTargetCameraTag;
 };

@@ -19,4 +19,7 @@ class LSHPF_API ULshPF_FunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintPure, Category = "LshP Function Library")
 	static TSoftClassPtr<ULshPF_FocusableWidgetBase> GetSoftFocusableWidgetBaseClassByTag(UPARAM(meta = (Categories = "LshPF.Widget")) FGameplayTag InWidgetTag);
+
+	UFUNCTION(BlueprintPure, Category = "LshP Function Library")
+	static TSoftObjectPtr<UWorld> GetSoftLevelByTag(UPARAM(meta = (Categories = "LshPF.Level")) FGameplayTag InTag);
 };

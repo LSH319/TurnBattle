@@ -7,6 +7,20 @@
 #include "Subsystems/LshPF_UISubsystem.h"
 
 
+void ULshPF_FocusableWidgetBase::NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent)
+{
+	Super::NativeOnAddedToFocusPath(InFocusEvent);
+
+	OnGetFocusDelegate.Broadcast();
+}
+
+void ULshPF_FocusableWidgetBase::NativeOnRemovedFromFocusPath(const FFocusEvent& InFocusEvent)
+{
+	Super::NativeOnRemovedFromFocusPath(InFocusEvent);
+
+	OnRemoveFocusDelegate.Broadcast();
+}
+
 UWidget* ULshPF_FocusableWidgetBase::GetDesiredFocusTarget()
 {
 	return NativeGetDesiredFocusTarget();
