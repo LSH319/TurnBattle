@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "LshPF_Types/LshPF_EnumTypes.h"
 #include "LshPF_BattleComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
@@ -53,9 +54,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float TakeDamageFromCursor(AActor* DamageCauser, FDamageInfo DamageInfo);
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetAttribute(EAttributeType AttributeType); 
+
+	UFUNCTION(BlueprintCallable)
+	void SetAttribute(EAttributeType AttributeType, int32 NewAttribute);
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnTakeDamageDelegate OnTakeDamageDelegate;
-	
+
+	void SetAllCurrentAttributeToBaseAttribute();
 protected:
 	/*
 	 * Base* 해당 속성의 기본값, Buff, Debuff 로 인한 스텟 변화시 연상에 사용, 전투 중 불변
@@ -63,11 +71,46 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 	int32 BaseHealth;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
 	int32 CurrentHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
-	int32 MaxBaseHealth;
-	UPROPERTY(BlueprintReadWrite)
-	int32 MaxCurrentHealth;
+	int32 BaseMaxHealth;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentMaxHealth;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseMana;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentMana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseMaxMana;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentMaxMana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseSpeed;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseAttack;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseDefence;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentDefence;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseAbilityAttack;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentAbilityAttack;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	int32 BaseAbilityDefence;
+	UPROPERTY(BlueprintReadWrite, Category = "Attribute")
+	int32 CurrentAbilityDefence;
 };

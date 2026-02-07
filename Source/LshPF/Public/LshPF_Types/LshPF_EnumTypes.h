@@ -23,3 +23,27 @@ enum class EInputDeviceType : uint8
 	Gamepad,
 	Unknown UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class EAttributeType : uint8
+{
+	BaseHealth,
+	CurrentHealth,
+	BaseMaxHealth,
+	CurrentMaxHealth,
+	BaseMana,
+	CurrentMana,
+	BaseMaxMana,
+	CurrentMaxMana,
+	BaseSpeed,
+	CurrentSpeed,
+	BaseAttack,
+	CurrentAttack,
+	BaseDefence,
+	CurrentDefence,
+	BaseAbilityAttack,
+	CurrentAbilityAttack,
+	BaseAbilityDefence,
+	CurrentAbilityDefence,
+	Unknown UMETA(Hidden)
+};
