@@ -33,7 +33,7 @@ public:
 protected:
 	//~ Begin UUserWidget Interface
     virtual void NativeConstruct() override;
-    //~ Begin UUserWidget Interface
+    //~ End UUserWidget Interface
 
 	/**
 	 * GameplayTag 와 WidgetSwitcher 를 받아 RegisterWidgetSwitcherMap 에 저장
