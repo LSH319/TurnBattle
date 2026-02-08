@@ -22,6 +22,7 @@ class LSHPF_API ULshPF_NotFocusableButton : public ULshPF_NotFocusableWidgetBase
 
 public:
 	UButton* GetButton();
+	
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText Text);
 

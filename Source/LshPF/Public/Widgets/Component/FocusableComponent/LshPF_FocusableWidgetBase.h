@@ -7,7 +7,7 @@
 #include "LshPF_FocusableWidgetBase.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFocusDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventDelegate);
 
 /**
  * 
@@ -58,9 +58,15 @@ public:
 
 	//focus 흭득 관련 Delegate
 	UPROPERTY(BlueprintAssignable)
-	FOnFocusDelegate OnGetFocusDelegate;
+	FOnEventDelegate OnGetFocusDelegate;
 	UPROPERTY(BlueprintAssignable)
-	FOnFocusDelegate OnRemoveFocusDelegate;
+	FOnEventDelegate OnRemoveFocusDelegate;
+
+	//입력 관련 이벤트 그래프 활용을 위한 Delegate
+	UPROPERTY(BlueprintAssignable)
+	FOnEventDelegate OnConfirmActionDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnEventDelegate OnBackActionDelegate;
 	
 protected:
 	//~ Begin UUserWidget Interface

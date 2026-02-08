@@ -35,12 +35,12 @@ bool ULshPF_FocusableWidgetBase::RemoveFromParentStack()
 
 void ULshPF_FocusableWidgetBase::WidgetConfirmAction()
 {
-
+	OnConfirmActionDelegate.Broadcast();
 }
 
 void ULshPF_FocusableWidgetBase::WidgetBackAction()
 {
-
+	OnBackActionDelegate.Broadcast();
 }
 
 UWidget* ULshPF_FocusableWidgetBase::NativeGetDesiredFocusTarget()
