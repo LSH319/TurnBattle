@@ -16,13 +16,13 @@ float ULshPF_BattleComponent::ApplyDamageToTarget(AActor* DamagedActor, AActor* 
 float ULshPF_BattleComponent::TakeDamageFromCursor(AActor* DamageCauser, FDamageInfo DamageInfo)
 {
 	OnTakeDamageDelegate.Broadcast();
-	
-	CurrentHealth = CurrentHealth - DamageInfo.Damage;
+	float ApplyDamage = DamageInfo.Damage;
+	CurrentHealth = CurrentHealth - ApplyDamage;
 	if (CurrentHealth <= 0)
 	{
 		//todo : 사망처리
 	}
-	return DamageInfo.Damage;
+	return ApplyDamage;
 }
 
 int32 ULshPF_BattleComponent::GetAttribute(EAttributeType AttributeType)

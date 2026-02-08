@@ -47,12 +47,23 @@ void ALshPF_BattleCharacter_Base::SetAttribute(EAttributeType AttributeType, int
 
 void ALshPF_BattleCharacter_Base::TurnStart()
 {
-	
+	OnTurnStartDelegate.Broadcast();
 }
 
 void ALshPF_BattleCharacter_Base::TurnEnd()
 {
+	OnTurnEndDelegate.Broadcast();
 	GetBattleGameMode()->TargetTurnEnd(this);
+}
+
+bool ALshPF_BattleCharacter_Base::IsPlayerCharacter()
+{
+	return false;
+}
+
+ULshPF_BattleComponent* ALshPF_BattleCharacter_Base::GetBattleComponent()
+{
+	return LshPF_BattleComponent;
 }
 
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()

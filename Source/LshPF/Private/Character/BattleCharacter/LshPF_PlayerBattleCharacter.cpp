@@ -18,6 +18,11 @@ void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
+bool ALshPF_PlayerBattleCharacter::IsPlayerCharacter()
+{
+	return true;
+}
+
 float ALshPF_PlayerBattleCharacter::GetBaseAttributeFromCurveTable(EAttributeType AttributeType, int32 Level)
 {
 	FRealCurve* Curve = nullptr;

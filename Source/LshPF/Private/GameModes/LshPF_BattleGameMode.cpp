@@ -12,6 +12,15 @@ void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestB
 	FTurnTableData TurnTableData(RequireTime, RequestBattleComponent);
 
 	TurnTable.Add(TurnTableData);
+
+	if (RequestBattleComponent->IsPlayerCharacter())
+	{
+		PlayerCharacterList.Add(RequestBattleComponent);
+	}
+	else
+	{
+		EnemyCharacterList.Add(RequestBattleComponent);
+	}
 	
 	SortTurnTable();
 }

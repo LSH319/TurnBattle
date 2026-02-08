@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 #include "LshPF_BattleInterface.generated.h"
 
+class ULshPF_BattleComponent;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class ULshPF_BattleInterface : public UInterface
@@ -27,4 +28,6 @@ public:
 	virtual void SetAttribute(EAttributeType AttributeType, int32 NewAttribute) = 0;
 	virtual void TurnStart() = 0;
 	virtual void TurnEnd() = 0;
+	virtual bool IsPlayerCharacter() = 0;
+	virtual ULshPF_BattleComponent* GetBattleComponent() = 0;
 };

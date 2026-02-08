@@ -39,6 +39,7 @@ public:
 	
 protected:
 	void SortTurnTable();
+	UFUNCTION(BlueprintCallable)
 	void GrantTurn();
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -50,4 +51,7 @@ protected:
 	float GlobalTimer = 0.f;
 
 	TArray<FTurnTableData> TurnTable;
+	
+	TArray<ILshPF_BattleInterface*> PlayerCharacterList;
+	TArray<ILshPF_BattleInterface*> EnemyCharacterList;
 };

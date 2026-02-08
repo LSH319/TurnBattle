@@ -7,6 +7,8 @@
 #include "Interface/LshPF_BattleInterface.h"
 #include "LshPF_BattleCharacter_Base.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTurnDelegate);
+
 class ALshPF_BattleGameMode;
 class ULshPF_BattleComponent;
 /**
@@ -39,7 +41,14 @@ public:
 	virtual void SetAttribute(EAttributeType AttributeType, int32 NewAttribute) override;
 	virtual void TurnStart() override;
 	virtual void TurnEnd() override;
+	virtual bool IsPlayerCharacter() override;
+	virtual ULshPF_BattleComponent* GetBattleComponent() override;
 	//~ End ACharacter Interface
+
+	UPROPERTY(BlueprintAssignable)
+	FTurnDelegate OnTurnStartDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FTurnDelegate OnTurnEndDelegate;
 	
 protected:
 	UPROPERTY(EditAnywhere)

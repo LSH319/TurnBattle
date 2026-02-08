@@ -19,6 +19,10 @@ public:
 	virtual void PostInitializeComponents() override;
 	//~ End ACharacter Interface
 	
+	//~ Begin ACharacter Interface
+	virtual bool IsPlayerCharacter() override;
+	//~ End ACharacter Interface
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CharacterLevel = 0;
