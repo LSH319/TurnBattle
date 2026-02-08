@@ -41,7 +41,7 @@ void ULshPF_NotFocusableButton::InitImage()
 {
 	ALshPF_PlayerControllerBase* LshPF_PlayerController = GetLshPF_PlayerController();
 	
-	if (BindInputAction.IsValid())
+	if (BindInputAction.IsValid() && LshPF_PlayerController)
 	{
 		//IA 에 바인딩 된 Keys
 		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(BindInputAction.Get()));

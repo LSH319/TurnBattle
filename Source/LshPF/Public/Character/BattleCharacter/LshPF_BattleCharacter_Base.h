@@ -40,6 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetAttribute(EAttributeType AttributeType, int32 NewAttribute) override;
 	virtual void TurnStart() override;
+	UFUNCTION(BlueprintCallable)
 	virtual void TurnEnd() override;
 	virtual bool IsPlayerCharacter() override;
 	virtual ULshPF_BattleComponent* GetBattleComponent() override;

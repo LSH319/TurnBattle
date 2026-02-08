@@ -54,4 +54,7 @@ protected:
 	
 	TArray<ILshPF_BattleInterface*> PlayerCharacterList;
 	TArray<ILshPF_BattleInterface*> EnemyCharacterList;
+
+private:
+	bool IsTurnGranted = false;
 };

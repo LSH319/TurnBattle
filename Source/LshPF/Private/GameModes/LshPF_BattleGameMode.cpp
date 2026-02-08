@@ -3,6 +3,7 @@
 
 #include "GameModes/LshPF_BattleGameMode.h"
 
+#include "LshPF_GameInstance.h"
 #include "Interface/LshPF_BattleInterface.h"
 
 void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleComponent)
@@ -43,10 +44,17 @@ void ALshPF_BattleGameMode::SortTurnTable()
 		{
 			return A.RequireTP < B.RequireTP;
 		});
+
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	if (GameInstance->GetAllCharacterCount() == TurnTable.Num() && !IsTurnGranted)
+	{
+		GrantTurn();
+	}
 }
 
 void ALshPF_BattleGameMode::GrantTurn()
 {
+	IsTurnGranted = true;
 	TurnTable[0].TargetCharacter->TurnStart();
 	GlobalTimer = TurnTable[0].RequireTP;
 	

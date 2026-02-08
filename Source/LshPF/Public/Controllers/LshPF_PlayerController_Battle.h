@@ -22,9 +22,6 @@ private:
 	UInputMappingContext* BattleCommandMappingContext;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
-	UInputAction* BattleGuardAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
 	UInputAction* BattleSkillAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
