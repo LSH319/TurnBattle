@@ -54,15 +54,28 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float TakeDamageFromCursor(AActor* DamageCauser, FDamageInfo DamageInfo);
 
+	/*
+	 * EAttributeType 에 따른 Attribute 값 반환
+	 * AttributeType 원하는 Attribute 값
+	 * return : EAttributeType 에 따른 Attribute 값
+	 */
 	UFUNCTION(BlueprintCallable)
 	int32 GetAttribute(EAttributeType AttributeType); 
 
+	/*
+	 * EAttributeType 에 따른 Attribute 값을 NewAttribute 값으로 설정
+	 * AttributeType 원하는 Attribute 값
+	 * NewAttribute 변경하길 원하는 값
+	 */
 	UFUNCTION(BlueprintCallable)
 	void SetAttribute(EAttributeType AttributeType, int32 NewAttribute);
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnTakeDamageDelegate OnTakeDamageDelegate;
 
+	/*
+	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화
+	 */
 	void SetAllCurrentAttributeToBaseAttribute();
 protected:
 	/*

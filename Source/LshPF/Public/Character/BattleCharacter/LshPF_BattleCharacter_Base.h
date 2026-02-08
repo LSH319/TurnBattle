@@ -5,23 +5,29 @@
 #include "CoreMinimal.h"
 #include "Character/LshPF_CharacterBase.h"
 #include "Interface/LshPF_BattleInterface.h"
-#include "LshPF_BattleCharacter.generated.h"
+#include "LshPF_BattleCharacter_Base.generated.h"
 
+class ALshPF_BattleGameMode;
 class ULshPF_BattleComponent;
 /**
  * 
  */
 UCLASS()
-class LSHPF_API ALshPF_BattleCharacter : public ALshPF_CharacterBase, public ILshPF_BattleInterface
+class LSHPF_API ALshPF_BattleCharacter_Base : public ALshPF_CharacterBase, public ILshPF_BattleInterface
 {
 	GENERATED_BODY()
 
 public:
-	ALshPF_BattleCharacter();
+	ALshPF_BattleCharacter_Base();
 
 	virtual ULshPF_BattleComponent* GetBattleComponent() const;
 	
 	//~ Begin ACharacter Interface
+	/*
+	 * override 하여 Attribute 초기화 후 Super 호출하기
+	 * BaseHealth 와 BaseMana 를 Max 값으로 설정 후 Current 값을 Base 값과 동기화,
+	 * 위 값들을 별도로 지정할 경우 Super 호출대신 코드 작성
+	 */
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	//~ End ACharacter Interface
@@ -38,4 +44,10 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	ULshPF_BattleComponent* LshPF_BattleComponent;
+
+	ALshPF_BattleGameMode* GetBattleGameMode();
+
+private:
+	UPROPERTY()
+	ALshPF_BattleGameMode* CachedBattleGameMode;
 };

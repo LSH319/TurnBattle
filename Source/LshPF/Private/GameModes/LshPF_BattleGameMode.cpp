@@ -22,6 +22,11 @@ void ALshPF_BattleGameMode::TargetTurnEnd(ILshPF_BattleInterface* RequestBattleC
 	GrantTurn();
 }
 
+FEnemyAttribute* ALshPF_BattleGameMode::GetEnemyAttributeByKeyName(FName EnemyKeyName)
+{
+	return EnemyAttributeData->FindRow<FEnemyAttribute>(EnemyKeyName, FString("EnemyKeyName Is Error"));
+}
+
 void ALshPF_BattleGameMode::SortTurnTable()
 {
 	TurnTable.Sort([](
@@ -35,5 +40,6 @@ void ALshPF_BattleGameMode::GrantTurn()
 {
 	TurnTable[0].TargetCharacter->TurnStart();
 	GlobalTimer = TurnTable[0].RequireTP;
+	
 	TurnTable.RemoveAt(0);
 }

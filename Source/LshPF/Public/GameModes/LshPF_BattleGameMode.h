@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/LshPF_DataTableRow.h"
 #include "GameModes/LshPF_GameModeBase.h"
 #include "LshPF_BattleGameMode.generated.h"
 
@@ -34,6 +35,7 @@ class LSHPF_API ALshPF_BattleGameMode : public ALshPF_GameModeBase
 public:
 	void RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleComponent);
 	void TargetTurnEnd(ILshPF_BattleInterface* RequestBattleComponent);
+	FEnemyAttribute* GetEnemyAttributeByKeyName(FName EnemyKeyName);
 	
 protected:
 	void SortTurnTable();
@@ -42,6 +44,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float TurnStartTP = 100.f;
 
+	UPROPERTY(EditDefaultsOnly)
+	UDataTable* EnemyAttributeData;
+	
 	float GlobalTimer = 0.f;
 
 	TArray<FTurnTableData> TurnTable;
