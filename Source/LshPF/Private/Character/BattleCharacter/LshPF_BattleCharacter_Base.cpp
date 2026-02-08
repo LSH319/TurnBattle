@@ -22,7 +22,7 @@ void ALshPF_BattleCharacter_Base::PostInitializeComponents()
 	
 	//BaseHealth 와 BaseMana 를 Max 값으로 설정
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseHealth,LshPF_BattleComponent->GetAttribute(EAttributeType::BaseMaxHealth));
-	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMana,LshPF_BattleComponent->GetAttribute(EAttributeType::BaseMana));
+	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMana,LshPF_BattleComponent->GetAttribute(EAttributeType::BaseMaxMana));
 
 	//Current 값을 Base 값과 동기화
 	LshPF_BattleComponent->SetAllCurrentAttributeToBaseAttribute();
