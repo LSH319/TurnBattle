@@ -39,8 +39,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<FActionBarEntry> ActionBarEntry;
 
+	/*
+	 * ActionBar 에 Entry 추가
+	 * return 이미지 설정 실패
+	 */
 	UFUNCTION(BlueprintCallable)
-	void CreateActionBarEntry();
+	bool CreateActionBarEntry();
 	
 protected:
 	//~ Begin UUserWidget interface

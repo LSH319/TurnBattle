@@ -23,28 +23,30 @@ void ULshPF_NotFocusableButton::SetButtonText(FText Text)
 	ButtonText->SetText(Text);
 }
 
-void ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
+bool ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
 {
 	BindInputAction.Reset();
 	BindInputAction = InInputAction;
-
-	InitImage();
-
+	
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
 		//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
 		UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
 	}
+
+	return InitImage();
 }
 
-void ULshPF_NotFocusableButton::InitImage()
+bool ULshPF_NotFocusableButton::InitImage()
 {
 	ALshPF_PlayerControllerBase* LshPF_PlayerController = GetLshPF_PlayerController();
-	
+
+	//사용할 값이 잘못된 경우 false
 	if (BindInputAction.IsValid() && LshPF_PlayerController)
 	{
 		//IA 에 바인딩 된 Keys
 		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(BindInputAction.Get()));
+		//IMC ADD 가 늦거나 등록이 안된경우 false
 		if (!BindKeys.IsEmpty())
 		{
 			//UDeveloperSettings 을 상속한 세팅
@@ -65,8 +67,11 @@ void ULshPF_NotFocusableButton::InitImage()
 					)
 				);
 			}
+			//Load 후 이벤트 등록을 완료했으므로 true
+			return true;
 		}
 	}
+	return false;
 }
 
 void ULshPF_NotFocusableButton::CacheKeyImage(TSoftObjectPtr<UTexture2D> CacheTarget, FKey InKey)

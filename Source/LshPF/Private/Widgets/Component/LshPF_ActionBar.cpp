@@ -7,9 +7,10 @@
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "Widgets/Component/NotFocusableComponent/LshPF_NotFocusableButton.h"
 
-void ULshPF_ActionBar::CreateActionBarEntry()
+bool ULshPF_ActionBar::CreateActionBarEntry()
 {
 	ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer());
+	bool IsSuccess = true;
 	
 	for (const FActionBarEntry Entry : ActionBarEntry)
 	{
@@ -17,9 +18,12 @@ void ULshPF_ActionBar::CreateActionBarEntry()
 		CreatedButton->SetButtonText(Entry.EntryText);
 		if (PlayerController)
 		{
-			CreatedButton->SetBindInputAction(Entry.EntryInputAction);
+			//SetBindInputAction 실행 중 false 가 있을경우 false return
+			IsSuccess = IsSuccess && CreatedButton->SetBindInputAction(Entry.EntryInputAction);
 		}
 	}
+
+	return IsSuccess;
 }
 
 void ULshPF_ActionBar::NativeConstruct()

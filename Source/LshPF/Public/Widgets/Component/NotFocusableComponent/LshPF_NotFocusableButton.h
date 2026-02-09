@@ -30,9 +30,10 @@ public:
 	 * 버튼에 Bind 될 IA 를 받아 처리
 	 * UISubsystem 의 Delegate 에 Bind하는 코드를 포함하므로 여러번 호출 시 주의 필요
 	 * @param InInputAction 버튼에 Bind 될 IA
+	 * return 이미지 등록 성공 여부
 	 */
 	UFUNCTION(BlueprintCallable)
-	void SetBindInputAction(UInputAction* InInputAction);
+	bool SetBindInputAction(UInputAction* InInputAction);
 	
 private:
 	TWeakObjectPtr<UInputAction> BindInputAction;
@@ -41,8 +42,9 @@ private:
 	 * 저장된 IA 에 바인딩 되어있는 Key 확인
 	 * key 에 따른 Image 가 저장되어 있는 DataAsset Load
 	 * DataAsset Load 후 이미지 저장을 위한 함수 호출
+	 * return 이미지 등록 성공 여부
 	 */
-	void InitImage();
+	bool InitImage();
 
 	/**
 	 * CacheTarget 을 Load 후 Image 저장
