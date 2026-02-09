@@ -19,11 +19,14 @@ protected:
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* BattleCommandMappingContext;
+	UInputAction* BattleAttackAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
-	UInputAction* BattleSkillAction;
+	UInputAction* BattleGuardAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
-	UInputAction* BattleItemAction;
+	UInputAction* BattleOpenSkillListAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
+	UInputAction* BattleOpenItemListAction;
 };
