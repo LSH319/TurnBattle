@@ -3,7 +3,10 @@
 
 #include "Character/BattleCharacter/LshPF_PlayerBattleCharacter.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Component/LshPF_BattleComponent.h"
+#include "Components/SlateWrapperTypes.h"
+#include "Subsystems/LshPF_UISubsystem.h"
 
 void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 {
@@ -16,6 +19,25 @@ void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityDefence, GetBaseAttributeFromCurveTable(EAttributeType::BaseAbilityDefence, CharacterLevel)); 
 
 	Super::PostInitializeComponents();
+}
+
+void ALshPF_PlayerBattleCharacter::TurnStart()
+{
+	Super::TurnStart();
+
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::SelfHitTestInvisible);
+	}
+}
+
+void ALshPF_PlayerBattleCharacter::TurnEnd()
+{
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
+	}
+	Super::TurnEnd();
 }
 
 bool ALshPF_PlayerBattleCharacter::IsPlayerCharacter()

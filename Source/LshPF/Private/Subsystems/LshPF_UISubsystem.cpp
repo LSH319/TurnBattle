@@ -105,4 +105,13 @@ void ULshPF_UISubsystem::SetRecentlyInputDeviceType()
 UWidget* ULshPF_UISubsystem::GetFocusTargetWidget()
 {
 	return CreatedPrimaryLayout->GetFocusTargetInFocusWidgetSwitcher();
+}
+
+void ULshPF_UISubsystem::SetWidgetSwitcherVisibilityWithTag(FGameplayTag InTag, ESlateVisibility Visibility)
+{
+	ULshPF_WidgetSwitcher* FindWidgetSwitcher= CreatedPrimaryLayout->FindWidgetSwitcherByTag(InTag);
+	if (FindWidgetSwitcher)
+	{
+		FindWidgetSwitcher->SetVisibility(Visibility);
+	}
 } 

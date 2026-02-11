@@ -34,7 +34,7 @@ public:
 	virtual void BeginPlay() override;
 	//~ End ACharacter Interface
 
-	//~ Begin ACharacter Interface
+	//~ Begin LshPF_BattleInterface Interface
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetAttribute(EAttributeType AttributeType) override;
 	UFUNCTION(BlueprintCallable)
@@ -44,7 +44,7 @@ public:
 	virtual void TurnEnd() override;
 	virtual bool IsPlayerCharacter() override;
 	virtual ULshPF_BattleComponent* GetBattleComponent() override;
-	//~ End ACharacter Interface
+	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
 	FTurnDelegate OnTurnStartDelegate;

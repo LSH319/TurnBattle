@@ -35,7 +35,7 @@ public:
 	 * @param InCreatedWidget 생성된 PrimaryLayoutWidget
 	 */
 	UFUNCTION(BlueprintCallable)
-	void RegisterCreatedPrimaryLayoutWidget(ULshPF_PrimaryLayout* InCreatedWidget);
+	void RegisterCreatedPrimaryLayoutWidget(UPARAM(meta = (Categories = "LshPF.WidgetStack")) ULshPF_PrimaryLayout* InCreatedWidget);
 
 	/**
 	 * InWidgetStackTag 를 통해 Widget 이 추가될 WidgetSwitcher 지정
@@ -74,6 +74,8 @@ public:
 	 */
 	UWidget* GetFocusTargetWidget();
 
+	void SetWidgetSwitcherVisibilityWithTag(UPARAM(meta = (Categories = "LshPF.WidgetStack")) FGameplayTag InTag, ESlateVisibility Visibility);
+	
 	//Focus Widget 재탐색 관련 Delegate
 	FFindNewFocusWidget FindNewFocusWidget;
 	//Input Device 변경 관련 Delegate

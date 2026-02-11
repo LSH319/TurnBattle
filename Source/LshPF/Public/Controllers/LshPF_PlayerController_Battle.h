@@ -6,6 +6,7 @@
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
+class ALshPF_BattleGameMode;
 /**
  * 
  */
@@ -16,6 +17,9 @@ class LSHPF_API ALshPF_PlayerController_Battle : public ALshPF_PlayerControllerB
 	
 protected:
 	virtual void SetupInputComponent() override;
+
+	UFUNCTION(BlueprintPure)
+	ALshPF_BattleGameMode* GetBattleGameMode();
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
@@ -29,4 +33,7 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Battle", meta = (AllowPrivateAccess = "true"))
 	UInputAction* BattleOpenItemListAction;
+
+	UPROPERTY()
+	ALshPF_BattleGameMode* CachedBattleGameMode;
 };

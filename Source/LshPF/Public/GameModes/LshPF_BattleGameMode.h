@@ -35,10 +35,15 @@ class LSHPF_API ALshPF_BattleGameMode : public ALshPF_GameModeBase
 public:
 	void RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleComponent);
 	void TargetTurnEnd(ILshPF_BattleInterface* RequestBattleComponent);
-	FEnemyAttribute* GetEnemyAttributeByKeyName(FName EnemyKeyName);
+	FEnemyAttribute* GetEnemyAttributeByKeyName(FName EnemyKeyName) const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetUIReady(bool NewIsUIReady);
 	
 protected:
 	void SortTurnTable();
+	bool IsGameReady() const;
+	
 	UFUNCTION(BlueprintCallable)
 	void GrantTurn();
 	
@@ -57,4 +62,5 @@ protected:
 
 private:
 	bool IsTurnGranted = false;
+	bool IsUIReady = false;
 };

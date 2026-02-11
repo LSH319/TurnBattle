@@ -22,7 +22,8 @@ public:
 	 * @param InTag 탐색하기 원하는 WidgetSwitcher 의 FGameplayTag
 	 * @return InTag 를 통해 찾아낸 WidgetSwitcher
 	 */
-	ULshPF_WidgetSwitcher* FindWidgetSwitcherByTag(const FGameplayTag InTag);
+	UFUNCTION(BlueprintCallable)
+	ULshPF_WidgetSwitcher* FindWidgetSwitcherByTag(UPARAM(meta = (Categories = "LshPF.WidgetStack")) const FGameplayTag InTag);
 	
 	/**
 	 * WidgetSwitcher 내부에 있는 Widget 중 Focus를 받아야 하는 Widget을 return

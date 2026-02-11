@@ -32,9 +32,19 @@ void ALshPF_BattleGameMode::TargetTurnEnd(ILshPF_BattleInterface* RequestBattleC
 	GrantTurn();
 }
 
-FEnemyAttribute* ALshPF_BattleGameMode::GetEnemyAttributeByKeyName(FName EnemyKeyName)
+FEnemyAttribute* ALshPF_BattleGameMode::GetEnemyAttributeByKeyName(FName EnemyKeyName) const
 {
 	return EnemyAttributeData->FindRow<FEnemyAttribute>(EnemyKeyName, FString("EnemyKeyName Is Error"));
+}
+
+void ALshPF_BattleGameMode::SetUIReady(bool NewIsUIReady)
+{
+	IsUIReady = NewIsUIReady;
+
+	if (IsGameReady())
+	{
+		GrantTurn();
+	}
 }
 
 void ALshPF_BattleGameMode::SortTurnTable()
@@ -45,11 +55,20 @@ void ALshPF_BattleGameMode::SortTurnTable()
 			return A.RequireTP < B.RequireTP;
 		});
 
-	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
-	if (GameInstance->GetAllCharacterCount() == TurnTable.Num() && !IsTurnGranted)
+	if (IsGameReady())
 	{
 		GrantTurn();
 	}
+}
+
+bool ALshPF_BattleGameMode::IsGameReady() const
+{
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	if (GameInstance->GetAllCharacterCount() == TurnTable.Num() && !IsTurnGranted && IsUIReady)
+	{
+		return true;
+	}
+	return false;
 }
 
 void ALshPF_BattleGameMode::GrantTurn()

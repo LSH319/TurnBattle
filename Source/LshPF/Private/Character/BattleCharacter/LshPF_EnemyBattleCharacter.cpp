@@ -3,8 +3,11 @@
 
 #include "Character/BattleCharacter/LshPF_EnemyBattleCharacter.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Component/LshPF_BattleComponent.h"
+#include "Components/SlateWrapperTypes.h"
 #include "GameModes/LshPF_BattleGameMode.h"
+#include "Subsystems/LshPF_UISubsystem.h"
 
 void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 {
@@ -23,4 +26,14 @@ void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 	}
 	
 	Super::PostInitializeComponents();
+}
+
+void ALshPF_EnemyBattleCharacter::TurnStart()
+{
+	Super::TurnStart();
+
+	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+	{
+		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
+	}
 }

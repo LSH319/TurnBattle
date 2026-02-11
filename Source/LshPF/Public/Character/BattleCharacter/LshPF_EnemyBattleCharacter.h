@@ -18,6 +18,10 @@ public:
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
 	//~ End ACharacter Interface
+
+	//~ Begin LshPF_BattleInterface Interface
+	virtual void TurnStart() override;
+	//~ End LshPF_BattleInterface Interface
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

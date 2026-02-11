@@ -18,10 +18,12 @@ public:
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
 	//~ End ACharacter Interface
-	
-	//~ Begin ACharacter Interface
+
+	//~ Begin LshPF_BattleInterface Interface
+	virtual void TurnStart() override;
+	virtual void TurnEnd() override;
 	virtual bool IsPlayerCharacter() override;
-	//~ End ACharacter Interface
+	//~ End LshPF_BattleInterface Interface
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
