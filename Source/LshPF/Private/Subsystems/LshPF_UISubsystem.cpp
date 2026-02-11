@@ -114,4 +114,4 @@ void ULshPF_UISubsystem::SetWidgetSwitcherVisibilityWithTag(FGameplayTag InTag, 
 	{
 		FindWidgetSwitcher->SetVisibility(Visibility);
 	}
-} 
+}

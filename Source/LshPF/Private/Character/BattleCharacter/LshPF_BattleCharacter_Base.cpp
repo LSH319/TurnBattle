@@ -32,7 +32,7 @@ void ALshPF_BattleCharacter_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetBattleGameMode()->RequestAddTurnTable(this);
+	GetBattleGameMode()->CharacterReady(this);
 }
 
 int32 ALshPF_BattleCharacter_Base::GetAttribute(EAttributeType AttributeType)

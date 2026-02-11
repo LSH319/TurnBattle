@@ -17,15 +17,15 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(AActor* DamageCauser, FDamage
 {
 	OnTakeDamageDelegate.Broadcast();
 	float ApplyDamage = DamageInfo.Damage;
-	CurrentHealth = CurrentHealth - ApplyDamage;
-	if (CurrentHealth <= 0)
+	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::CurrentHealth) - ApplyDamage);
+	if (GetAttribute(EAttributeType::CurrentHealth) <= 0)
 	{
 		//todo : 사망처리
 	}
 	return ApplyDamage;
 }
 
-int32 ULshPF_BattleComponent::GetAttribute(EAttributeType AttributeType)
+float ULshPF_BattleComponent::GetAttribute(EAttributeType AttributeType)
 {
 	switch (AttributeType)
 	{
@@ -71,15 +71,15 @@ int32 ULshPF_BattleComponent::GetAttribute(EAttributeType AttributeType)
 	}
 }
 
-void ULshPF_BattleComponent::SetAttribute(EAttributeType AttributeType, int32 NewAttribute)
+void ULshPF_BattleComponent::SetAttribute(EAttributeType AttributeType, float NewAttribute)
 {
 	switch (AttributeType)
 	{
 	case EAttributeType::BaseHealth:
-		BaseHealth = NewAttribute;
+		BaseHealth = FMath::Clamp(NewAttribute, 0, GetAttribute(EAttributeType::BaseMaxHealth));
 		break;
 	case EAttributeType::CurrentHealth:
-		CurrentHealth = NewAttribute;
+		CurrentHealth = FMath::Clamp(NewAttribute, 0, GetAttribute(EAttributeType::CurrentMaxHealth));
 		break;
 	case EAttributeType::BaseMaxHealth:
 		BaseMaxHealth = NewAttribute;
@@ -88,10 +88,10 @@ void ULshPF_BattleComponent::SetAttribute(EAttributeType AttributeType, int32 Ne
 		CurrentMaxHealth = NewAttribute;
 		break;
 	case EAttributeType::BaseMana:
-		BaseMana = NewAttribute;
+		BaseMana = FMath::Clamp(NewAttribute, 0, GetAttribute(EAttributeType::BaseMaxMana));
 		break;
 	case EAttributeType::CurrentMana:
-		CurrentMana = NewAttribute;
+		CurrentMana = FMath::Clamp(NewAttribute, 0, GetAttribute(EAttributeType::CurrentMaxMana));
 		break;
 	case EAttributeType::BaseMaxMana:
 		BaseMaxMana = NewAttribute;
@@ -133,17 +133,24 @@ void ULshPF_BattleComponent::SetAttribute(EAttributeType AttributeType, int32 Ne
 	default:
 		break;
 	}
+
+	AttributeChangedDelegate.Broadcast(AttributeType, NewAttribute);
 }
 
 void ULshPF_BattleComponent::SetAllCurrentAttributeToBaseAttribute()
 {
-	CurrentHealth = BaseHealth;
-	CurrentMaxHealth = BaseMaxHealth;
-	CurrentMana = BaseMana;
-	CurrentMaxMana = BaseMaxMana;
-	CurrentSpeed = BaseSpeed;
-	CurrentAttack = BaseAttack;
-	CurrentDefence = BaseDefence;
-	CurrentAbilityAttack = BaseAbilityAttack;
-	CurrentAbilityDefence = BaseAbilityDefence;
+	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::BaseHealth));
+	SetAttribute(EAttributeType::CurrentMaxHealth, GetAttribute(EAttributeType::BaseMaxHealth));
+	SetAttribute(EAttributeType::CurrentMana, GetAttribute(EAttributeType::BaseMana));
+	SetAttribute(EAttributeType::CurrentMaxMana, GetAttribute(EAttributeType::BaseMaxMana));
+	SetAttribute(EAttributeType::CurrentSpeed, GetAttribute(EAttributeType::BaseSpeed));
+	SetAttribute(EAttributeType::CurrentAttack, GetAttribute(EAttributeType::BaseAttack));
+	SetAttribute(EAttributeType::CurrentDefence, GetAttribute(EAttributeType::BaseDefence));
+	SetAttribute(EAttributeType::CurrentAbilityAttack, GetAttribute(EAttributeType::BaseAbilityAttack));
+	SetAttribute(EAttributeType::CurrentAbilityDefence, GetAttribute(EAttributeType::BaseAbilityDefence));
+}
+
+FText ULshPF_BattleComponent::GetCharacterName()
+{
+	return CharacterName;
 }

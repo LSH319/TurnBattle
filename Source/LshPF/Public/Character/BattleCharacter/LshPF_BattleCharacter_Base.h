@@ -52,7 +52,7 @@ public:
 	FTurnDelegate OnTurnEndDelegate;
 	
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ULshPF_BattleComponent* LshPF_BattleComponent;
 
 	ALshPF_BattleGameMode* GetBattleGameMode();

@@ -8,6 +8,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LshPF_UISubsystem.generated.h"
 
+class ULshPF_BattleComponent;
 enum class EHardwareDevicePrimaryType : uint8;
 struct FHardwareDeviceIdentifier;
 class ULshPF_ConfirmScreen;
@@ -17,6 +18,7 @@ class ULshPF_PrimaryLayout;
 
 DECLARE_DELEGATE(FFindNewFocusWidget)
 DECLARE_MULTICAST_DELEGATE_OneParam(FInputDeviceChange, EInputDeviceType)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBattleComponentDelegate, ULshPF_BattleComponent*, BattleComponent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdatedDelegate, ULshPF_FocusableButton*, BroadcastingButton, FText, DescriptionText);
 
 /**
@@ -29,7 +31,7 @@ class LSHPF_API ULshPF_UISubsystem : public UGameInstanceSubsystem
 
 public:
 	static ULshPF_UISubsystem* Get(const UObject* WorldContextObject);
-
+	
 	/**
 	 * PrimaryLayoutWidget 을 UISubsystem 에 저장
 	 * @param InCreatedWidget 생성된 PrimaryLayoutWidget
@@ -75,7 +77,7 @@ public:
 	UWidget* GetFocusTargetWidget();
 
 	void SetWidgetSwitcherVisibilityWithTag(UPARAM(meta = (Categories = "LshPF.WidgetStack")) FGameplayTag InTag, ESlateVisibility Visibility);
-	
+
 	//Focus Widget 재탐색 관련 Delegate
 	FFindNewFocusWidget FindNewFocusWidget;
 	//Input Device 변경 관련 Delegate
@@ -83,6 +85,9 @@ public:
 	//Description Text 변경을 위한 Delegate
 	UPROPERTY(BlueprintAssignable)
 	FOnButtonDescriptionTextUpdatedDelegate OnButtonDescriptionTextUpdated;
+	//Broadcast 시 해당 Component 에 따른 Status Widget 생성 을 위한 Delegate
+	UPROPERTY(BlueprintAssignable)
+	FOnBattleComponentDelegate OnBattleComponentDelegate;
 	
 private:
 	EInputDeviceType RecentlyInputDeviceType = EInputDeviceType::KeyboardAndMouse;

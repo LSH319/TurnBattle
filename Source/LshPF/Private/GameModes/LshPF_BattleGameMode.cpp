@@ -5,30 +5,60 @@
 
 #include "LshPF_GameInstance.h"
 #include "Interface/LshPF_BattleInterface.h"
+#include "Subsystems/LshPF_UISubsystem.h"
 
-void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleComponent)
+void ALshPF_BattleGameMode::PostInitializeComponents()
 {
-	int32 CharacterSpeed = RequestBattleComponent->GetAttribute(EAttributeType::CurrentSpeed);
-	float RequireTime = GlobalTimer + (TurnStartTP / CharacterSpeed);
-	FTurnTableData TurnTableData(RequireTime, RequestBattleComponent);
+	Super::PostInitializeComponents();
 
-	TurnTable.Add(TurnTableData);
+	//Status UI 준비 완료시 CallBack 등록
+	StatusUIReady.AddDynamic(this, &ThisClass::StatusUIReadyCallBack);
+}
 
-	if (RequestBattleComponent->IsPlayerCharacter())
+void ALshPF_BattleGameMode::CharacterReady(ILshPF_BattleInterface* RequestBattleInterface)
+{
+	if (RequestBattleInterface->IsPlayerCharacter())
 	{
-		PlayerCharacterList.Add(RequestBattleComponent);
+		//Player Character 리스트 에 추가
+		PlayerCharacterList.Add(RequestBattleInterface);
+		
+		if (IsStatusUIReady)
+		{
+			//Status UI 가 준비된 경우, Subsystem Delegate 를 통해 UI에 추가되도록 Broadcast
+			if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+			{
+				UISubsystem->OnBattleComponentDelegate.Broadcast(RequestBattleInterface->GetBattleComponent());
+			}
+		}
+		else
+		{
+			//Status UI 가 준비되지 않은 경우 Queue 에 삽입하여 준비 완료 후 사용
+			WaitingRegisterComponents.Enqueue(RequestBattleInterface->GetBattleComponent());
+		}
 	}
 	else
 	{
-		EnemyCharacterList.Add(RequestBattleComponent);
+		//Enemy Character 리스트 에 추가
+		EnemyCharacterList.Add(RequestBattleInterface);
 	}
+
+	RequestAddTurnTable(RequestBattleInterface);
+}
+
+void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleInterface)
+{
+	int32 CharacterSpeed = RequestBattleInterface->GetAttribute(EAttributeType::CurrentSpeed);
+	float RequireTime = GlobalTimer + (TurnStartTP / CharacterSpeed);
+	FTurnTableData TurnTableData(RequireTime, RequestBattleInterface);
+
+	TurnTable.Add(TurnTableData);
 	
 	SortTurnTable();
 }
 
-void ALshPF_BattleGameMode::TargetTurnEnd(ILshPF_BattleInterface* RequestBattleComponent)
+void ALshPF_BattleGameMode::TargetTurnEnd(ILshPF_BattleInterface* RequestBattleInterface)
 {
-	RequestAddTurnTable(RequestBattleComponent);
+	RequestAddTurnTable(RequestBattleInterface);
 	GrantTurn();
 }
 
@@ -64,7 +94,9 @@ void ALshPF_BattleGameMode::SortTurnTable()
 bool ALshPF_BattleGameMode::IsGameReady() const
 {
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
-	if (GameInstance->GetAllCharacterCount() == TurnTable.Num() && !IsTurnGranted && IsUIReady)
+	if (GameInstance->GetAllCharacterCount() == TurnTable.Num() &&
+		!IsTurnGranted &&
+		IsUIReady)
 	{
 		return true;
 	}
@@ -78,4 +110,22 @@ void ALshPF_BattleGameMode::GrantTurn()
 	GlobalTimer = TurnTable[0].RequireTP;
 	
 	TurnTable.RemoveAt(0);
+}
+
+void ALshPF_BattleGameMode::StatusUIReadyCallBack()
+{
+	//Status UI 준비여부 변경
+	IsStatusUIReady = true;
+
+	//Queue 에 삽입되어 있던 요소들을 전부 사용할때까지
+	while(!WaitingRegisterComponents.IsEmpty())
+	{
+		ULshPF_BattleComponent* BattleComponent;
+		WaitingRegisterComponents.Dequeue(BattleComponent);
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			//UI Subsystem 의 Delegate 를 통해 Broadcast 
+			UISubsystem->OnBattleComponentDelegate.Broadcast(BattleComponent);
+		}
+	}
 }

@@ -10,23 +10,23 @@ struct FEnemyAttribute : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseMaxHealth = 0;
+	float BaseMaxHealth = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseMaxMana = 0;
+	float BaseMaxMana = 0;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseSpeed = 0;
+	float BaseSpeed = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseAttack = 0;
+	float BaseAttack = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseDefence = 0;
+	float BaseDefence = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseAbilityAttack = 0;
+	float BaseAbilityAttack = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attribute")
-	int32 BaseAbilityDefence = 0;
+	float BaseAbilityDefence = 0;
 };
