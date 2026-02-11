@@ -139,10 +139,11 @@ void ULshPF_BattleComponent::SetAttribute(EAttributeType AttributeType, float Ne
 
 void ULshPF_BattleComponent::SetAllCurrentAttributeToBaseAttribute()
 {
-	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::BaseHealth));
 	SetAttribute(EAttributeType::CurrentMaxHealth, GetAttribute(EAttributeType::BaseMaxHealth));
-	SetAttribute(EAttributeType::CurrentMana, GetAttribute(EAttributeType::BaseMana));
 	SetAttribute(EAttributeType::CurrentMaxMana, GetAttribute(EAttributeType::BaseMaxMana));
+
+	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::BaseHealth));
+	SetAttribute(EAttributeType::CurrentMana, GetAttribute(EAttributeType::BaseMana));
 	SetAttribute(EAttributeType::CurrentSpeed, GetAttribute(EAttributeType::BaseSpeed));
 	SetAttribute(EAttributeType::CurrentAttack, GetAttribute(EAttributeType::BaseAttack));
 	SetAttribute(EAttributeType::CurrentDefence, GetAttribute(EAttributeType::BaseDefence));

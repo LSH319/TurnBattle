@@ -83,53 +83,54 @@ public:
 	
 	FOnAttributeChangedDelegate AttributeChangedDelegate;
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 	FText CharacterName;
+	
 	/*
 	 * Base* 해당 속성의 기본값, Buff, Debuff 로 인한 스텟 변화시 연상에 사용, 전투 중 불변
 	 * Current* Buff, Debuff 등의 수치 변화가 적용된 값, 실제 연산에 사용, 전투 중 가변
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentHealth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseMaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentMaxHealth;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseMana;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentMana;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseMaxMana;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentMaxMana;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseSpeed;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentAttack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseDefence;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentDefence;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseAbilityAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentAbilityAttack;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float BaseAbilityDefence;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentAbilityDefence;
