@@ -24,7 +24,7 @@ void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 void ALshPF_PlayerBattleCharacter::TurnStart()
 {
 	Super::TurnStart();
-
+	
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
 		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::SelfHitTestInvisible);
