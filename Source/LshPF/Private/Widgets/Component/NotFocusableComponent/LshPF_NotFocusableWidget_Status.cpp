@@ -30,6 +30,7 @@ void ULshPF_NotFocusableWidget_Status::AttributeChangedCallback(EAttributeType A
 	case EAttributeType::BaseMaxHealth:
 		break;
 	case EAttributeType::CurrentMaxHealth:
+		HealthBar->SetPercent(CachedBattleComponent->GetAttribute(EAttributeType::CurrentHealth)/CachedBattleComponent->GetAttribute(EAttributeType::CurrentMaxHealth));
 		break;
 	case EAttributeType::BaseMana:
 		break;
@@ -39,6 +40,7 @@ void ULshPF_NotFocusableWidget_Status::AttributeChangedCallback(EAttributeType A
 	case EAttributeType::BaseMaxMana:
 		break;
 	case EAttributeType::CurrentMaxMana:
+		ManaBar->SetPercent(CachedBattleComponent->GetAttribute(EAttributeType::CurrentMana)/CachedBattleComponent->GetAttribute(EAttributeType::CurrentMaxMana));
 		break;
 	case EAttributeType::BaseSpeed:
 		break;

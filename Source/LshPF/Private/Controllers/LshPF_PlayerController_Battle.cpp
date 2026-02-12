@@ -8,31 +8,46 @@
 #include "LshPF_GameplayTags.h"
 #include "Data/InputActionGameplayTagInfo.h"
 #include "GameModes/LshPF_BattleGameMode.h"
+#include "Interface/LshPF_BattleInterface.h"
 
 void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGameplayTag TargetGameplayTag)
 {
-	//들어온 Tag 에 따라 필요한 로직을 작성한 함수 실행
-	if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_Attack))
+	//Input 에 대한 Action 실행 여부 체크
+	if (IsEnableInput)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Attack"));
-	}
-	else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_Guard))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Guard"));
-	}
-	else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenSkill))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OpenSkill"));
-	}
-	else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenItem))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OpenItem"));
+		IsEnableInput = false;
+		//들어온 Tag 에 따라 필요한 로직을 작성한 함수 실행
+        if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_Attack))
+        {
+        	UE_LOG(LogTemp, Warning, TEXT("Attack"));
+        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_Guard))
+        {
+        	UE_LOG(LogTemp, Warning, TEXT("Guard"));
+        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenSkill))
+        {
+        	UE_LOG(LogTemp, Warning, TEXT("OpenSkill"));
+        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenItem))
+        {
+        	UE_LOG(LogTemp, Warning, TEXT("OpenItem"));
+        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+        }
 	}
 }
 
 UInputAction* ALshPF_PlayerController_Battle::GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag)
 {
 	return InputActionGameplayTagInfo->GetInputActionByGameplayTag(TargetGameplayTag);
+}
+
+void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
+{
+	IsEnableInput = InIsEnableInput;
 }
 
 void ALshPF_PlayerController_Battle::SetupInputComponent()

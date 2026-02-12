@@ -28,6 +28,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
+
+	void SetIsEnableInput(bool InIsEnableInput);
 	
 protected:
 	virtual void SetupInputComponent() override;
@@ -37,6 +39,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Data")
 	UInputActionGameplayTagInfo* InputActionGameplayTagInfo;
+
+	bool IsEnableInput = false;
 	
 private:
 	UPROPERTY()

@@ -91,12 +91,17 @@ void ALshPF_BattleGameMode::SetUIReady(bool NewIsUIReady)
 	}
 }
 
+ILshPF_BattleInterface* ALshPF_BattleGameMode::GetRecentOwingTurnCharacter() const
+{
+	return RecentOwingTurnCharacter;
+}
+
 void ALshPF_BattleGameMode::SortTurnTable()
 {
 	TurnTable.Sort([](
 		const FTurnTableData& A, const FTurnTableData& B)
 		{
-			return A.RequireTP < B.RequireTP;
+			return A.RequireTime < B.RequireTime;
 		});
 
 	if (IsGameReady())
@@ -120,8 +125,9 @@ bool ALshPF_BattleGameMode::IsGameReady() const
 void ALshPF_BattleGameMode::GrantTurn()
 {
 	IsTurnGranted = true;
+	RecentOwingTurnCharacter = TurnTable[0].TargetCharacter;
 	TurnTable[0].TargetCharacter->TurnStart();
-	GlobalTimer = TurnTable[0].RequireTP;
+	GlobalTimer = TurnTable[0].RequireTime;
 	
 	TurnTable.RemoveAt(0);
 }

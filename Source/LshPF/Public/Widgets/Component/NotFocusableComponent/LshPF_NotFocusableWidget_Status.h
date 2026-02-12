@@ -23,6 +23,7 @@ public:
 	void SetBattleComponent(ULshPF_BattleComponent* BattleComponent);
 
 private:
+	UPROPERTY()
 	ULshPF_BattleComponent* CachedBattleComponent;
 
 	void AttributeChangedCallback(EAttributeType AttributeType, float NewAttribute);

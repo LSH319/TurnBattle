@@ -18,14 +18,14 @@ struct FTurnTableData
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly)
-	float RequireTP;
+	float RequireTime;
 	
 	ILshPF_BattleInterface* TargetCharacter;
 
-	FTurnTableData() : RequireTP(0.f), TargetCharacter(nullptr) {}
+	FTurnTableData() : RequireTime(0.f), TargetCharacter(nullptr) {}
 
 	FTurnTableData(float _RequireTime, ILshPF_BattleInterface* TargetCharacter)
-		: RequireTP(_RequireTime), TargetCharacter(TargetCharacter) {}
+		: RequireTime(_RequireTime), TargetCharacter(TargetCharacter) {}
 };
 /**
  * 
@@ -59,12 +59,13 @@ public:
 	 */
 	UPROPERTY(BlueprintCallable)
 	FStatusUIReady StatusUIReady;
+
+	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
 	
 protected:
 	void SortTurnTable();
 	bool IsGameReady() const;
 	
-	UFUNCTION(BlueprintCallable)
 	void GrantTurn();
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -81,7 +82,10 @@ protected:
 	TArray<ILshPF_BattleInterface*> EnemyCharacterList;
 
 private:
+	//Turn 순서
 	TQueue<ULshPF_BattleComponent*> WaitingRegisterComponents;
+	//가장 최근 Turn을 시작한 캐릭터
+	ILshPF_BattleInterface* RecentOwingTurnCharacter;
 	bool IsStatusUIReady = false;
 	bool IsTurnGranted = false;
 	bool IsUIReady = false;
