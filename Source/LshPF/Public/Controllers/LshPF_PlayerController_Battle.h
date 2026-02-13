@@ -47,6 +47,12 @@ private:
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 
 	/*
+	 * FInputActionValue 의 값을 사용하기 위해 IA 에 바인딩 될 함수
+	 * ExecuteInputActionByGameplayTag 를 호출하여 Button 과 동작을 통일
+	 */
+	void ExecuteInputAction(const FInputActionValue& Value, const FGameplayTag TargetGameplayTag);
+	
+	/*
 	 * WidgetStackTag LshPF.WidgetStack 형식의 Tag, Widget 이 추가될 Stack
 	 * WidgetTag LshPF.Widget 형식의 Tag, 추가할 Widget 을 표시하는 Tag
 	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true

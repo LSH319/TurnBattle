@@ -60,7 +60,7 @@ void ALshPF_PlayerController_Battle::SetupInputComponent()
 	{
 		//InputActionGameplayTagInfo 의 Map 을 순회하면서 바인딩 실행
 		//FGameplayTag 를 매갭변수로 넘겨줘 동작 구분 시 사용
-		EnhancedInputComponent->BindAction(Info.Value, ETriggerEvent::Started, this, &ThisClass::ExecuteInputActionByGameplayTag, Info.Key);
+		EnhancedInputComponent->BindAction(Info.Value, ETriggerEvent::Started, this, &ThisClass::ExecuteInputAction, Info.Key);
 	}
 }
 
@@ -73,8 +73,14 @@ ALshPF_BattleGameMode* ALshPF_PlayerController_Battle::GetBattleGameMode()
 	return CachedBattleGameMode;
 }
 
+void ALshPF_PlayerController_Battle::ExecuteInputAction(const FInputActionValue& Value,
+	const FGameplayTag TargetGameplayTag)
+{
+	ExecuteInputActionByGameplayTag(TargetGameplayTag);;
+}
+
 void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag,
-	bool IsWidgetGetFocus)
+                                                            bool IsWidgetGetFocus)
 {
 	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
 
