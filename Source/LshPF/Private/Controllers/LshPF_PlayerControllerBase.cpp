@@ -6,17 +6,21 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
+#include "LshPF_GameplayTags.h"
+#include "Data/InputActionGameplayTagInfo.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
-UInputAction* ALshPF_PlayerControllerBase::GetDefaultConfirmAction()
+void ALshPF_PlayerControllerBase::ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag)
 {
-	return DefaultConfirmAction;
-}
-
-UInputAction* ALshPF_PlayerControllerBase::GetDefaultBackAction()
-{
-	return DefaultBackAction;
+	if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
+	{
+		DefaultConfirmAction_Callback();
+	}
+	else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultBack))
+	{
+		DefaultBackAction_Callback();
+	}
 }
 
 TArray<FKey> ALshPF_PlayerControllerBase::GetKeysByInputAction(const UInputAction* InAction)
@@ -30,6 +34,18 @@ TArray<FKey> ALshPF_PlayerControllerBase::GetKeysByInputAction(const UInputActio
 		}
 	}
 	return ReturnKeys;
+}
+
+UInputAction* ALshPF_PlayerControllerBase::GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag)
+{
+	if (InputActionGameplayTagInfo)
+	{
+		if (UInputAction* CurrentInputAction = InputActionGameplayTagInfo->GetInputActionByGameplayTag(TargetGameplayTag))
+		{
+			return CurrentInputAction;
+		}
+	}
+	return nullptr;
 }
 
 void ALshPF_PlayerControllerBase::SetupInputComponent()
@@ -58,7 +74,7 @@ void ALshPF_PlayerControllerBase::SetupInputComponent()
 	EnhancedInputComponent->BindAction(DefaultBackAction, ETriggerEvent::Started, this, &ThisClass::DefaultBackAction_Callback);
 }
 
-void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback(const FInputActionValue& Value)
+void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
 {
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
@@ -69,7 +85,7 @@ void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback(const FInputActi
 	}
 }
 
-void ALshPF_PlayerControllerBase::DefaultBackAction_Callback(const FInputActionValue& Value)
+void ALshPF_PlayerControllerBase::DefaultBackAction_Callback()
 {
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
@@ -80,7 +96,7 @@ void ALshPF_PlayerControllerBase::DefaultBackAction_Callback(const FInputActionV
 	}
 }
 
-void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback(const FInputActionValue& Value)
+void ALshPF_PlayerControllerBase::InputDeviceCheckAction_Callback()
 {
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{

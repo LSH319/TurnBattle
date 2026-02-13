@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "LshPF_Types/LshPF_EnumTypes.h"
 #include "Widgets/Component/NotFocusableComponent/LshPF_NotFocusableWidgetBase.h"
 #include "LshPF_NotFocusableButton.generated.h"
@@ -25,17 +26,27 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText Text);
-
+	
 	/**
-	 * 버튼에 Bind 될 IA 를 받아 처리
+	 * FGameplayTag 를 통해 버튼에 Bind 될 IA 를 받아 처리
 	 * UISubsystem 의 Delegate 에 Bind하는 코드를 포함하므로 여러번 호출 시 주의 필요
-	 * @param InInputAction 버튼에 Bind 될 IA
+	 * InGameplayTag 버튼에 Bind 될 IA 를 검색할 FGameplayTag
 	 * return 이미지 등록 성공 여부
 	 */
 	UFUNCTION(BlueprintCallable)
-	bool SetBindInputAction(UInputAction* InInputAction);
+	bool SetInputActionTag(FGameplayTag InGameplayTag);
+
+	UFUNCTION(BlueprintCallable)
+	void BindClickEvent();
+	
+protected:
+	UFUNCTION()
+	void RequestExecuteInputActionToController();
 	
 private:
+	FGameplayTag InputActionTag;
+	UInputAction* GetInputActionByTag() const;
+	
 	TWeakObjectPtr<UInputAction> BindInputAction;
 
 	/**

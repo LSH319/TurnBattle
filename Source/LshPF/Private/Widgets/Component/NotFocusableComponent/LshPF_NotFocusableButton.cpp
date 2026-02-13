@@ -23,23 +23,44 @@ void ULshPF_NotFocusableButton::SetButtonText(FText Text)
 	ButtonText->SetText(Text);
 }
 
-bool ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
+bool ULshPF_NotFocusableButton::SetInputActionTag(FGameplayTag InFGameplayTag)
 {
-	BindInputAction.Reset();
-	BindInputAction = InInputAction;
+	InputActionTag = InFGameplayTag;
 
 	const bool IsInitSuccess = InitImage();
 	
 	if (IsInitSuccess)
 	{
 		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-        {
-        	//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
-        	UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
-        }
+		{
+			//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
+			UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
+		}
 	}
 	
 	return IsInitSuccess;
+}
+
+void ULshPF_NotFocusableButton::BindClickEvent()
+{
+	ButtonWidget->OnClicked.AddDynamic(this, &ThisClass::RequestExecuteInputActionToController);
+}
+
+void ULshPF_NotFocusableButton::RequestExecuteInputActionToController()
+{
+	if (ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer()))
+	{
+		PlayerController->ExecuteInputActionByGameplayTag(InputActionTag);
+	}
+}
+
+UInputAction* ULshPF_NotFocusableButton::GetInputActionByTag() const
+{
+	if (ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer()))
+	{
+		return PlayerController->GetInputActionByGameplayTag(InputActionTag);
+	}
+	return nullptr;
 }
 
 bool ULshPF_NotFocusableButton::InitImage()
@@ -47,10 +68,10 @@ bool ULshPF_NotFocusableButton::InitImage()
 	ALshPF_PlayerControllerBase* LshPF_PlayerController = GetLshPF_PlayerController();
 
 	//사용할 값이 잘못된 경우 false
-	if (BindInputAction.IsValid() && LshPF_PlayerController)
+	if (GetInputActionByTag() && LshPF_PlayerController)
 	{
 		//IA 에 바인딩 된 Keys
-		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(BindInputAction.Get()));
+		TArray<FKey> BindKeys(LshPF_PlayerController->GetKeysByInputAction(GetInputActionByTag()));
 		//IMC ADD 가 늦거나 등록이 안된경우 false
 		if (!BindKeys.IsEmpty())
 		{

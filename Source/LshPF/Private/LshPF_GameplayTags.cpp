@@ -21,6 +21,8 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_MainMenu, "LshPF.Level.MainMenu");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_Battle, "LshPF.Level.Battle");
 
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_DefaultConfirm, "LshPF.InputAction.DefaultConfirm");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_DefaultBack, "LshPF.InputAction.DefaultBack");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_Attack, "LshPF.InputAction.Attack");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_Guard, "LshPF.InputAction.Guard");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_OpenSkill, "LshPF.InputAction.OpenSkill");

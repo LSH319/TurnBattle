@@ -3,6 +3,7 @@
 
 #include "Widgets/Component/LshPF_ActionBar.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Components/DynamicEntryBox.h"
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "Widgets/Component/NotFocusableComponent/LshPF_NotFocusableButton.h"
@@ -20,7 +21,12 @@ bool ULshPF_ActionBar::CreateActionBarEntry()
 		if (PlayerController)
 		{
 			//SetBindInputAction 실행 중 false 가 있을경우 false return
-			IsSuccess = IsSuccess && CreatedButton->SetBindInputAction(Entry.EntryInputAction);
+			IsSuccess = IsSuccess && CreatedButton->SetInputActionTag(Entry.InputActionTag);
+
+			if (Entry.IsNeedBindClick)
+			{
+				CreatedButton->BindClickEvent();
+			}
 		}
 	}
 
@@ -39,7 +45,8 @@ void ULshPF_ActionBar::NativeConstruct()
 		CreatedButton->SetButtonText(FText::FromString(TEXT("OK")));
 		if (PlayerController)
 		{
-			CreatedButton->SetBindInputAction(PlayerController->GetDefaultConfirmAction());
+			CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+			CreatedButton->BindClickEvent();
 		}
 	}
 
@@ -49,7 +56,8 @@ void ULshPF_ActionBar::NativeConstruct()
 		CreatedButton->SetButtonText(FText::FromString(TEXT("Back")));
 		if (PlayerController)
 		{
-			CreatedButton->SetBindInputAction(PlayerController->GetDefaultBackAction());
+			CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
+			CreatedButton->BindClickEvent();
 		}
 	}
 }

@@ -4,6 +4,7 @@
 #include "Widgets/Component/FocusableComponent/LshPF_ConfirmScreen.h"
 
 #include "InputAction.h"
+#include "LshPF_GameplayTags.h"
 #include "Components/Button.h"
 #include "Components/DynamicEntryBox.h"
 #include "Components/TextBlock.h"
@@ -36,7 +37,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 				OkButton->SetButtonText(FText::FromString(TEXT("OK")));
 				if (LshPF_PlayerController)
 				{
-					OkButton->SetBindInputAction(LshPF_PlayerController->GetDefaultConfirmAction());
+					OkButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
 				}
 				OkButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 				break;
@@ -47,7 +48,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 				YesButton->SetButtonText(FText::FromString(TEXT("YES")));
 				if (LshPF_PlayerController)
 				{
-					YesButton->SetBindInputAction(LshPF_PlayerController->GetDefaultConfirmAction());
+					YesButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
 				}
 				YesButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 
@@ -55,7 +56,7 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 				NoButton->SetButtonText(FText::FromString(TEXT("NO")));
 				if (LshPF_PlayerController)
 				{
-					NoButton->SetBindInputAction(LshPF_PlayerController->GetDefaultBackAction());
+					NoButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
 				}
 				NoButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_No);
 

@@ -19,7 +19,6 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
 	//Input 에 대한 Action 실행 여부 체크
 	if (IsEnableInput)
 	{
-		IsEnableInput = false;
 		//들어온 Tag 에 따라 필요한 로직을 작성한 함수 실행
         if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_Attack))
         {
@@ -38,11 +37,6 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Item);
         }
 	}
-}
-
-UInputAction* ALshPF_PlayerController_Battle::GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag)
-{
-	return InputActionGameplayTagInfo->GetInputActionByGameplayTag(TargetGameplayTag);
 }
 
 void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
@@ -76,12 +70,13 @@ ALshPF_BattleGameMode* ALshPF_PlayerController_Battle::GetBattleGameMode()
 void ALshPF_PlayerController_Battle::ExecuteInputAction(const FInputActionValue& Value,
 	const FGameplayTag TargetGameplayTag)
 {
-	ExecuteInputActionByGameplayTag(TargetGameplayTag);;
+	ExecuteInputActionByGameplayTag(TargetGameplayTag);
 }
 
 void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag,
                                                             bool IsWidgetGetFocus)
 {
+	IsEnableInput = false;
 	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
 
 	UISubsystem->PushSoftWidgetToStackAsync(
@@ -101,8 +96,9 @@ void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetS
 		});
 }
 
-void ALshPF_PlayerController_Battle::Command_Attack() const
+void ALshPF_PlayerController_Battle::Command_Attack()
 {
+	IsEnableInput = false;
 	ILshPF_BattleInterface* TurnCharacter = CachedBattleGameMode->GetRecentOwingTurnCharacter();
 	//todo : GetEnemyCharacterByIndex 의 Index 설정
 	ILshPF_BattleInterface* TargetCharacter = CachedBattleGameMode->GetEnemyCharacterByIndex(0);
@@ -119,8 +115,9 @@ void ALshPF_PlayerController_Battle::Command_Attack() const
 	TurnCharacter->TurnEnd();
 }
 
-void ALshPF_PlayerController_Battle::Command_Guard() const
+void ALshPF_PlayerController_Battle::Command_Guard()
 {
+	IsEnableInput = false;
 	/* todo : ILshPF_BattleInterface 에 Guard 추가 후 호출
 	ILshPF_BattleInterface* TurnCharacter = CachedBattleGameMode->GetRecentOwingTurnCharacter();
 	

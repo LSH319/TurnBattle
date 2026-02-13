@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/PlayerController.h"
 #include "LshPF_PlayerControllerBase.generated.h"
 
+class UInputActionGameplayTagInfo;
 struct FInputActionValue;
 class UButton;
 class UInputAction;
@@ -20,14 +22,22 @@ class LSHPF_API ALshPF_PlayerControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
+	/*
+	 * Tag 와 관련해 IA 사용시 override 하여 사용
+	 */
 	UFUNCTION(BlueprintCallable)
-	UInputAction* GetDefaultConfirmAction();
-	UFUNCTION(BlueprintCallable)
-	UInputAction* GetDefaultBackAction();
+	virtual void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
+	
 	TArray<FKey> GetKeysByInputAction(const UInputAction* InAction);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	virtual UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
 	
 protected:
 	virtual void SetupInputComponent() override;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Data")
+	UInputActionGameplayTagInfo* InputActionGameplayTagInfo;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -45,7 +55,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DefaultBackAction;
 	
-	void DefaultConfirmAction_Callback(const FInputActionValue& Value);
-	void DefaultBackAction_Callback(const FInputActionValue& Value);
-	void InputDeviceCheckAction_Callback(const FInputActionValue& Value);
+	void DefaultConfirmAction_Callback();
+	void DefaultBackAction_Callback();
+	void InputDeviceCheckAction_Callback();
 };

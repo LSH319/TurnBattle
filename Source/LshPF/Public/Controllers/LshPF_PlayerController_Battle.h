@@ -23,12 +23,8 @@ public:
 	 * Tag 에 따라 지정된 로직을 실행
 	 * Button 의 Onclick 과 IA 의 동작을 통일하기위해 사용
 	 */
-	UFUNCTION(BlueprintCallable)
-	void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
+	virtual void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag) override;
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
-
 	void SetIsEnableInput(bool InIsEnableInput);
 	
 protected:
@@ -36,9 +32,6 @@ protected:
 
 	UFUNCTION(BlueprintPure)
 	ALshPF_BattleGameMode* GetBattleGameMode();
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Data")
-	UInputActionGameplayTagInfo* InputActionGameplayTagInfo;
 
 	bool IsEnableInput = false;
 	
@@ -58,6 +51,6 @@ private:
 	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true
 	 */
 	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
-	void Command_Attack() const;
-	void Command_Guard() const;
+	void Command_Attack();
+	void Command_Guard();
 };

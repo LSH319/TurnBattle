@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
 #include "LshPF_ActionBar.generated.h"
 
@@ -15,10 +16,13 @@ struct FActionBarEntry
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UInputAction* EntryInputAction;
+	FGameplayTag InputActionTag;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText EntryText;
+
+	UPROPERTY(EditAnywhere)
+	bool IsNeedBindClick = false;
 };
 
 /**
