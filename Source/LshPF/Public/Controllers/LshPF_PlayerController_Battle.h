@@ -45,4 +45,11 @@ protected:
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
+
+	/*
+	 * WidgetStackTag LshPF.WidgetStack 형식의 Tag, Widget 이 추가될 Stack
+	 * WidgetTag LshPF.Widget 형식의 Tag, 추가할 Widget 을 표시하는 Tag
+	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true
+	 */
+	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
 };

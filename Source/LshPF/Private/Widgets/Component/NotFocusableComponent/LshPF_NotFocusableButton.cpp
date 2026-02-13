@@ -27,14 +27,19 @@ bool ULshPF_NotFocusableButton::SetBindInputAction(UInputAction* InInputAction)
 {
 	BindInputAction.Reset();
 	BindInputAction = InInputAction;
-	
-	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-	{
-		//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
-		UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
-	}
 
-	return InitImage();
+	const bool IsInitSuccess = InitImage();
+	
+	if (IsInitSuccess)
+	{
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+        {
+        	//UISubsystem 에서 InputDevice 변경시 호출하는 delegate
+        	UISubsystem->InputDeviceChange.AddUObject(this, &ThisClass::RecentlyInputDeviceChangedCallback);
+        }
+	}
+	
+	return IsInitSuccess;
 }
 
 bool ULshPF_NotFocusableButton::InitImage()

@@ -5,10 +5,13 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "LshPF_FunctionLibrary.h"
 #include "LshPF_GameplayTags.h"
 #include "Data/InputActionGameplayTagInfo.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Interface/LshPF_BattleInterface.h"
+#include "Subsystems/LshPF_UISubsystem.h"
+#include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
 void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGameplayTag TargetGameplayTag)
 {
@@ -30,12 +33,14 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenSkill))
         {
         	UE_LOG(LogTemp, Warning, TEXT("OpenSkill"));
-        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+
+        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Skill);
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenItem))
         {
         	UE_LOG(LogTemp, Warning, TEXT("OpenItem"));
-        	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+
+        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Item);
         }
 	}
 }
@@ -71,4 +76,26 @@ ALshPF_BattleGameMode* ALshPF_PlayerController_Battle::GetBattleGameMode()
 		CachedBattleGameMode = Cast<ALshPF_BattleGameMode>(GetWorld()->GetAuthGameMode());
 	}
 	return CachedBattleGameMode;
+}
+
+void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag,
+	bool IsWidgetGetFocus)
+{
+	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
+
+	UISubsystem->PushSoftWidgetToStackAsync(
+		WidgetStackTag,
+		ULshPF_FunctionLibrary::GetSoftFocusableWidgetBaseClassByTag(WidgetTag),
+		[this, IsWidgetGetFocus](ULshPF_FocusableWidgetBase* PushedWidget)
+		{
+			PushedWidget->SetOwningPlayer(this);
+			if (IsWidgetGetFocus)
+			{
+				if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusTarget())
+	            {
+            		WidgetToFocus->SetFocus();
+	            }
+			}
+			IsEnableInput = true;
+		});
 }
