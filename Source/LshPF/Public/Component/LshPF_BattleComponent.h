@@ -11,23 +11,30 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, float);
 
 USTRUCT(BlueprintType)
-struct FDamageInfo
+struct FBattleAttributeModifier
 {
 	GENERATED_BODY()
 
-	FDamageInfo(){}
+	FBattleAttributeModifier()
+	:TargetAttribute(EAttributeType::Unknown)
+	{}
 	
-	FDamageInfo(float InDamage, bool InIsCritical)
+	FBattleAttributeModifier(float InModifyValue, EAttributeType InAttributeType)
+	:ModifyValue(InModifyValue), IsCritical(false), TargetAttribute(InAttributeType)
 	{
-		Damage = InDamage;
-		IsCritical = InIsCritical;
 	}
-	
+
+	//변경할 값
 	UPROPERTY()
-	float Damage = 0;
-	
+	float ModifyValue = 0;
+
+	//크리티컬 여부
 	UPROPERTY()
 	bool IsCritical = false;
+
+	//변경할 Attribute
+	UPROPERTY()
+	EAttributeType TargetAttribute;
 };
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -36,27 +43,43 @@ class LSHPF_API ULshPF_BattleComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	//todo : Damage 관련 계산 수정 필요, 기반 스텟, 배율 등
-	static FDamageInfo CreateDamageInfo(float InDamage, bool InIsCritical);
-	
 	/*
 	* Target 에게 Damage 적용
 	* DamagedActorBattleComponent Damage를 받는 Actor BattleComponent
 	* DamageCauserBattleComponent Damage를 가하는 Actor BattleComponent
-	* DamageInfo Damage 관련 정보
+	* BattleAttributeModifier Damage 관련 정보
 	* return : 실제 Target 에 적용된 Damage
 	 */
 	UFUNCTION(BlueprintCallable)
-	float ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo);
+	float ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier);
+
+	/*
+	* Target 에게 Cure 적용
+	* CuredActorBattleComponent Cure 받는 Actor BattleComponent
+	* HealCauserBattleComponent Cure 가하는 Actor BattleComponent
+	* BattleAttributeModifier Cure 관련 정보
+	* return : 실제 Target 에 적용된 Cure
+	 */
+	UFUNCTION(BlueprintCallable)
+	float ApplyCureToTarget(ULshPF_BattleComponent* CuredActorBattleComponent, ULshPF_BattleComponent* HealCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier);
 
 	/*
 	 * Damage 받을경우 처리
 	 * DamageCauserBattleComponent Damage를 가하는 Actor BattleComponent
-	 * DamageInfo Damage 관련 정보
+	 * BattleAttributeModifier Damage 관련 정보
 	 * return : 실제 적용된 Damage
 	 */
 	UFUNCTION(BlueprintCallable)
-	float TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo);
+	float TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier);
+
+	/*
+	 * Cure 받을경우 처리
+	 * CureCauserBattleComponent Cure를 가하는 Actor BattleComponent
+	 * BattleAttributeModifier Cure 관련 정보
+	 * return : 실제 적용된 Cure
+	 */
+	UFUNCTION(BlueprintCallable)
+	float TakeCureFromCursor(ULshPF_BattleComponent* CureCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier);
 
 	/*
 	 * EAttributeType 에 따른 Attribute 값 반환
@@ -76,15 +99,30 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnTakeDamageDelegate OnTakeDamageDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnTakeDamageDelegate OnTakeHealDelegate;
 
+	FOnAttributeChangedDelegate AttributeChangedDelegate;
+	
+	/*
+	 * Attribute 변경에 필요한 정보를 담고있는 구조체 생성
+	 * TargetAttributeType 변경을 원하는 Attribute
+	 * BaseAttributeType 변경 할 값을 계산할때 사용할 Attribute
+	 * DamageRatio 변경 할 값을 계산할때 사용할 배율
+	 * ex.
+	 * TargetAttributeType = EAttributeType::CurrentHealth, BaseAttributeType = EAttributeType::CurrentAttack, DamageRatio = 1 인경우
+	 * Target 의 EAttributeType::CurrentHealth 를 자신의 EAttributeType::CurrentAttack * 1 만큼 변경
+	 * + 를 원할경우 TakeCureFromCursor, - 를 원할경우 TakeDamageFromCursor 사용
+	 */
+	FBattleAttributeModifier CreateBattleAttributeModifier(EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, float DamageRatio = 1.f);
+	
 	/*
 	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화
 	 */
 	void SetAllCurrentAttributeToBaseAttribute();
-
 	FText GetCharacterName();
+	bool IsDead();
 	
-	FOnAttributeChangedDelegate AttributeChangedDelegate;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 	FText CharacterName;
@@ -137,4 +175,8 @@ protected:
 	float BaseAbilityDefence;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attribute")
 	float CurrentAbilityDefence;
+
+private:
+	//사망 시 처리할 이벤트
+	void OwnerDeadEvent();
 };

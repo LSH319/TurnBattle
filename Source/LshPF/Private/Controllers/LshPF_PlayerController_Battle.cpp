@@ -109,11 +109,11 @@ void ALshPF_PlayerController_Battle::Command_Attack() const
 	
 	if (TurnCharacter && TargetCharacter)
 	{
-		FDamageInfo DamageInfo = ULshPF_BattleComponent::CreateDamageInfo(50, false);
+		FBattleAttributeModifier BattleAttributeModifier = TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(EAttributeType::CurrentHealth, EAttributeType::CurrentAttack, 1.f);
 		TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
 			TargetCharacter->GetBattleComponent(),
 			TurnCharacter->GetBattleComponent(),
-			DamageInfo);;
+			BattleAttributeModifier);;
 	}
 	
 	TurnCharacter->TurnEnd();

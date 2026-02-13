@@ -5,41 +5,64 @@
 
 #include "Interface/LshPF_BattleInterface.h"
 
-FDamageInfo ULshPF_BattleComponent::CreateDamageInfo(float InDamage, bool InIsCritical)
+FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
+	EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, float DamageRatio)
 {
-	return FDamageInfo(InDamage, InIsCritical);
+	float ApplyModifyValue = GetAttribute(BaseAttributeType) * DamageRatio;
+	
+	return FBattleAttributeModifier(ApplyModifyValue, TargetAttributeType);
 }
 
-float ULshPF_BattleComponent::ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo)
+float ULshPF_BattleComponent::ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
 {
 	if (DamagedActorBattleComponent)
 	{
-		return DamagedActorBattleComponent->TakeDamageFromCursor(DamageCauserBattleComponent, DamageInfo);
+		return DamagedActorBattleComponent->TakeDamageFromCursor(DamageCauserBattleComponent, BattleAttributeModifier);
 	}
 
 	return -1;
 }
 
-float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo)
+float ULshPF_BattleComponent::ApplyCureToTarget(ULshPF_BattleComponent* CuredActorBattleComponent,
+	ULshPF_BattleComponent* HealCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
+{
+	if (CuredActorBattleComponent)
+	{
+		return CuredActorBattleComponent->TakeCureFromCursor(HealCauserBattleComponent, BattleAttributeModifier);
+	}
+
+	return -1;
+}
+
+float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
 {
 	OnTakeDamageDelegate.Broadcast();
-	float ApplyDamage = DamageInfo.Damage;
-	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::CurrentHealth) - ApplyDamage);
+	float ApplyDamage = BattleAttributeModifier.ModifyValue;
+	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) - ApplyDamage);
 
-	if (GetAttribute(EAttributeType::CurrentHealth) <= 0)
+	switch (BattleAttributeModifier.TargetAttribute)
 	{
-		//todo : 사망처리
-		
-		/*
-		if (ILshPF_BattleInterface* OwnerBattleInterface = Cast<ILshPF_BattleInterface>(GetOwner()))
-		{
-		ILshPF_BattleInterface 에 Die 로직 추가 후 호출예정
-			OwnerBattleInterface->Die();
-		}
-		*/
+		case EAttributeType::CurrentHealth:
+			if (IsDead())
+			{
+				OwnerDeadEvent();
+			}
+			break;
+		default:
+			break;
 	}
 	
 	return ApplyDamage;
+}
+
+float ULshPF_BattleComponent::TakeCureFromCursor(ULshPF_BattleComponent* CureCauserBattleComponent,
+	FBattleAttributeModifier BattleAttributeModifier)
+{
+	OnTakeHealDelegate.Broadcast();
+	float ApplyCure = BattleAttributeModifier.ModifyValue;
+	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) + ApplyCure);
+	
+	return ApplyCure;
 }
 
 float ULshPF_BattleComponent::GetAttribute(EAttributeType AttributeType)
@@ -171,4 +194,22 @@ void ULshPF_BattleComponent::SetAllCurrentAttributeToBaseAttribute()
 FText ULshPF_BattleComponent::GetCharacterName()
 {
 	return CharacterName;
+}
+
+bool ULshPF_BattleComponent::IsDead()
+{
+	return GetAttribute(EAttributeType::CurrentHealth) <= 0;
+}
+
+void ULshPF_BattleComponent::OwnerDeadEvent()
+{
+	//todo : 사망처리
+        	
+	/*
+	if (ILshPF_BattleInterface* OwnerBattleInterface = Cast<ILshPF_BattleInterface>(GetOwner()))
+	{
+	ILshPF_BattleInterface 에 Die 로직 추가 후 호출예정
+		OwnerBattleInterface->Die();
+	}
+	*/
 }
