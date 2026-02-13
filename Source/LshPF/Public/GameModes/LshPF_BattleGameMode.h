@@ -61,6 +61,7 @@ public:
 	FStatusUIReady StatusUIReady;
 
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
+	ILshPF_BattleInterface* GetEnemyCharacterByIndex(int Index) const;
 	
 protected:
 	void SortTurnTable();

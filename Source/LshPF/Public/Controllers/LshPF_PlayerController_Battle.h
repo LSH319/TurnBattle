@@ -25,7 +25,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
-
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
 
@@ -52,4 +52,6 @@ private:
 	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true
 	 */
 	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
+	void Command_Attack() const;
+	void Command_Guard() const;
 };

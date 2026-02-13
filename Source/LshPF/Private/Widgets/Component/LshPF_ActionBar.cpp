@@ -16,6 +16,7 @@ bool ULshPF_ActionBar::CreateActionBarEntry()
 	{
 		ULshPF_NotFocusableButton* CreatedButton = ActionBar->CreateEntry<ULshPF_NotFocusableButton>();
 		CreatedButton->SetButtonText(Entry.EntryText);
+
 		if (PlayerController)
 		{
 			//SetBindInputAction 실행 중 false 가 있을경우 false return

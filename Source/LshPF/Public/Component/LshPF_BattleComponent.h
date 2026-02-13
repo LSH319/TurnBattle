@@ -36,24 +36,27 @@ class LSHPF_API ULshPF_BattleComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	//todo : Damage 관련 계산 수정 필요, 기반 스텟, 배율 등
+	static FDamageInfo CreateDamageInfo(float InDamage, bool InIsCritical);
+	
 	/*
 	* Target 에게 Damage 적용
-	* DamagedActor Damage를 받는 Actor
-	* DamageCauser Damage를 가하는 Actor 
+	* DamagedActorBattleComponent Damage를 받는 Actor BattleComponent
+	* DamageCauserBattleComponent Damage를 가하는 Actor BattleComponent
 	* DamageInfo Damage 관련 정보
 	* return : 실제 Target 에 적용된 Damage
 	 */
 	UFUNCTION(BlueprintCallable)
-	float ApplyDamageToTarget(AActor* DamagedActor, AActor* DamageCauser, FDamageInfo DamageInfo);
+	float ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo);
 
 	/*
 	 * Damage 받을경우 처리
-	 * DamageCauser Damage를 가하는 Actor 
+	 * DamageCauserBattleComponent Damage를 가하는 Actor BattleComponent
 	 * DamageInfo Damage 관련 정보
 	 * return : 실제 적용된 Damage
 	 */
 	UFUNCTION(BlueprintCallable)
-	float TakeDamageFromCursor(AActor* DamageCauser, FDamageInfo DamageInfo);
+	float TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo);
 
 	/*
 	 * EAttributeType 에 따른 Attribute 값 반환

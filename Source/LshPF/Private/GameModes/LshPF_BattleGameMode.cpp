@@ -96,6 +96,17 @@ ILshPF_BattleInterface* ALshPF_BattleGameMode::GetRecentOwingTurnCharacter() con
 	return RecentOwingTurnCharacter;
 }
 
+ILshPF_BattleInterface* ALshPF_BattleGameMode::GetEnemyCharacterByIndex(int Index) const
+{
+	if (EnemyCharacterList.IsEmpty())
+	{
+		return nullptr;
+	}
+	//Index 가 유효 범위를 벗어난 경우 조정
+	Index = FMath::Clamp(Index, 0, EnemyCharacterList.Num() - 1);
+	return EnemyCharacterList[Index];
+}
+
 void ALshPF_BattleGameMode::SortTurnTable()
 {
 	TurnTable.Sort([](

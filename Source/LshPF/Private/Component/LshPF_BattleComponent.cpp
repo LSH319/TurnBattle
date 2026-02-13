@@ -3,25 +3,42 @@
 
 #include "Component/LshPF_BattleComponent.h"
 
-float ULshPF_BattleComponent::ApplyDamageToTarget(AActor* DamagedActor, AActor* DamageCauser, FDamageInfo DamageInfo)
+#include "Interface/LshPF_BattleInterface.h"
+
+FDamageInfo ULshPF_BattleComponent::CreateDamageInfo(float InDamage, bool InIsCritical)
 {
-	if (ULshPF_BattleComponent* TargetBattleComponent = DamagedActor->FindComponentByClass<ULshPF_BattleComponent>())
+	return FDamageInfo(InDamage, InIsCritical);
+}
+
+float ULshPF_BattleComponent::ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo)
+{
+	if (DamagedActorBattleComponent)
 	{
-		return TargetBattleComponent->TakeDamageFromCursor(DamageCauser, DamageInfo);
+		return DamagedActorBattleComponent->TakeDamageFromCursor(DamageCauserBattleComponent, DamageInfo);
 	}
 
 	return -1;
 }
 
-float ULshPF_BattleComponent::TakeDamageFromCursor(AActor* DamageCauser, FDamageInfo DamageInfo)
+float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* DamageCauserBattleComponent, FDamageInfo DamageInfo)
 {
 	OnTakeDamageDelegate.Broadcast();
 	float ApplyDamage = DamageInfo.Damage;
 	SetAttribute(EAttributeType::CurrentHealth, GetAttribute(EAttributeType::CurrentHealth) - ApplyDamage);
+
 	if (GetAttribute(EAttributeType::CurrentHealth) <= 0)
 	{
 		//todo : 사망처리
+		
+		/*
+		if (ILshPF_BattleInterface* OwnerBattleInterface = Cast<ILshPF_BattleInterface>(GetOwner()))
+		{
+		ILshPF_BattleInterface 에 Die 로직 추가 후 호출예정
+			OwnerBattleInterface->Die();
+		}
+		*/
 	}
+	
 	return ApplyDamage;
 }
 
