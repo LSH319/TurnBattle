@@ -13,7 +13,7 @@ void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 {
 	if(GetBattleGameMode())
 	{
-		if (const FEnemyAttribute* EnemyAttribute = GetBattleGameMode()->GetEnemyAttributeByKeyName(EnemyKeyName))
+		if (const FEnemyAttribute* EnemyAttribute = GetBattleGameMode()->GetEnemyAttributeByKeyName(CharacterKeyName))
         	{
         		LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxHealth, EnemyAttribute->BaseMaxHealth);
                 LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxMana, EnemyAttribute->BaseMaxMana);

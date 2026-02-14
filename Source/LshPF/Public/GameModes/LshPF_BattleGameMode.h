@@ -9,6 +9,7 @@
 
 class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
+class UEnemyMeshInfo;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatusUIReady);
 
@@ -38,6 +39,7 @@ class LSHPF_API ALshPF_BattleGameMode : public ALshPF_GameModeBase
 public:
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;;
+	virtual void BeginPlay() override;
 	//~ End ACharacter Interface
 
 	//캐릭터에서 begin play 시 호출될 함수
@@ -68,12 +70,29 @@ protected:
 	bool IsGameReady() const;
 	
 	void GrantTurn();
+
+	//todo : 테스트용, 삭제 후 game instance 값으로 사용할것
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 TestEnemyCount = 3;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float TurnStartTP = 100.f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float CharacterInterval = 300.f;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FQuat EnemySpawnQuat = FQuat(0, 0, -180, 0);
+
+	UPROPERTY(EditDefaultsOnly, Category="SpawnPointActorTag")
+	FName EnemySpawnPointActorTag = "EnemySpawnPoint";
+	UPROPERTY(EditDefaultsOnly, Category="SpawnPointActorTag")
+	FName PlayerSpawnPointActorTag = "PlayerSpawnPoint";
+	
+	UPROPERTY(EditDefaultsOnly, Category="EnemyInfo")
 	UDataTable* EnemyAttributeData;
+	UPROPERTY(EditDefaultsOnly, Category = "EnemyInfo")
+	UEnemyMeshInfo* EnemyMeshInfo;
 	
 	float GlobalTimer = 0.f;
 
@@ -91,6 +110,11 @@ private:
 	bool IsTurnGranted = false;
 	bool IsUIReady = false;
 
+	/*
+	 * Enemy Spawn 을 위한 함수
+	 */
+	void SpawnEnemies();
+	
 	UFUNCTION()
 	void StatusUIReadyCallBack();
 };

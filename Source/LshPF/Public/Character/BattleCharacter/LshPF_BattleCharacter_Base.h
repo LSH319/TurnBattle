@@ -50,13 +50,17 @@ public:
 	FTurnDelegate OnTurnStartDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FTurnDelegate OnTurnEndDelegate;
-	
+
+	void SetCharacterKeyName(FName NewCharacterKeyName);
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ULshPF_BattleComponent* LshPF_BattleComponent;
 
 	ALshPF_BattleGameMode* GetBattleGameMode();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FName CharacterKeyName = "001";
+	
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;

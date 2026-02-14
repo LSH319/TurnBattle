@@ -66,6 +66,11 @@ ULshPF_BattleComponent* ALshPF_BattleCharacter_Base::GetBattleComponent()
 	return LshPF_BattleComponent;
 }
 
+void ALshPF_BattleCharacter_Base::SetCharacterKeyName(FName NewCharacterKeyName)
+{
+	CharacterKeyName = NewCharacterKeyName;
+}
+
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
 {
 	if (!CachedBattleGameMode)

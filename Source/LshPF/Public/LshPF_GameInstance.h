@@ -16,12 +16,15 @@ class LSHPF_API ULshPF_GameInstance : public UGameInstance
 
 public:
 	int32 GetAllCharacterCount() const;
+
+	int32 GetPlayerCharacterCount() const;
+	int32 GetEnemyCharacterCount() const;
 	
 	void SetPlayerCharacterCount(int32 NewPlayerCharacterCount);
 	void SetEnemyCharacterCount(int32 NewEnemyCharacterCount);
 
 private:
-	//todo : test 를 위해 2로 설정, 추후 수정필요
+	//todo : test 를 위해 설정, 추후 수정필요
 	int32 PlayerCharacterCount = 2;
-	int32 EnemyCharacterCount = 2;
+	int32 EnemyCharacterCount = 3;
 };

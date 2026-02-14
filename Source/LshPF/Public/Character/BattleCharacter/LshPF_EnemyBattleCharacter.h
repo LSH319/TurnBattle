@@ -22,8 +22,4 @@ public:
 	//~ Begin LshPF_BattleInterface Interface
 	virtual void TurnStart() override;
 	//~ End LshPF_BattleInterface Interface
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FName EnemyKeyName = "001";
 };
