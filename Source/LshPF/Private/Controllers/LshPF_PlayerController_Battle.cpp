@@ -126,6 +126,5 @@ void ALshPF_PlayerController_Battle::Command_Guard()
 		TurnCharacter->Guard();
 	}
 	*/
-	
 	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
 }

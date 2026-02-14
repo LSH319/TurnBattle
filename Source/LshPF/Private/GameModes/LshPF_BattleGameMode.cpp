@@ -7,6 +7,7 @@
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 #include "Character/BattleCharacter/LshPF_EnemyBattleCharacter.h"
 #include "Character/BattleCharacter/LshPF_PlayerBattleCharacter.h"
+#include "Component/LshPF_BattleComponent.h"
 #include "Data/EnemyMeshInfo.h"
 #include "Data/PlayerCharacterInfo.h"
 #include "Engine/AssetManager.h"
@@ -76,12 +77,12 @@ void ALshPF_BattleGameMode::CharacterReady(ILshPF_BattleInterface* RequestBattle
 
 void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleInterface)
 {
-	int32 CharacterSpeed = RequestBattleInterface->GetAttribute(EAttributeType::CurrentSpeed);
+ 	int32 CharacterSpeed = RequestBattleInterface->GetAttribute(EAttributeType::CurrentSpeed);
 	float RequireTime = GlobalTimer + (TurnStartTP / CharacterSpeed);
 	FTurnTableData TurnTableData(RequireTime, RequestBattleInterface);
 
 	TurnTable.Add(TurnTableData);
-	
+
 	SortTurnTable();
 }
 
@@ -160,7 +161,7 @@ void ALshPF_BattleGameMode::GrantTurn()
 	RecentOwingTurnCharacter = TurnTable[0].TargetCharacter;
 	TurnTable[0].TargetCharacter->TurnStart();
 	GlobalTimer = TurnTable[0].RequireTime;
-	
+
 	TurnTable.RemoveAt(0);
 }
 
@@ -195,23 +196,24 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 		EnemyMeshInfo->EnemyMeshInfoMap.GetKeys(EnemyKeyNames);
 		int32 RandomIndex = FMath::RandRange(0, EnemyKeyNames.Num() - 1);
 		FName RandomKey = EnemyKeyNames[RandomIndex];
-		
-		//Spawn 전 설정을 위해 SpawnActorDeferred 사용
-		ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
-			EnemyMeshInfo->EnemyBattleCharacterBaseClass,
-			EnemyTransform
-		);
-		
-		SpawnedActor->SetCharacterKeyName(RandomKey);
-		
-		//FinishSpawning 전 필요한 값 설정
-		FEnemyMeshData EnemyMeshData = EnemyMeshInfo->GetEnemyMeshInfoByKeyName(RandomKey);
 
+		//Spawn 시 사용할 Mesh 데이터
+		FEnemyMeshData EnemyMeshData = EnemyMeshInfo->GetEnemyMeshInfoByKeyName(RandomKey);
+		
 		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
 			EnemyMeshData.SkeletalMesh.ToSoftObjectPath(),
 			FStreamableDelegate::CreateLambda(
-				[SpawnedActor, EnemyMeshData, EnemyTransform]
+				[this, EnemyMeshData, EnemyTransform, RandomKey]
 				{
+					//Spawn 전 설정을 위해 SpawnActorDeferred 사용
+					ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
+						EnemyMeshInfo->EnemyBattleCharacterBaseClass,
+						EnemyTransform
+					);
+					
+					//FinishSpawning 전 필요한 값 설정
+					SpawnedActor->SetCharacterKeyName(RandomKey);
+					
 					//Enemy 의 매쉬관련 설정
 					SpawnedActor->GetMesh()->SetSkeletalMesh(EnemyMeshData.SkeletalMesh.Get());
 					SpawnedActor->GetMesh()->SetAnimInstanceClass(EnemyMeshData.AnimClass);

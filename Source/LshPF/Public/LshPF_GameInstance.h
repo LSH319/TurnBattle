@@ -24,6 +24,6 @@ public:
 
 private:
 	//todo : test 를 위해 설정, 추후 수정필요
-	TArray<FName> PlayerCharacterKeyNames = {"001","001","001","001"};
+	TArray<FName> PlayerCharacterKeyNames = {"001","002","003","004"};
 	int32 EnemyCharacterCount = 4;
 };
