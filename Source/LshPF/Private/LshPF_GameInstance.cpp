@@ -5,12 +5,12 @@
 
 int32 ULshPF_GameInstance::GetAllCharacterCount() const
 {
-	return PlayerCharacterCount + EnemyCharacterCount;
+	return PlayerCharacterKeyNames.Num() + EnemyCharacterCount;
 }
 
-int32 ULshPF_GameInstance::GetPlayerCharacterCount() const
+TArray<FName> ULshPF_GameInstance::GetPlayerCharacterKeyNames() const
 {
-	return PlayerCharacterCount;
+	return PlayerCharacterKeyNames;
 }
 
 int32 ULshPF_GameInstance::GetEnemyCharacterCount() const
@@ -18,10 +18,6 @@ int32 ULshPF_GameInstance::GetEnemyCharacterCount() const
 	return EnemyCharacterCount;
 }
 
-void ULshPF_GameInstance::SetPlayerCharacterCount(int32 NewPlayerCharacterCount)
-{
-	PlayerCharacterCount = NewPlayerCharacterCount;
-}
 
 void ULshPF_GameInstance::SetEnemyCharacterCount(int32 NewEnemyCharacterCount)
 {

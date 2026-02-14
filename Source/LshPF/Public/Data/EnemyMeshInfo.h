@@ -29,7 +29,7 @@ class LSHPF_API UEnemyMeshInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	FEnemyMeshData GetEnemyMeshInfoByEnemyKeyName(FName EnemyKeyName);
+	FEnemyMeshData GetEnemyMeshInfoByKeyName(FName EnemyKeyName);
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ALshPF_EnemyBattleCharacter> EnemyBattleCharacterBaseClass;

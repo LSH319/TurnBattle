@@ -3,7 +3,7 @@
 
 #include "Data/EnemyMeshInfo.h"
 
-FEnemyMeshData UEnemyMeshInfo::GetEnemyMeshInfoByEnemyKeyName(FName EnemyKeyName)
+FEnemyMeshData UEnemyMeshInfo::GetEnemyMeshInfoByKeyName(FName EnemyKeyName)
 {
 	return EnemyMeshInfoMap.FindChecked(EnemyKeyName);
 }

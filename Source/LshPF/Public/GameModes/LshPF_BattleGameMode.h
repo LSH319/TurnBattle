@@ -7,6 +7,8 @@
 #include "GameModes/LshPF_GameModeBase.h"
 #include "LshPF_BattleGameMode.generated.h"
 
+class ALshPF_BattleCharacter_Base;
+class UPlayerCharacterInfo;
 class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UEnemyMeshInfo;
@@ -83,7 +85,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FQuat EnemySpawnQuat = FQuat(0, 0, -180, 0);
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FQuat PlayerSpawnQuat = FQuat(0, 0, 0, 0);
+	
 	UPROPERTY(EditDefaultsOnly, Category="SpawnPointActorTag")
 	FName EnemySpawnPointActorTag = "EnemySpawnPoint";
 	UPROPERTY(EditDefaultsOnly, Category="SpawnPointActorTag")
@@ -93,6 +97,9 @@ protected:
 	UDataTable* EnemyAttributeData;
 	UPROPERTY(EditDefaultsOnly, Category = "EnemyInfo")
 	UEnemyMeshInfo* EnemyMeshInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PlayerInfo")
+	UPlayerCharacterInfo* PlayerCharacterInfo;
 	
 	float GlobalTimer = 0.f;
 
@@ -114,6 +121,8 @@ private:
 	 * Enemy Spawn 을 위한 함수
 	 */
 	void SpawnEnemies();
+
+	void SpawnPlayerCharacters();
 	
 	UFUNCTION()
 	void StatusUIReadyCallBack();

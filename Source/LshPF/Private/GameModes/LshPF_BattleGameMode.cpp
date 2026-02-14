@@ -6,7 +6,9 @@
 #include "LshPF_GameInstance.h"
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 #include "Character/BattleCharacter/LshPF_EnemyBattleCharacter.h"
+#include "Character/BattleCharacter/LshPF_PlayerBattleCharacter.h"
 #include "Data/EnemyMeshInfo.h"
+#include "Data/PlayerCharacterInfo.h"
 #include "Engine/AssetManager.h"
 #include "Interface/LshPF_BattleInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,7 +25,8 @@ void ALshPF_BattleGameMode::PostInitializeComponents()
 void ALshPF_BattleGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	SpawnPlayerCharacters();
 	SpawnEnemies();
 }
 
@@ -142,7 +145,7 @@ bool ALshPF_BattleGameMode::IsGameReady() const
 	if (
 		/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
 		GameInstance->GetAllCharacterCount() == TurnTable.Num() &&*/
-		GameInstance->GetPlayerCharacterCount() + TestEnemyCount == TurnTable.Num() &&
+		GameInstance->GetPlayerCharacterKeyNames().Num() + TestEnemyCount == TurnTable.Num() &&
 		!IsTurnGranted &&
 		IsUIReady)
 	{
@@ -165,9 +168,9 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 {
 	TArray<AActor*> FoundPoints;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), EnemySpawnPointActorTag, FoundPoints);
-	checkf(!FoundPoints.IsEmpty(), TEXT("SpawnPointActorTag Is Error"));
-
+	checkf(!FoundPoints.IsEmpty(), TEXT("EnemySpawnPointActorTag Is Error"));
 	FVector SpawnPoint = FoundPoints[0]->GetActorLocation();
+	
 	/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
 	int32 EnemyCount = GameInstance->GetEnemyCharacterCount();*/
@@ -186,22 +189,23 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 		FTransform EnemyTransform;
 		EnemyTransform.SetLocation(SpawnPoint);
 		EnemyTransform.SetRotation(EnemySpawnQuat);
-
-		//Spawn 전 설정을 위해 SpawnActorDeferred 사용
-		ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
-			EnemyMeshInfo->EnemyBattleCharacterBaseClass,
-			EnemyTransform
-		);
-
+		
 		//Spawn 시 무작위 생성을 위한 코드
 		TArray<FName> EnemyKeyNames;
 		EnemyMeshInfo->EnemyMeshInfoMap.GetKeys(EnemyKeyNames);
 		int32 RandomIndex = FMath::RandRange(0, EnemyKeyNames.Num() - 1);
 		FName RandomKey = EnemyKeyNames[RandomIndex];
+		
+		//Spawn 전 설정을 위해 SpawnActorDeferred 사용
+		ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
+			EnemyMeshInfo->EnemyBattleCharacterBaseClass,
+			EnemyTransform
+		);
+		
 		SpawnedActor->SetCharacterKeyName(RandomKey);
 		
 		//FinishSpawning 전 필요한 값 설정
-		FEnemyMeshData EnemyMeshData = EnemyMeshInfo->GetEnemyMeshInfoByEnemyKeyName(RandomKey);
+		FEnemyMeshData EnemyMeshData = EnemyMeshInfo->GetEnemyMeshInfoByKeyName(RandomKey);
 
 		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
 			EnemyMeshData.SkeletalMesh.ToSoftObjectPath(),
@@ -215,6 +219,52 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 				})
 		);
 
+		//Spawn 위치를 Interval 만큼 이동
+		SpawnPoint.Y = SpawnPoint.Y + CharacterInterval;
+	}
+}
+
+void ALshPF_BattleGameMode::SpawnPlayerCharacters()
+{
+	TArray<AActor*> FoundPoints;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), PlayerSpawnPointActorTag, FoundPoints);
+	checkf(!FoundPoints.IsEmpty(), TEXT("PlayerSpawnPointActorTag Is Error"));
+	FVector SpawnPoint = FoundPoints[0]->GetActorLocation();
+	
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	TArray<FName> PlayerCharacterKeyNames = GameInstance->GetPlayerCharacterKeyNames();
+	int32 PlayerCharacterCount = PlayerCharacterKeyNames.Num();
+	
+	//Spawn 시 시작지점 계산
+	SpawnPoint.Y = SpawnPoint.Y - (CharacterInterval * (PlayerCharacterCount/2));
+	if (PlayerCharacterCount % 2 == 0)
+	{
+		SpawnPoint.Y = SpawnPoint.Y + (CharacterInterval * 0.5);
+	}
+
+	//Count 숫자만큼 Spawn 실행
+	for (FName PlayerCharacterKeyName : PlayerCharacterKeyNames)
+	{
+		FTransform PlayerTransform;
+		PlayerTransform.SetLocation(SpawnPoint);
+		PlayerTransform.SetRotation(PlayerSpawnQuat);
+
+		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+			PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(PlayerCharacterKeyName).ToSoftObjectPath(),
+		FStreamableDelegate::CreateLambda(
+			[this, PlayerCharacterKeyName, PlayerTransform]
+			{
+				ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
+					PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(PlayerCharacterKeyName).Get(),
+					PlayerTransform
+				);
+				
+				//FinishSpawning 전 필요한 값 설정
+				SpawnedActor->SetCharacterKeyName(PlayerCharacterKeyName);
+				SpawnedActor->FinishSpawning(PlayerTransform);
+			})
+		);
+		
 		//Spawn 위치를 Interval 만큼 이동
 		SpawnPoint.Y = SpawnPoint.Y + CharacterInterval;
 	}
