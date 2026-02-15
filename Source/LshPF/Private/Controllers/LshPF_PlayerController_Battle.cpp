@@ -36,6 +36,14 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         {
         	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Item);
         }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Prev))
+        {
+        	UE_LOG(LogTemp, Display, TEXT("Select Previous Item"));
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Next))
+        {
+        	UE_LOG(LogTemp, Display, TEXT("Select Next Item"));
+        }
 	}
 }
 
