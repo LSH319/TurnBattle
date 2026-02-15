@@ -5,10 +5,19 @@
 
 #include "Component/LshPF_BattleComponent.h"
 #include "GameModes/LshPF_BattleGameMode.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ALshPF_BattleCharacter_Base::ALshPF_BattleCharacter_Base()
 {
 	LshPF_BattleComponent = CreateDefaultSubobject<ULshPF_BattleComponent>("BattleComponent");
+
+	TargetingParticle = CreateDefaultSubobject<UParticleSystemComponent>("TargetingParticle");
+	TargetingParticle->SetupAttachment(RootComponent);
+	TargetingParticle->bAutoActivate = false;
+	
+	GuardParticle = CreateDefaultSubobject<UParticleSystemComponent>("GuardParticle");
+	GuardParticle->SetupAttachment(RootComponent);
+	GuardParticle->bAutoActivate = false;
 }
 
 ULshPF_BattleComponent* ALshPF_BattleCharacter_Base::GetBattleComponent() const
@@ -19,6 +28,9 @@ ULshPF_BattleComponent* ALshPF_BattleCharacter_Base::GetBattleComponent() const
 void ALshPF_BattleCharacter_Base::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	ToggleTargeting(false);
+	ToggleGuard(false);
 	
 	//BaseHealth 와 BaseMana 를 Max 값으로 설정
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseHealth,LshPF_BattleComponent->GetAttribute(EAttributeType::BaseMaxHealth));
@@ -47,6 +59,7 @@ void ALshPF_BattleCharacter_Base::SetAttribute(EAttributeType AttributeType, int
 
 void ALshPF_BattleCharacter_Base::TurnStart()
 {
+	ToggleGuard(false);
 	OnTurnStartDelegate.Broadcast();
 }
 
@@ -64,6 +77,34 @@ bool ALshPF_BattleCharacter_Base::IsPlayerCharacter()
 ULshPF_BattleComponent* ALshPF_BattleCharacter_Base::GetBattleComponent()
 {
 	return LshPF_BattleComponent;
+}
+
+void ALshPF_BattleCharacter_Base::ToggleTargeting(bool IsActive)
+{
+	if (IsActive)
+	{
+		TargetingParticle->Activate(true);
+	}
+	else
+	{
+		TargetingParticle->DeactivateImmediate();
+		TargetingParticle->ForceReset();
+	}
+}
+
+void ALshPF_BattleCharacter_Base::ToggleGuard(bool IsActive)
+{
+	if (IsActive)
+	{
+		LshPF_BattleComponent->SetIsGuard(true);
+		GuardParticle->Activate(true);
+	}
+	else
+	{
+		LshPF_BattleComponent->SetIsGuard(false);
+		GuardParticle->DeactivateImmediate();
+		GuardParticle->ForceReset();
+	}
 }
 
 void ALshPF_BattleCharacter_Base::SetCharacterKeyName(FName NewCharacterKeyName)

@@ -38,6 +38,12 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 {
 	OnTakeDamageDelegate.Broadcast();
 	float ApplyDamage = BattleAttributeModifier.ModifyValue;
+
+	if (IsGuard)
+	{//가드 중인경우 대미지 감소 30%
+		ApplyDamage = ApplyDamage * 0.7;
+	}
+	
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) - ApplyDamage);
 
 	switch (BattleAttributeModifier.TargetAttribute)
@@ -189,6 +195,11 @@ void ULshPF_BattleComponent::SetAllCurrentAttributeToBaseAttribute()
 	SetAttribute(EAttributeType::CurrentDefence, GetAttribute(EAttributeType::BaseDefence));
 	SetAttribute(EAttributeType::CurrentAbilityAttack, GetAttribute(EAttributeType::BaseAbilityAttack));
 	SetAttribute(EAttributeType::CurrentAbilityDefence, GetAttribute(EAttributeType::BaseAbilityDefence));
+}
+
+void ULshPF_BattleComponent::SetIsGuard(bool NewIsGuard)
+{
+	IsGuard = NewIsGuard;
 }
 
 FText ULshPF_BattleComponent::GetCharacterName()

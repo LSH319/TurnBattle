@@ -171,7 +171,7 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), EnemySpawnPointActorTag, FoundPoints);
 	checkf(!FoundPoints.IsEmpty(), TEXT("EnemySpawnPointActorTag Is Error"));
 	FVector SpawnPoint = FoundPoints[0]->GetActorLocation();
-	
+
 	/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
 	int32 EnemyCount = GameInstance->GetEnemyCharacterCount();*/

@@ -44,6 +44,8 @@ public:
 	virtual void TurnEnd() override;
 	virtual bool IsPlayerCharacter() override;
 	virtual ULshPF_BattleComponent* GetBattleComponent() override;
+	virtual void ToggleTargeting(bool IsActive) override;
+	virtual void ToggleGuard(bool IsActive) override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -56,6 +58,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ULshPF_BattleComponent* LshPF_BattleComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UParticleSystemComponent* TargetingParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UParticleSystemComponent* GuardParticle;
+	
 	ALshPF_BattleGameMode* GetBattleGameMode();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

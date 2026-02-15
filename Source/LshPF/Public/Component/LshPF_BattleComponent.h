@@ -120,9 +120,10 @@ public:
 	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화
 	 */
 	void SetAllCurrentAttributeToBaseAttribute();
+	void SetIsGuard(bool NewIsGuard);
 	FText GetCharacterName();
 	bool IsDead();
-	
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 	FText CharacterName;
@@ -179,4 +180,6 @@ protected:
 private:
 	//사망 시 처리할 이벤트
 	void OwnerDeadEvent();
+
+	bool IsGuard = false;
 };

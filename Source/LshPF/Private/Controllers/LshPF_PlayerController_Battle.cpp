@@ -118,13 +118,13 @@ void ALshPF_PlayerController_Battle::Command_Attack()
 void ALshPF_PlayerController_Battle::Command_Guard()
 {
 	IsEnableInput = false;
-	/* todo : ILshPF_BattleInterface 에 Guard 추가 후 호출
+	
 	ILshPF_BattleInterface* TurnCharacter = CachedBattleGameMode->GetRecentOwingTurnCharacter();
 	
 	if (TurnCharacter)
 	{
-		TurnCharacter->Guard();
+		TurnCharacter->ToggleGuard(true);
 	}
-	*/
+	
 	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
 }

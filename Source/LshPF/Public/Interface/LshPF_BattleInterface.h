@@ -30,4 +30,6 @@ public:
 	virtual void TurnEnd() = 0;
 	virtual bool IsPlayerCharacter() = 0;
 	virtual ULshPF_BattleComponent* GetBattleComponent() = 0;
+	virtual void ToggleTargeting(bool IsActive) = 0;
+	virtual void ToggleGuard(bool IsActive) = 0;
 };
