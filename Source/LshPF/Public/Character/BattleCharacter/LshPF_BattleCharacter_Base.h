@@ -48,6 +48,7 @@ public:
 	virtual void ToggleTargeting(bool IsActive) override;
 	virtual void ToggleGuard(bool IsActive) override;
 	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) override;
+	virtual int32 GetCharacterOrderPriority() const;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -59,7 +60,9 @@ public:
 	void SetCharacterName(const FText& NewCharacterName);
 
 	void AddSoftAnimMontageMap(TMap<FGameplayTag, TSoftObjectPtr<UAnimMontage>> MontageMap);
-	
+
+	void SetCharacterOrderPriority(int32 NewCharacterOrderPriority);
+
 protected:
 	ALshPF_BattleGameMode* GetBattleGameMode();
 	
@@ -78,6 +81,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName CharacterKey = "001";
 
+	int32 CharacterOrderPriority = 0;
+	
 	bool IsCharacterReady();
 	
 	bool IsMontageReady = false;

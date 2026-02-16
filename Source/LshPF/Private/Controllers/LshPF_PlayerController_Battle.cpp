@@ -38,11 +38,11 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Prev))
         {
-        	UE_LOG(LogTemp, Display, TEXT("Select Previous Item"));
+        	Command_ChangeTarget(true);
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Next))
         {
-        	UE_LOG(LogTemp, Display, TEXT("Select Next Item"));
+        	Command_ChangeTarget(false);
         }
 	}
 }
@@ -50,6 +50,12 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
 void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
 {
 	IsEnableInput = InIsEnableInput;
+}
+
+void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
+{
+	CachedTargetEnemyByIndex(TargetingEnemyNum);
+	ToggleTargetingAllTargets(true);
 }
 
 void ALshPF_PlayerController_Battle::SetupInputComponent()
@@ -104,12 +110,34 @@ void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetS
 		});
 }
 
+void ALshPF_PlayerController_Battle::ToggleTargetingAllTargets(bool IsActive)
+{
+	for (ILshPF_BattleInterface* Target : TargetList)
+	{
+		Target->ToggleTargeting(IsActive);
+	}
+}
+
+void ALshPF_PlayerController_Battle::CachedTargetEnemyByIndex(int32& TargetIndex)
+{
+	TargetList.Empty();
+	ILshPF_BattleInterface* NewTarget = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetIndex);
+	TargetList.Add(NewTarget);
+}
+
+void ALshPF_PlayerController_Battle::CallTurnEnd()
+{
+	//Player 턴 종료를 위해 함수, 필요한 이벤트 처리
+	ToggleTargetingAllTargets(false);
+	TargetList.Empty();
+	GetBattleGameMode()->GetRecentOwingTurnCharacter()->TurnEnd();
+}
+
 void ALshPF_PlayerController_Battle::Command_Attack()
 {
 	IsEnableInput = false;
 	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
-	//todo : GetEnemyCharacterByIndex 의 Index 설정
-	ILshPF_BattleInterface* TargetCharacter = GetBattleGameMode()->GetEnemyCharacterByIndex(0);
+	ILshPF_BattleInterface* TargetCharacter = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetingEnemyNum);
 	
 	if (TurnCharacter && TargetCharacter)
 	{
@@ -121,7 +149,7 @@ void ALshPF_PlayerController_Battle::Command_Attack()
 			BattleAttributeModifier);;
 	}
 	
-	TurnCharacter->TurnEnd();
+	CallTurnEnd();
 }
 
 void ALshPF_PlayerController_Battle::Command_Guard()
@@ -135,5 +163,24 @@ void ALshPF_PlayerController_Battle::Command_Guard()
 		TurnCharacter->ToggleGuard(true);
 	}
 	
-	GetBattleGameMode()->GetRecentOwingTurnCharacter()->TurnEnd();
+	CallTurnEnd();
+}
+
+void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
+{
+	//타켓 파티클 Off
+	ToggleTargetingAllTargets(false);
+	
+	if (IsPrev)
+	{
+		TargetingEnemyNum--;
+	}
+	else
+	{
+		TargetingEnemyNum++;
+	}
+	
+	CachedTargetEnemyByIndex(TargetingEnemyNum);
+	//타켓 파티클 On
+	ToggleTargetingAllTargets(true);
 }

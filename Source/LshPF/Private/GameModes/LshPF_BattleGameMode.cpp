@@ -106,6 +106,8 @@ void ALshPF_BattleGameMode::SetUIReady(bool NewIsUIReady)
 
 	if (IsGameReady())
 	{
+		//준비 완료시 게임 시작
+		SortEnemyList();
 		GrantTurn();
 	}
 }
@@ -115,7 +117,7 @@ ILshPF_BattleInterface* ALshPF_BattleGameMode::GetRecentOwingTurnCharacter() con
 	return RecentOwingTurnCharacter;
 }
 
-ILshPF_BattleInterface* ALshPF_BattleGameMode::GetEnemyCharacterByIndex(int Index) const
+ILshPF_BattleInterface* ALshPF_BattleGameMode::GetEnemyCharacterByIndex(int32& Index) const
 {
 	if (EnemyCharacterList.IsEmpty())
 	{
@@ -136,8 +138,21 @@ void ALshPF_BattleGameMode::SortTurnTable()
 
 	if (IsGameReady())
 	{
+		//준비 완료시 게임 시작
+		SortEnemyList();
 		GrantTurn();
 	}
+}
+
+void ALshPF_BattleGameMode::SortEnemyList()
+{
+	//Spawn 순서에 따라 List 정렬
+	//Asset 로드에 따라 순서가 달라질 수 있어 1회 정렬 수행
+	EnemyCharacterList.Sort([](
+		const ILshPF_BattleInterface& A, const ILshPF_BattleInterface& B)
+		{
+			return A.GetCharacterOrderPriority() < B.GetCharacterOrderPriority();
+		});
 }
 
 bool ALshPF_BattleGameMode::IsGameReady() const
@@ -185,7 +200,7 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 	}
 
 	//Enemy 숫자만큼 Spawn 실행
-	for (int i = 0; i < EnemyCount; i++)
+	for (int Index = 0; Index < EnemyCount; Index++)
 	{
 		FTransform EnemyTransform;
 		EnemyTransform.SetLocation(SpawnPoint);
@@ -203,7 +218,7 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
 			EnemyMeshData.SkeletalMesh.ToSoftObjectPath(),
 			FStreamableDelegate::CreateLambda(
-				[this, EnemyMeshData, EnemyTransform, RandomKey]
+				[this, EnemyMeshData, EnemyTransform, RandomKey, Index]
 				{
 					//Spawn 전 설정을 위해 SpawnActorDeferred 사용
 					ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
@@ -215,6 +230,8 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 					SpawnedActor->SetCharacterKey(RandomKey);
 					SpawnedActor->SetCharacterName(EnemyMeshData.CharacterName);
 					SpawnedActor->AddSoftAnimMontageMap(EnemyMeshData.EnemyMontageMap);
+					//몇번째 Spawn 인지 추가해 List Sort에 활용
+					SpawnedActor->SetCharacterOrderPriority(Index);
 					
 					//Enemy 의 매쉬관련 설정
 					SpawnedActor->GetMesh()->SetSkeletalMesh(EnemyMeshData.SkeletalMesh.Get());

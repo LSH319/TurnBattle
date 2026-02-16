@@ -7,6 +7,7 @@
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
+class ILshPF_BattleInterface;
 class UInputActionGameplayTagInfo;
 class ALshPF_BattleGameMode;
 /**
@@ -26,6 +27,10 @@ public:
 	virtual void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag) override;
 	
 	void SetIsEnableInput(bool InIsEnableInput);
+	/*
+	 * Player Turn 시작 시 Character 에서 호출하여 이벤트 처리를 위한 함수
+	 */
+	void PlayerCharacterTurnStartEvent();
 	
 protected:
 	virtual void SetupInputComponent() override;
@@ -39,6 +44,9 @@ private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 
+	int32 TargetingEnemyNum = 0;
+	TArray<ILshPF_BattleInterface*> TargetList;
+	
 	/*
 	 * FInputActionValue 의 값을 사용하기 위해 IA 에 바인딩 될 함수
 	 * ExecuteInputActionByGameplayTag 를 호출하여 Button 과 동작을 통일
@@ -51,6 +59,20 @@ private:
 	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true
 	 */
 	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
+
+	/*
+	 * TargetList 에 포함된 요소들의 Targeting Toggle을 위한 함수
+	 */
+	void ToggleTargetingAllTargets(bool IsActive);
+	
+	/*
+	 * Index 를 통해 Target Enemy 를 TargetList에 추가
+	 * 파라미터를 & 로 받아 값이 배열의 범위를 넘어가도 조정
+	 */
+	void CachedTargetEnemyByIndex(int32& TargetIndex);
+	void CallTurnEnd();
+	
 	void Command_Attack();
 	void Command_Guard();
+	void Command_ChangeTarget(bool IsPrev);
 };

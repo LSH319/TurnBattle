@@ -156,6 +156,16 @@ void ALshPF_BattleCharacter_Base::AddSoftAnimMontageMap(TMap<FGameplayTag, TSoft
 	
 }
 
+void ALshPF_BattleCharacter_Base::SetCharacterOrderPriority(int32 NewCharacterOrderPriority)
+{
+	CharacterOrderPriority = NewCharacterOrderPriority;
+}
+
+int32 ALshPF_BattleCharacter_Base::GetCharacterOrderPriority() const
+{
+	return CharacterOrderPriority;
+}
+
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
 {
 	if (!CachedBattleGameMode)

@@ -34,4 +34,5 @@ public:
 	virtual void ToggleTargeting(bool IsActive) = 0;
 	virtual void ToggleGuard(bool IsActive) = 0;
 	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) = 0;
+	virtual int32 GetCharacterOrderPriority() const = 0;
 };

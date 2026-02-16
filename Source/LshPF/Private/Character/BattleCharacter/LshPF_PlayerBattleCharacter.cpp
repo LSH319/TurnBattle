@@ -35,6 +35,7 @@ void ALshPF_PlayerBattleCharacter::TurnStart()
 		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::SelfHitTestInvisible);
 	}
 	GetBattlePlayerController()->SetIsEnableInput(true);
+	GetBattlePlayerController()->PlayerCharacterTurnStartEvent();
 }
 
 void ALshPF_PlayerBattleCharacter::TurnEnd()

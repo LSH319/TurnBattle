@@ -65,10 +65,15 @@ public:
 	FStatusUIReady StatusUIReady;
 
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
-	ILshPF_BattleInterface* GetEnemyCharacterByIndex(int Index) const;
+	/*
+	 * Index로 EnemyList 에서 요소 반환
+	 * 파라미터를 & 로받아 배열의 범위를 넘은값이 들어올 경우 범위 내부 값으로 조정
+	 */
+	ILshPF_BattleInterface* GetEnemyCharacterByIndex(int32& Index) const;
 	
 protected:
 	void SortTurnTable();
+	void SortEnemyList();
 	bool IsGameReady() const;
 	
 	void GrantTurn();
