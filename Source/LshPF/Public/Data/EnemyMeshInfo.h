@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
 #include "EnemyMeshInfo.generated.h"
 
@@ -14,10 +15,16 @@ struct FEnemyMeshData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly)
+	FText CharacterName;
+	
+	UPROPERTY(EditDefaultsOnly)
 	TSoftObjectPtr<USkeletalMesh> SkeletalMesh;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UAnimInstance> AnimClass;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FGameplayTag, TSoftObjectPtr<UAnimMontage>> EnemyMontageMap;	
 };
 
 /**

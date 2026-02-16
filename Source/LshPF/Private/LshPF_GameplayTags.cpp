@@ -29,5 +29,9 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_OpenItem, "LshPF.InputAction.OpenItem");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_SelectTarget_Prev, "LshPF.InputAction.SelectTarget.Prev");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_SelectTarget_Next, "LshPF.InputAction.SelectTarget.Next");
-	
+
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Attack, "LshPF.AnimMontage.Attack");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Skill, "LshPF.AnimMontage.Skill");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Death, "LshPF.AnimMontage.Death");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_HitReact, "LshPF.AnimMontage.HitReact");
 }

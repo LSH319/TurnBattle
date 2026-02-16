@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Character/LshPF_CharacterBase.h"
 #include "Interface/LshPF_BattleInterface.h"
 #include "LshPF_BattleCharacter_Base.generated.h"
@@ -46,6 +47,7 @@ public:
 	virtual ULshPF_BattleComponent* GetBattleComponent() override;
 	virtual void ToggleTargeting(bool IsActive) override;
 	virtual void ToggleGuard(bool IsActive) override;
+	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -53,8 +55,14 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FTurnDelegate OnTurnEndDelegate;
 
-	void SetCharacterKeyName(FName NewCharacterKeyName);
+	void SetCharacterKey(FName NewCharacterKey);
+	void SetCharacterName(const FText& NewCharacterName);
+
+	void AddSoftAnimMontageMap(TMap<FGameplayTag, TSoftObjectPtr<UAnimMontage>> MontageMap);
+	
 protected:
+	ALshPF_BattleGameMode* GetBattleGameMode();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ULshPF_BattleComponent* LshPF_BattleComponent;
 
@@ -63,11 +71,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UParticleSystemComponent* GuardParticle;
-	
-	ALshPF_BattleGameMode* GetBattleGameMode();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TMap<FGameplayTag, UAnimMontage*> CharacterMontageMap;	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FName CharacterKeyName = "001";
+	FName CharacterKey = "001";
+
+	bool IsCharacterReady();
+	
+	bool IsMontageReady = false;
+	bool IsBeginPlay = false;
 	
 private:
 	UPROPERTY()

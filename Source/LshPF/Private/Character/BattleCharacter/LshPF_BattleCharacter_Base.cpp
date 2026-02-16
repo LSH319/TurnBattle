@@ -3,7 +3,9 @@
 
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Component/LshPF_BattleComponent.h"
+#include "Engine/AssetManager.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -42,9 +44,14 @@ void ALshPF_BattleCharacter_Base::PostInitializeComponents()
 
 void ALshPF_BattleCharacter_Base::BeginPlay()
 {
+	IsBeginPlay = true;
 	Super::BeginPlay();
 
-	GetBattleGameMode()->CharacterReady(this);
+	if (IsCharacterReady())
+	{
+		//캐릭터의 준비 완료 시 GM 으로 전송
+		GetBattleGameMode()->CharacterReady(this);
+	}
 }
 
 int32 ALshPF_BattleCharacter_Base::GetAttribute(EAttributeType AttributeType)
@@ -107,9 +114,46 @@ void ALshPF_BattleCharacter_Base::ToggleGuard(bool IsActive)
 	}
 }
 
-void ALshPF_BattleCharacter_Base::SetCharacterKeyName(FName NewCharacterKeyName)
+void ALshPF_BattleCharacter_Base::PlayAnimMontageByTag(FGameplayTag AnimMontageTag)
 {
-	CharacterKeyName = NewCharacterKeyName;
+	PlayAnimMontage(CharacterMontageMap.FindChecked(AnimMontageTag));
+}
+
+void ALshPF_BattleCharacter_Base::SetCharacterKey(FName NewCharacterKey)
+{
+	CharacterKey = NewCharacterKey;
+}
+
+void ALshPF_BattleCharacter_Base::SetCharacterName(const FText& NewCharacterName)
+{
+	LshPF_BattleComponent->SetCharacterName(NewCharacterName);
+}
+
+void ALshPF_BattleCharacter_Base::AddSoftAnimMontageMap(TMap<FGameplayTag, TSoftObjectPtr<UAnimMontage>> MontageMap)
+{
+	int32 MontageCount = MontageMap.Num();
+	for (TTuple<FGameplayTag, TSoftObjectPtr<UAnimMontage>> Montage : MontageMap)
+	{
+		//시작 전 Montage 로드 및 추가
+		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+        	Montage.Value.ToSoftObjectPath(),
+        	FStreamableDelegate::CreateLambda(
+        		[this, Montage, MontageCount]()
+        		{
+        			CharacterMontageMap.Add(Montage.Key, Montage.Value.Get());
+        			if (CharacterMontageMap.Num() >= MontageCount)
+        			{
+        				IsMontageReady = true;
+        				if (IsCharacterReady())
+        				{
+        					//캐릭터의 준비 완료 시 GM 으로 전송
+        					GetBattleGameMode()->CharacterReady(this);
+        				}
+        			}
+        		})
+        	);
+	}
+	
 }
 
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
@@ -119,4 +163,10 @@ ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
 		CachedBattleGameMode = Cast<ALshPF_BattleGameMode>(GetWorld()->GetAuthGameMode());
 	}
 	return CachedBattleGameMode;
+}
+
+bool ALshPF_BattleCharacter_Base::IsCharacterReady()
+{
+	//Montage 로드 및 저장 완료 && 캐릭터의 BeginPlay 호출 이후 체크
+	return IsMontageReady && IsBeginPlay;
 }

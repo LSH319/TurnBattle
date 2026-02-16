@@ -7,6 +7,7 @@
 #include "LshPF_Types/LshPF_EnumTypes.h"
 #include "LshPF_BattleComponent.generated.h"
 
+class ILshPF_BattleInterface;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, float);
 
@@ -122,8 +123,11 @@ public:
 	void SetAllCurrentAttributeToBaseAttribute();
 	void SetIsGuard(bool NewIsGuard);
 	FText GetCharacterName();
+	void SetCharacterName(const FText& NewCharacterName);
 	bool IsDead();
 
+	ILshPF_BattleInterface* GetOwnerBattleInterface();
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 	FText CharacterName;
@@ -182,4 +186,6 @@ private:
 	void OwnerDeadEvent();
 
 	bool IsGuard = false;
+
+	ILshPF_BattleInterface* CachedOwnerBattleInterface;
 };

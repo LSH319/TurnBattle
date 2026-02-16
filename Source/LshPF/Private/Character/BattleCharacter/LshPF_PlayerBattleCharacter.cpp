@@ -12,6 +12,9 @@
 
 void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 {
+	//PlayerCharacter 는 Montage 를 미리 설정해두기 때문에 true
+	IsMontageReady = true;
+	
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxHealth, GetBaseAttributeFromCurveTable(EAttributeType::BaseMaxHealth, CharacterLevel));
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxMana, GetBaseAttributeFromCurveTable(EAttributeType::BaseMaxMana, CharacterLevel));
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseSpeed, GetBaseAttributeFromCurveTable(EAttributeType::BaseSpeed, CharacterLevel));

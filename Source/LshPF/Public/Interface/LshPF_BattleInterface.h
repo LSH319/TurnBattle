@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "LshPF_Types/LshPF_EnumTypes.h"
 #include "UObject/Interface.h"
 #include "LshPF_BattleInterface.generated.h"
@@ -32,4 +33,5 @@ public:
 	virtual ULshPF_BattleComponent* GetBattleComponent() = 0;
 	virtual void ToggleTargeting(bool IsActive) = 0;
 	virtual void ToggleGuard(bool IsActive) = 0;
+	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) = 0;
 };

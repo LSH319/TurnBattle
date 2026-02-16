@@ -212,7 +212,9 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 					);
 					
 					//FinishSpawning 전 필요한 값 설정
-					SpawnedActor->SetCharacterKeyName(RandomKey);
+					SpawnedActor->SetCharacterKey(RandomKey);
+					SpawnedActor->SetCharacterName(EnemyMeshData.CharacterName);
+					SpawnedActor->AddSoftAnimMontageMap(EnemyMeshData.EnemyMontageMap);
 					
 					//Enemy 의 매쉬관련 설정
 					SpawnedActor->GetMesh()->SetSkeletalMesh(EnemyMeshData.SkeletalMesh.Get());
@@ -262,7 +264,7 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 				);
 				
 				//FinishSpawning 전 필요한 값 설정
-				SpawnedActor->SetCharacterKeyName(PlayerCharacterKeyName);
+				SpawnedActor->SetCharacterKey(PlayerCharacterKeyName);
 				SpawnedActor->FinishSpawning(PlayerTransform);
 			})
 		);

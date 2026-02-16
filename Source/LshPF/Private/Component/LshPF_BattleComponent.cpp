@@ -3,6 +3,7 @@
 
 #include "Component/LshPF_BattleComponent.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Interface/LshPF_BattleInterface.h"
 
 FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
@@ -43,7 +44,8 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 	{//가드 중인경우 대미지 감소 30%
 		ApplyDamage = ApplyDamage * 0.7;
 	}
-	
+
+	GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_HitReact);
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) - ApplyDamage);
 
 	switch (BattleAttributeModifier.TargetAttribute)
@@ -207,9 +209,26 @@ FText ULshPF_BattleComponent::GetCharacterName()
 	return CharacterName;
 }
 
+void ULshPF_BattleComponent::SetCharacterName(const FText& NewCharacterName)
+{
+	CharacterName = NewCharacterName;
+}
+
 bool ULshPF_BattleComponent::IsDead()
 {
 	return GetAttribute(EAttributeType::CurrentHealth) <= 0;
+}
+
+ILshPF_BattleInterface* ULshPF_BattleComponent::GetOwnerBattleInterface()
+{
+	if (!CachedOwnerBattleInterface)
+	{
+		if (ILshPF_BattleInterface* OwnerBattleInterface = Cast<ILshPF_BattleInterface>(GetOwner()))
+		{
+			CachedOwnerBattleInterface = OwnerBattleInterface;
+		}
+	}
+	return CachedOwnerBattleInterface;
 }
 
 void ULshPF_BattleComponent::OwnerDeadEvent()

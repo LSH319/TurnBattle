@@ -107,13 +107,14 @@ void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetS
 void ALshPF_PlayerController_Battle::Command_Attack()
 {
 	IsEnableInput = false;
-	ILshPF_BattleInterface* TurnCharacter = CachedBattleGameMode->GetRecentOwingTurnCharacter();
+	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
 	//todo : GetEnemyCharacterByIndex 의 Index 설정
-	ILshPF_BattleInterface* TargetCharacter = CachedBattleGameMode->GetEnemyCharacterByIndex(0);
+	ILshPF_BattleInterface* TargetCharacter = GetBattleGameMode()->GetEnemyCharacterByIndex(0);
 	
 	if (TurnCharacter && TargetCharacter)
 	{
 		FBattleAttributeModifier BattleAttributeModifier = TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(EAttributeType::CurrentHealth, EAttributeType::CurrentAttack, 1.f);
+		TurnCharacter->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Attack);
 		TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
 			TargetCharacter->GetBattleComponent(),
 			TurnCharacter->GetBattleComponent(),
@@ -127,12 +128,12 @@ void ALshPF_PlayerController_Battle::Command_Guard()
 {
 	IsEnableInput = false;
 	
-	ILshPF_BattleInterface* TurnCharacter = CachedBattleGameMode->GetRecentOwingTurnCharacter();
+	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
 	
 	if (TurnCharacter)
 	{
 		TurnCharacter->ToggleGuard(true);
 	}
 	
-	CachedBattleGameMode->GetRecentOwingTurnCharacter()->TurnEnd();
+	GetBattleGameMode()->GetRecentOwingTurnCharacter()->TurnEnd();
 }
