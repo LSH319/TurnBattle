@@ -35,4 +35,6 @@ public:
 	virtual void ToggleGuard(bool IsActive) = 0;
 	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) = 0;
 	virtual int32 GetCharacterOrderPriority() const = 0;
+	virtual FVector GetBattleCharacterLocation() = 0;
+	virtual void SetLookAtRotation(FVector TargetLocation) = 0;
 };

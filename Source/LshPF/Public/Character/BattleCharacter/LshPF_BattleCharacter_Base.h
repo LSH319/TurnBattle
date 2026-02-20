@@ -52,6 +52,8 @@ public:
 	virtual void ToggleGuard(bool IsActive) override;
 	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) override;
 	virtual int32 GetCharacterOrderPriority() const override;
+	virtual FVector GetBattleCharacterLocation() override;
+	virtual void SetLookAtRotation(FVector TargetLocation) override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)

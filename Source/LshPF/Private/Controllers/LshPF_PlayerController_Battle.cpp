@@ -54,6 +54,8 @@ void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
 
 void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 {
+	SetCharacterRotationToTarget();
+	
 	CachedTargetEnemyByIndex(TargetingEnemyNum);
 	ToggleTargetingAllTargets(true);
 }
@@ -125,6 +127,18 @@ void ALshPF_PlayerController_Battle::CachedTargetEnemyByIndex(int32& TargetIndex
 	TargetList.Add(NewTarget);
 }
 
+void ALshPF_PlayerController_Battle::SetCharacterRotationToTarget()
+{
+	//TurnCharacter Rotation 설정
+	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
+	ILshPF_BattleInterface* TargetCharacter = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetingEnemyNum);
+	if (TurnCharacter && TargetCharacter)
+	{
+		TurnCharacter->SetLookAtRotation(TargetCharacter->GetBattleCharacterLocation());
+	}
+}
+
+
 void ALshPF_PlayerController_Battle::CallTurnEnd()
 {
 	//Player 턴 종료를 위해 함수, 필요한 이벤트 처리
@@ -183,4 +197,6 @@ void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
 	CachedTargetEnemyByIndex(TargetingEnemyNum);
 	//타켓 파티클 On
 	ToggleTargetingAllTargets(true);
+
+	SetCharacterRotationToTarget();
 }

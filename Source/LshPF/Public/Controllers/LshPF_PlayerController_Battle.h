@@ -70,6 +70,7 @@ private:
 	 * 파라미터를 & 로 받아 값이 배열의 범위를 넘어가도 조정
 	 */
 	void CachedTargetEnemyByIndex(int32& TargetIndex);
+	void SetCharacterRotationToTarget();
 	void CallTurnEnd();
 	
 	void Command_Attack();

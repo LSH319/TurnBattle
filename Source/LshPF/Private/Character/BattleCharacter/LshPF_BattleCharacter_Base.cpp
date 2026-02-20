@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystemComponent.h"
 
 ALshPF_BattleCharacter_Base::ALshPF_BattleCharacter_Base()
@@ -184,6 +185,17 @@ void ALshPF_BattleCharacter_Base::SetCharacterOrderPriority(int32 NewCharacterOr
 int32 ALshPF_BattleCharacter_Base::GetCharacterOrderPriority() const
 {
 	return CharacterOrderPriority;
+}
+
+FVector ALshPF_BattleCharacter_Base::GetBattleCharacterLocation()
+{
+	return GetActorLocation();
+}
+
+void ALshPF_BattleCharacter_Base::SetLookAtRotation(FVector TargetLocation)
+{
+	FRotator LookAtRotator = UKismetMathLibrary::FindLookAtRotation(GetBattleCharacterLocation(), TargetLocation);
+	SetActorRotation(LookAtRotator);
 }
 
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
