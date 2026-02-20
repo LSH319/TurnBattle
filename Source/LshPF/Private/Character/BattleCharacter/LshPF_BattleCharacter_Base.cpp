@@ -3,16 +3,35 @@
 
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 
-#include "LshPF_GameplayTags.h"
+#include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
+#include "Controllers/LshPF_PlayerController_Battle.h"
 #include "Engine/AssetManager.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "GameModes/LshPF_BattleGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 ALshPF_BattleCharacter_Base::ALshPF_BattleCharacter_Base()
 {
 	LshPF_BattleComponent = CreateDefaultSubobject<ULshPF_BattleComponent>("BattleComponent");
-
+	
+	FrontCameraBoom = CreateDefaultSubobject<USpringArmComponent>("FrontCameraBoom");
+	FrontCameraBoom->SetupAttachment(RootComponent);
+	
+	FrontCameraComponent = CreateDefaultSubobject<UCameraComponent>("FrontCameraComponent");
+	FrontCameraComponent->SetupAttachment(FrontCameraBoom);
+	FrontCameraComponent->SetAutoActivate(false);
+	FrontCameraComponent->SetActive(false);
+	
+	BackCameraBoom = CreateDefaultSubobject<USpringArmComponent>("BackCameraBoom");
+	BackCameraBoom->SetupAttachment(RootComponent);
+	
+	BackCameraComponent = CreateDefaultSubobject<UCameraComponent>("BackCameraComponent");
+	BackCameraComponent->SetupAttachment(BackCameraBoom);
+	BackCameraComponent->SetAutoActivate(false);
+	BackCameraComponent->SetActive(true);
+	
 	TargetingParticle = CreateDefaultSubobject<UParticleSystemComponent>("TargetingParticle");
 	TargetingParticle->SetupAttachment(RootComponent);
 	TargetingParticle->bAutoActivate = false;
@@ -116,6 +135,7 @@ void ALshPF_BattleCharacter_Base::ToggleGuard(bool IsActive)
 
 void ALshPF_BattleCharacter_Base::PlayAnimMontageByTag(FGameplayTag AnimMontageTag)
 {
+	SetViewTargetSelf(true);
 	PlayAnimMontage(CharacterMontageMap.FindChecked(AnimMontageTag));
 }
 
@@ -175,8 +195,32 @@ ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
 	return CachedBattleGameMode;
 }
 
+ALshPF_PlayerController_Battle* ALshPF_BattleCharacter_Base::GetBattlePlayerController()
+{
+	if (!CachedPlayerController)
+	{
+		CachedPlayerController = Cast<ALshPF_PlayerController_Battle>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	}
+	return CachedPlayerController;;
+}
+
 bool ALshPF_BattleCharacter_Base::IsCharacterReady()
 {
 	//Montage 로드 및 저장 완료 && 캐릭터의 BeginPlay 호출 이후 체크
 	return IsMontageReady && IsBeginPlay;
+}
+
+void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
+{
+	if (TargetIsFrontCamera)
+	{
+		FrontCameraComponent->SetActive(true);
+		BackCameraComponent->SetActive(false);
+	}
+	else
+	{
+		FrontCameraComponent->SetActive(false);
+		BackCameraComponent->SetActive(true);
+	}
+	GetBattlePlayerController()->SetViewTarget(this);
 }

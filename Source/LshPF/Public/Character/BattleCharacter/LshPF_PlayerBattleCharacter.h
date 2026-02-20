@@ -6,7 +6,6 @@
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 #include "LshPF_PlayerBattleCharacter.generated.h"
 
-class ALshPF_PlayerController_Battle;
 /**
  * 
  */
@@ -16,6 +15,8 @@ class LSHPF_API ALshPF_PlayerBattleCharacter : public ALshPF_BattleCharacter_Bas
 	GENERATED_BODY()
 
 public:
+	ALshPF_PlayerBattleCharacter();
+	
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
 	//~ End ACharacter Interface
@@ -32,8 +33,7 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly)
 	UCurveTable* CharacterAttributeData;
-
-	ALshPF_PlayerController_Battle* GetBattlePlayerController();
+	
 private:
 	/*
 	 * Base Attribute 값을 Curve Table 에서 받아오기
@@ -43,7 +43,4 @@ private:
 	 * return AttributeType 과 Level 에 따른 CurveTable 값
 	 */
 	float GetBaseAttributeFromCurveTable(EAttributeType AttributeType, int32 Level = 0);
-
-	UPROPERTY()
-	ALshPF_PlayerController_Battle* CachedPlayerController;
 };

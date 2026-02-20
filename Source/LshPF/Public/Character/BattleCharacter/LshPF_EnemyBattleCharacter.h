@@ -15,6 +15,8 @@ class LSHPF_API ALshPF_EnemyBattleCharacter : public ALshPF_BattleCharacter_Base
 	GENERATED_BODY()
 
 public:
+	ALshPF_EnemyBattleCharacter();
+	
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
 	//~ End ACharacter Interface

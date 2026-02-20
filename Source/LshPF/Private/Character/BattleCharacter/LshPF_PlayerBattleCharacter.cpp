@@ -4,11 +4,18 @@
 #include "Character/BattleCharacter/LshPF_PlayerBattleCharacter.h"
 
 #include "LshPF_GameplayTags.h"
+#include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Components/SlateWrapperTypes.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
+
+ALshPF_PlayerBattleCharacter::ALshPF_PlayerBattleCharacter()
+{
+	FrontCameraComponent->SetActive(false);
+	BackCameraComponent->SetActive(true);
+}
 
 void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 {
@@ -34,6 +41,7 @@ void ALshPF_PlayerBattleCharacter::TurnStart()
 	{
 		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::SelfHitTestInvisible);
 	}
+	SetViewTargetSelf(false);
 	GetBattlePlayerController()->SetIsEnableInput(true);
 	GetBattlePlayerController()->PlayerCharacterTurnStartEvent();
 }
@@ -51,15 +59,6 @@ void ALshPF_PlayerBattleCharacter::TurnEnd()
 bool ALshPF_PlayerBattleCharacter::IsPlayerCharacter()
 {
 	return true;
-}
-
-ALshPF_PlayerController_Battle* ALshPF_PlayerBattleCharacter::GetBattlePlayerController()
-{
-	if (!CachedPlayerController)
-	{
-		CachedPlayerController = Cast<ALshPF_PlayerController_Battle>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	}
-	return CachedPlayerController;;
 }
 
 float ALshPF_PlayerBattleCharacter::GetBaseAttributeFromCurveTable(EAttributeType AttributeType, int32 Level)

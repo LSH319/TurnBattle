@@ -146,7 +146,7 @@ void ALshPF_PlayerController_Battle::Command_Attack()
 		TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
 			TargetCharacter->GetBattleComponent(),
 			TurnCharacter->GetBattleComponent(),
-			BattleAttributeModifier);;
+			BattleAttributeModifier);
 	}
 	
 	CallTurnEnd();

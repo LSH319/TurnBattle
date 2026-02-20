@@ -4,10 +4,17 @@
 #include "Character/BattleCharacter/LshPF_EnemyBattleCharacter.h"
 
 #include "LshPF_GameplayTags.h"
+#include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Components/SlateWrapperTypes.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Subsystems/LshPF_UISubsystem.h"
+
+ALshPF_EnemyBattleCharacter::ALshPF_EnemyBattleCharacter()
+{
+	BackCameraComponent->SetActive(false);
+	FrontCameraComponent->SetActive(true);
+}
 
 void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 {
@@ -36,4 +43,5 @@ void ALshPF_EnemyBattleCharacter::TurnStart()
 	{
 		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
 	}
+	SetViewTargetSelf(true);
 }

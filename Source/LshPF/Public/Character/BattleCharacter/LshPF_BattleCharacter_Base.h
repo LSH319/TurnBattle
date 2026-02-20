@@ -8,6 +8,9 @@
 #include "Interface/LshPF_BattleInterface.h"
 #include "LshPF_BattleCharacter_Base.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+class ALshPF_PlayerController_Battle;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTurnDelegate);
 
 class ALshPF_BattleGameMode;
@@ -48,7 +51,7 @@ public:
 	virtual void ToggleTargeting(bool IsActive) override;
 	virtual void ToggleGuard(bool IsActive) override;
 	virtual void PlayAnimMontageByTag(FGameplayTag AnimMontageTag) override;
-	virtual int32 GetCharacterOrderPriority() const;
+	virtual int32 GetCharacterOrderPriority() const override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -78,12 +81,33 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TMap<FGameplayTag, UAnimMontage*> CharacterMontageMap;	
 
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* FrontCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* FrontCameraBoom;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* BackCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* BackCameraBoom;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName CharacterKey = "001";
 
-	int32 CharacterOrderPriority = 0;
+	UPROPERTY()
+	ALshPF_PlayerController_Battle* CachedPlayerController;
 	
+	int32 CharacterOrderPriority = 0;
+
+	ALshPF_PlayerController_Battle* GetBattlePlayerController();
 	bool IsCharacterReady();
+	/*
+	 * PlayerController 의 SetViewTarget 호출 파라미터로 this 사용
+	 * TargetIsFrontCamera true 일 경우 front 카메라, false 일 경우 back 카메라 활성화후 ViewTarget설정
+	 */
+	void SetViewTargetSelf(bool TargetIsFrontCamera);
 	
 	bool IsMontageReady = false;
 	bool IsBeginPlay = false;
