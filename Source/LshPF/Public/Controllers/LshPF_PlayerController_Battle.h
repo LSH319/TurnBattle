@@ -7,9 +7,12 @@
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
+class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UInputActionGameplayTagInfo;
 class ALshPF_BattleGameMode;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTargetChange, ULshPF_BattleComponent*, TargetBattleComponent);
 
 /**
  * 
@@ -34,6 +37,15 @@ public:
 	void PlayerCharacterTurnStartEvent();
 	void PlayerCharacterTurnEndEvent();
 	TArray<ILshPF_BattleInterface*> GetTargetList();
+
+	UFUNCTION(BlueprintCallable)
+	ULshPF_BattleComponent* GetTargetBattleComponent();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetViewTarget();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnTargetChange OnTargetChange;
 	
 protected:
 	virtual void SetupInputComponent() override;

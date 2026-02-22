@@ -44,6 +44,18 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         {
         	Command_ChangeTarget(false);
         }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_CharacterInfo))
+        {
+        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_CharacterInfo);
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
+        {
+        	DefaultConfirmAction_Callback();
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultBack))
+        {
+        	DefaultBackAction_Callback();
+        }
 	}
 }
 
@@ -63,6 +75,23 @@ void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 TArray<ILshPF_BattleInterface*> ALshPF_PlayerController_Battle::GetTargetList()
 {
 	return TargetList;
+}
+
+ULshPF_BattleComponent* ALshPF_PlayerController_Battle::GetTargetBattleComponent()
+{
+	return TargetList[0]->GetBattleComponent();
+}
+
+void ALshPF_PlayerController_Battle::ResetViewTarget()
+{
+	if (GetBattleGameMode()->GetRecentOwingTurnCharacter()->IsPlayerCharacter())
+	{
+		GetBattleGameMode()->GetRecentOwingTurnCharacter()->SetViewTargetSelf(false);
+	}
+	else
+	{
+		GetBattleGameMode()->GetRecentOwingTurnCharacter()->SetViewTargetSelf(true);
+	}
 }
 
 void ALshPF_PlayerController_Battle::SetupInputComponent()
@@ -201,4 +230,5 @@ void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
 	ToggleTargetingAllTargets(true);
 
 	SetCharacterRotationToTarget();
+	OnTargetChange.Broadcast(TargetList[0]->GetBattleComponent());
 }

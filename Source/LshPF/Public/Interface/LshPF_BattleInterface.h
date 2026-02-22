@@ -38,4 +38,5 @@ public:
 	virtual FVector GetBattleCharacterLocation() = 0;
 	virtual void SetLookAtRotation(FVector TargetLocation) = 0;
 	virtual void CharacterDeath() = 0;
+	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) = 0;
 };

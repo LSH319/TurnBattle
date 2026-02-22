@@ -74,7 +74,7 @@ public:
 
 	FMontageEndedEvent TriggerMontageEndedEvent;
 	FMontageEndedEvent ReactMontageEndedEvent;
-	
+
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
 	
 	/*

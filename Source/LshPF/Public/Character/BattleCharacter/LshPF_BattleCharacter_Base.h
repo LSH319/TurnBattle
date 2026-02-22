@@ -55,6 +55,12 @@ public:
 	virtual FVector GetBattleCharacterLocation() override;
 	virtual void SetLookAtRotation(FVector TargetLocation) override;
 	virtual void CharacterDeath() override;
+	/*
+	 * PlayerController 의 SetViewTarget 호출 파라미터로 this 사용
+	 * TargetIsFrontCamera true 일 경우 front 카메라, false 일 경우 back 카메라 활성화후 ViewTarget설정
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -118,11 +124,6 @@ protected:
 
 	ALshPF_PlayerController_Battle* GetBattlePlayerController();
 	bool IsCharacterReady();
-	/*
-	 * PlayerController 의 SetViewTarget 호출 파라미터로 this 사용
-	 * TargetIsFrontCamera true 일 경우 front 카메라, false 일 경우 back 카메라 활성화후 ViewTarget설정
-	 */
-	void SetViewTargetSelf(bool TargetIsFrontCamera);
 	
 	bool IsMontageReady = false;
 	bool IsBeginPlay = false;

@@ -38,6 +38,10 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Data")
 	UInputActionGameplayTagInfo* InputActionGameplayTagInfo;
+
+	void DefaultConfirmAction_Callback();
+	void DefaultBackAction_Callback();
+	void InputDeviceCheckAction_Callback();
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -54,8 +58,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DefaultBackAction;
-	
-	void DefaultConfirmAction_Callback();
-	void DefaultBackAction_Callback();
-	void InputDeviceCheckAction_Callback();
 };
