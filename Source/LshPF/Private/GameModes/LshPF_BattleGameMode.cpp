@@ -78,6 +78,25 @@ void ALshPF_BattleGameMode::CharacterReady(ILshPF_BattleInterface* RequestBattle
 	RequestAddTurnTable(RequestBattleInterface);
 }
 
+void ALshPF_BattleGameMode::CharacterDeath(ILshPF_BattleInterface* RemoveTarget)
+{
+	//TurnTable 에서 제거
+	TurnTable.RemoveAll([RemoveTarget](const FTurnTableData& Data)
+	{
+		return Data.TargetCharacter == RemoveTarget;
+	});
+
+	//CharacterList 에서 제거
+	if (RemoveTarget->IsPlayerCharacter())
+	{
+		PlayerCharacterList.Remove(RemoveTarget);
+	}
+	else
+	{
+		EnemyCharacterList.Remove(RemoveTarget);
+	}
+}
+
 void ALshPF_BattleGameMode::RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleInterface)
 {
  	int32 CharacterSpeed = RequestBattleInterface->GetAttribute(EAttributeType::CurrentSpeed);

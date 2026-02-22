@@ -87,12 +87,14 @@ void ALshPF_BattleCharacter_Base::SetAttribute(EAttributeType AttributeType, int
 
 void ALshPF_BattleCharacter_Base::TurnStart()
 {
+	IsCharacterHaveTurn = true;
 	ToggleGuard(false);
 	OnTurnStartDelegate.Broadcast();
 }
 
 void ALshPF_BattleCharacter_Base::TurnEnd()
 {
+	IsCharacterHaveTurn = false;
 	OnTurnEndDelegate.Broadcast();
 	GetBattleGameMode()->TargetTurnEnd(this);
 }
@@ -230,6 +232,13 @@ void ALshPF_BattleCharacter_Base::SetLookAtRotation(FVector TargetLocation)
 	SetActorRotation(LookAtRotator);
 }
 
+void ALshPF_BattleCharacter_Base::CharacterDeath()
+{
+	IsCharacterDeath = true;
+	ToggleGuard(false);
+	GetBattleGameMode()->CharacterDeath(this);
+}
+
 ALshPF_BattleGameMode* ALshPF_BattleCharacter_Base::GetBattleGameMode()
 {
 	if (!CachedBattleGameMode)
@@ -277,6 +286,15 @@ void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, b
 
 void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	if (GetBattleComponent()->IsDead())
+	{
+		if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Pause"));
+			AnimInstance->Montage_Pause(Montage);
+		}
+	}
+	
 	TArray<ILshPF_BattleInterface*> TargetList;
 	TargetList.Add(this);
 	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound(TargetList);

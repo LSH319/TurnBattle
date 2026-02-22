@@ -45,7 +45,6 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 		ApplyDamage = ApplyDamage * 0.7;
 	}
 
-	GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_HitReact);
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) - ApplyDamage);
 
 	switch (BattleAttributeModifier.TargetAttribute)
@@ -54,6 +53,11 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 			if (IsDead())
 			{
 				OwnerDeadEvent();
+				GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Death);
+			}
+			else
+			{
+				GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_HitReact);
 			}
 			break;
 		default:
@@ -233,13 +237,5 @@ ILshPF_BattleInterface* ULshPF_BattleComponent::GetOwnerBattleInterface()
 
 void ULshPF_BattleComponent::OwnerDeadEvent()
 {
-	//todo : 사망처리
-        	
-	/*
-	if (ILshPF_BattleInterface* OwnerBattleInterface = Cast<ILshPF_BattleInterface>(GetOwner()))
-	{
-	ILshPF_BattleInterface 에 Die 로직 추가 후 호출예정
-		OwnerBattleInterface->Die();
-	}
-	*/
+	GetOwnerBattleInterface()->CharacterDeath();
 }

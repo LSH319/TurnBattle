@@ -51,10 +51,7 @@ void ALshPF_PlayerBattleCharacter::TurnEnd()
 {
 	GetBattlePlayerController()->SetIsEnableInput(false);
 	GetBattlePlayerController()->PlayerCharacterTurnEndEvent();
-	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-	{
-		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
-	}
+	
 	Super::TurnEnd();
 }
 

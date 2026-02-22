@@ -30,6 +30,11 @@ struct FTurnTableData
 
 	FTurnTableData(float _RequireTime, ILshPF_BattleInterface* TargetCharacter)
 		: RequireTime(_RequireTime), TargetCharacter(TargetCharacter) {}
+
+	bool IsEqualBattleInterface (const ILshPF_BattleInterface* Other)
+	{
+		return TargetCharacter == Other;
+	}
 };
 /**
  * 
@@ -47,6 +52,8 @@ public:
 
 	//캐릭터에서 begin play 시 호출될 함수
 	void CharacterReady(ILshPF_BattleInterface* RequestBattleInterface);
+	//캐릭터 사망 시 처리를 위해 호출 될 함수
+	void CharacterDeath(ILshPF_BattleInterface* RemoveTarget);
 	//Turn Table 에 삼입 요청을 위한 함수
 	void RequestAddTurnTable(ILshPF_BattleInterface* RequestBattleInterface);
 	//Turn 종료를 GM 에 알리기 위한 함수

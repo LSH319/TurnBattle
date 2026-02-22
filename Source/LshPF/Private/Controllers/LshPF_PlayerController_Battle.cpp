@@ -121,7 +121,10 @@ void ALshPF_PlayerController_Battle::ToggleTargetingAllTargets(bool IsActive)
 {
 	for (ILshPF_BattleInterface* Target : TargetList)
 	{
-		Target->ToggleTargeting(IsActive);
+		if (Target)
+		{
+			Target->ToggleTargeting(IsActive);
+		}
 	}
 }
 
@@ -155,6 +158,11 @@ void ALshPF_PlayerController_Battle::Command_Attack()
 {
 	if (ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter())
 	{
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
+		}
+		
 		IsEnableInput = false;
 		TurnCharacter->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Attack);
 	}
@@ -164,6 +172,11 @@ void ALshPF_PlayerController_Battle::Command_Guard()
 {
 	if (ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter())
 	{
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
+		}
+		
 		IsEnableInput = false;
 		TurnCharacter->ToggleGuard(true);
 	}

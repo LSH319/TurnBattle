@@ -37,4 +37,5 @@ public:
 	virtual int32 GetCharacterOrderPriority() const = 0;
 	virtual FVector GetBattleCharacterLocation() = 0;
 	virtual void SetLookAtRotation(FVector TargetLocation) = 0;
+	virtual void CharacterDeath() = 0;
 };

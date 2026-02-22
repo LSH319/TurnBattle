@@ -54,6 +54,7 @@ public:
 	virtual int32 GetCharacterOrderPriority() const override;
 	virtual FVector GetBattleCharacterLocation() override;
 	virtual void SetLookAtRotation(FVector TargetLocation) override;
+	virtual void CharacterDeath() override;
 	//~ End LshPF_BattleInterface Interface
 
 	UPROPERTY(BlueprintAssignable)
@@ -98,6 +99,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName CharacterKey = "001";
 
+	UPROPERTY(BlueprintReadOnly)
+	bool IsCharacterHaveTurn = false;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool IsCharacterDeath = false;
+	
 	UPROPERTY()
 	ALshPF_PlayerController_Battle* CachedPlayerController;
 
