@@ -3,6 +3,7 @@
 
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
@@ -125,6 +126,17 @@ void ALshPF_BattleCharacter_Base::ToggleGuard(bool IsActive)
 	{
 		LshPF_BattleComponent->SetIsGuard(true);
 		GuardParticle->Activate(true);
+
+		//Guard 실행 시 1초 후 턴 종료 호출
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			FTimerDelegate::CreateLambda([this]()
+				{
+					TurnEnd();
+					GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+				}),
+			1.f,
+			false);
 	}
 	else
 	{
@@ -136,8 +148,28 @@ void ALshPF_BattleCharacter_Base::ToggleGuard(bool IsActive)
 
 void ALshPF_BattleCharacter_Base::PlayAnimMontageByTag(FGameplayTag AnimMontageTag)
 {
-	SetViewTargetSelf(true);
-	PlayAnimMontage(CharacterMontageMap.FindChecked(AnimMontageTag));
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		SetViewTargetSelf(true);
+		UAnimMontage* CachedMontage = CharacterMontageMap.FindChecked(AnimMontageTag);
+		if (AnimInstance->Montage_Play(CachedMontage) > 0.f)
+		{
+			FOnMontageEnded EndDelegate;
+
+			if (AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Attack ||
+				AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Skill)
+			{
+				EndDelegate.BindUObject(this, &ALshPF_BattleCharacter_Base::OnTriggerMontageEnded);
+			}
+			else if (AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_HitReact||
+					 AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Death)
+			{
+				EndDelegate.BindUObject(this, &ALshPF_BattleCharacter_Base::OnReactMontageEnded);
+			}
+			
+			AnimInstance->Montage_SetEndDelegate(EndDelegate, CachedMontage);
+		}
+	}
 }
 
 void ALshPF_BattleCharacter_Base::SetCharacterKey(FName NewCharacterKey)
@@ -235,4 +267,17 @@ void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
 		BackCameraComponent->SetActive(true);
 	}
 	GetBattlePlayerController()->SetViewTarget(this);
+}
+
+void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	TArray<ILshPF_BattleInterface*> TargetList = GetBattlePlayerController()->GetTargetList();
+	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList);
+}
+
+void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	TArray<ILshPF_BattleInterface*> TargetList;
+	TargetList.Add(this);
+	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound(TargetList);
 }

@@ -21,6 +21,9 @@ void ALshPF_BattleGameMode::PostInitializeComponents()
 
 	//Status UI 준비 완료시 CallBack 등록
 	StatusUIReady.AddDynamic(this, &ThisClass::StatusUIReadyCallBack);
+
+	TriggerMontageEndedEvent.BindUObject(this, &ThisClass::TriggerMontageEndedCallback);
+	ReactMontageEndedEvent.BindUObject(this, &ThisClass::ReactMontageEndedCallback);
 }
 
 void ALshPF_BattleGameMode::BeginPlay()
@@ -126,6 +129,17 @@ ILshPF_BattleInterface* ALshPF_BattleGameMode::GetEnemyCharacterByIndex(int32& I
 	//Index 가 유효 범위를 벗어난 경우 조정
 	Index = FMath::Clamp(Index, 0, EnemyCharacterList.Num() - 1);
 	return EnemyCharacterList[Index];
+}
+
+ILshPF_BattleInterface* ALshPF_BattleGameMode::GetPlayerCharacterByIndex(int32& Index) const
+{
+	if (PlayerCharacterList.IsEmpty())
+	{
+		return nullptr;
+	}
+	//Index 가 유효 범위를 벗어난 경우 조정
+	Index = FMath::Clamp(Index, 0, PlayerCharacterList.Num() - 1);
+	return PlayerCharacterList[Index];
 }
 
 void ALshPF_BattleGameMode::SortTurnTable()
@@ -289,6 +303,46 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 		//Spawn 위치를 Interval 만큼 이동
 		SpawnPoint.Y = SpawnPoint.Y + CharacterInterval;
 	}
+}
+
+void ALshPF_BattleGameMode::TriggerMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces)
+{
+	ILshPF_BattleInterface* TurnCharacter = GetRecentOwingTurnCharacter();
+
+	//TargetBattleInterfaces 가 empty 인지 확인
+	if (TurnCharacter && !TargetBattleInterfaces.IsEmpty())
+	{
+		for (ILshPF_BattleInterface* TargetBattleInterface : TargetBattleInterfaces)
+		{
+			if (TargetBattleInterface)
+			{
+				//todo : 행동에 따라 Modifier 생성 혹은 받아 사용
+				FBattleAttributeModifier BattleAttributeModifier =
+					TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(
+						EAttributeType::CurrentHealth,
+						EAttributeType::CurrentAttack,
+						1.f);
+
+				//ApplyDamageToTarget 호출 시 Target 의 TakeDamageFromCursor 호출,
+				//Target 의 TakeDamageFromCursor 에서 Target 의 HitReact 재생
+				//Target 의 HitReact 종료 시 ReactMontageEndedCallback 호출
+				TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
+					TargetBattleInterface->GetBattleComponent(),
+					TurnCharacter->GetBattleComponent(),
+					BattleAttributeModifier);
+			}
+		}
+	}
+	else
+	{
+		//TargetBattleInterfaces 가 empty인 경우 즉시 턴 종료
+		GetRecentOwingTurnCharacter()->TurnEnd();
+	}
+}
+
+void ALshPF_BattleGameMode::ReactMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces)
+{
+	GetRecentOwingTurnCharacter()->TurnEnd();
 }
 
 void ALshPF_BattleGameMode::StatusUIReadyCallBack()

@@ -8,6 +8,7 @@
 #include "Component/LshPF_BattleComponent.h"
 #include "Components/SlateWrapperTypes.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
+#include "GameModes/LshPF_BattleGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 
@@ -49,6 +50,7 @@ void ALshPF_PlayerBattleCharacter::TurnStart()
 void ALshPF_PlayerBattleCharacter::TurnEnd()
 {
 	GetBattlePlayerController()->SetIsEnableInput(false);
+	GetBattlePlayerController()->PlayerCharacterTurnEndEvent();
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
 		UISubsystem->SetWidgetSwitcherVisibilityWithTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, ESlateVisibility::Hidden);
@@ -59,6 +61,12 @@ void ALshPF_PlayerBattleCharacter::TurnEnd()
 bool ALshPF_PlayerBattleCharacter::IsPlayerCharacter()
 {
 	return true;
+}
+
+void ALshPF_PlayerBattleCharacter::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	TArray<ILshPF_BattleInterface*> TargetList = GetBattlePlayerController()->GetTargetList();
+	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList);
 }
 
 float ALshPF_PlayerBattleCharacter::GetBaseAttributeFromCurveTable(EAttributeType AttributeType, int32 Level)

@@ -10,6 +10,7 @@
 class ILshPF_BattleInterface;
 class UInputActionGameplayTagInfo;
 class ALshPF_BattleGameMode;
+
 /**
  * 
  */
@@ -31,6 +32,8 @@ public:
 	 * Player Turn 시작 시 Character 에서 호출하여 이벤트 처리를 위한 함수
 	 */
 	void PlayerCharacterTurnStartEvent();
+	void PlayerCharacterTurnEndEvent();
+	TArray<ILshPF_BattleInterface*> GetTargetList();
 	
 protected:
 	virtual void SetupInputComponent() override;
@@ -39,7 +42,6 @@ protected:
 	ALshPF_BattleGameMode* GetBattleGameMode();
 
 	bool IsEnableInput = false;
-	
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
@@ -71,7 +73,6 @@ private:
 	 */
 	void CachedTargetEnemyByIndex(int32& TargetIndex);
 	void SetCharacterRotationToTarget();
-	void CallTurnEnd();
 	
 	void Command_Attack();
 	void Command_Guard();

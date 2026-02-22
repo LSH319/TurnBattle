@@ -13,6 +13,7 @@ class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UEnemyMeshInfo;
 
+DECLARE_DELEGATE_OneParam(FMontageEndedEvent, TArray<ILshPF_BattleInterface*>);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatusUIReady);
 
 USTRUCT(BlueprintType)
@@ -64,12 +65,17 @@ public:
 	UPROPERTY(BlueprintCallable)
 	FStatusUIReady StatusUIReady;
 
+	FMontageEndedEvent TriggerMontageEndedEvent;
+	FMontageEndedEvent ReactMontageEndedEvent;
+	
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
+	
 	/*
-	 * Index로 EnemyList 에서 요소 반환
+	 * Index로 List 에서 요소 반환
 	 * 파라미터를 & 로받아 배열의 범위를 넘은값이 들어올 경우 범위 내부 값으로 조정
 	 */
 	ILshPF_BattleInterface* GetEnemyCharacterByIndex(int32& Index) const;
+	ILshPF_BattleInterface* GetPlayerCharacterByIndex(int32& Index) const;
 	
 protected:
 	void SortTurnTable();
@@ -128,6 +134,14 @@ private:
 	void SpawnEnemies();
 
 	void SpawnPlayerCharacters();
+	
+	//턴 캐릭터 행동 시 Trigger Montage 종료시 -> 타켓의 React -> 타켓의 React Montage 종료시 -> Turn End 흐
+	//턴 캐릭터 행동 시 Trigger 가 되는 Montage 종료시 사용하기 위한 Callback
+	//턴 캐릭터 행동 시 Trigger 가 되는 행동 : Attack, Skill, Item 사용
+	void TriggerMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces);
+	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React Montage 종료시 사용하기 위한 Callback
+	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React : HitReact, Death
+	void ReactMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces);
 	
 	UFUNCTION()
 	void StatusUIReadyCallBack();

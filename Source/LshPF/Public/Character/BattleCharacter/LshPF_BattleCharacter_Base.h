@@ -100,6 +100,12 @@ protected:
 
 	UPROPERTY()
 	ALshPF_PlayerController_Battle* CachedPlayerController;
+
+	UFUNCTION()
+	virtual void OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	UFUNCTION()
+	virtual void OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	
 	int32 CharacterOrderPriority = 0;
 
@@ -117,4 +123,6 @@ protected:
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
+
+	FTimerHandle TimerHandle;
 };

@@ -34,6 +34,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UCurveTable* CharacterAttributeData;
 	
+	//~ Begin ALshPF_BattleCharacter_Base Interface
+	virtual void OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted) override;
+	//~ End ALshPF_BattleCharacter_Base Interface
+	
 private:
 	/*
 	 * Base Attribute 값을 Curve Table 에서 받아오기

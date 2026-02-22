@@ -60,6 +60,11 @@ void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 	ToggleTargetingAllTargets(true);
 }
 
+TArray<ILshPF_BattleInterface*> ALshPF_PlayerController_Battle::GetTargetList()
+{
+	return TargetList;
+}
+
 void ALshPF_PlayerController_Battle::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -139,45 +144,29 @@ void ALshPF_PlayerController_Battle::SetCharacterRotationToTarget()
 }
 
 
-void ALshPF_PlayerController_Battle::CallTurnEnd()
+void ALshPF_PlayerController_Battle::PlayerCharacterTurnEndEvent()
 {
 	//Player 턴 종료를 위해 함수, 필요한 이벤트 처리
 	ToggleTargetingAllTargets(false);
 	TargetList.Empty();
-	GetBattleGameMode()->GetRecentOwingTurnCharacter()->TurnEnd();
 }
 
 void ALshPF_PlayerController_Battle::Command_Attack()
 {
-	IsEnableInput = false;
-	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
-	ILshPF_BattleInterface* TargetCharacter = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetingEnemyNum);
-	
-	if (TurnCharacter && TargetCharacter)
+	if (ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter())
 	{
-		FBattleAttributeModifier BattleAttributeModifier = TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(EAttributeType::CurrentHealth, EAttributeType::CurrentAttack, 1.f);
+		IsEnableInput = false;
 		TurnCharacter->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Attack);
-		TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
-			TargetCharacter->GetBattleComponent(),
-			TurnCharacter->GetBattleComponent(),
-			BattleAttributeModifier);
 	}
-	
-	CallTurnEnd();
 }
 
 void ALshPF_PlayerController_Battle::Command_Guard()
 {
-	IsEnableInput = false;
-	
-	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
-	
-	if (TurnCharacter)
+	if (ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter())
 	{
+		IsEnableInput = false;
 		TurnCharacter->ToggleGuard(true);
 	}
-	
-	CallTurnEnd();
 }
 
 void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
