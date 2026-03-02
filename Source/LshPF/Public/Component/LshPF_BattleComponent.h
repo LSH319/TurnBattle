@@ -17,11 +17,11 @@ struct FBattleAttributeModifier
 	GENERATED_BODY()
 
 	FBattleAttributeModifier()
-	:TargetAttribute(EAttributeType::Unknown)
+	:TargetAttribute(EAttributeType::Unknown), ModifierType(EModifierType::Damage)
 	{}
 	
-	FBattleAttributeModifier(float InModifyValue, EAttributeType InAttributeType)
-	:ModifyValue(InModifyValue), IsCritical(false), TargetAttribute(InAttributeType)
+	FBattleAttributeModifier(float InModifyValue, EAttributeType InAttributeType, EModifierType InModifierType)
+	:ModifyValue(InModifyValue), IsCritical(false), TargetAttribute(InAttributeType), ModifierType(InModifierType)
 	{
 	}
 
@@ -36,6 +36,9 @@ struct FBattleAttributeModifier
 	//변경할 Attribute
 	UPROPERTY()
 	EAttributeType TargetAttribute;
+	
+	UPROPERTY()
+	EModifierType ModifierType;
 };
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -44,6 +47,16 @@ class LSHPF_API ULshPF_BattleComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	/*
+	* Target 에게 Modifier 적용
+	* ModifierActorBattleComponent Modifier를 받는 Actor BattleComponent
+	* CauserBattleComponent Modifier를 가하는 Actor BattleComponent
+	* BattleAttributeModifier Modifier 관련 정보
+	* return : 실제 Target 에 적용된 Value
+	 */
+	UFUNCTION(BlueprintCallable)
+	float ApplyModifierToTarget(ULshPF_BattleComponent* ModifierActorBattleComponent, ULshPF_BattleComponent* CauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier);
+
 	/*
 	* Target 에게 Damage 적용
 	* DamagedActorBattleComponent Damage를 받는 Actor BattleComponent
@@ -115,7 +128,7 @@ public:
 	 * Target 의 EAttributeType::CurrentHealth 를 자신의 EAttributeType::CurrentAttack * 1 만큼 변경
 	 * + 를 원할경우 TakeCureFromCursor, - 를 원할경우 TakeDamageFromCursor 사용
 	 */
-	FBattleAttributeModifier CreateBattleAttributeModifier(EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, float DamageRatio = 1.f);
+	FBattleAttributeModifier CreateBattleAttributeModifier(EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, EModifierType ModifierType, float DamageRatio = 1.f);
 	
 	/*
 	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화

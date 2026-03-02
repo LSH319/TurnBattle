@@ -7,11 +7,26 @@
 #include "Interface/LshPF_BattleInterface.h"
 
 FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
-	EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, float DamageRatio)
+	EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, EModifierType ModifierType, float DamageRatio)
 {
 	float ApplyModifyValue = GetAttribute(BaseAttributeType) * DamageRatio;
 	
-	return FBattleAttributeModifier(ApplyModifyValue, TargetAttributeType);
+	return FBattleAttributeModifier(ApplyModifyValue, TargetAttributeType, ModifierType);
+}
+
+float ULshPF_BattleComponent::ApplyModifierToTarget(ULshPF_BattleComponent* ModifierActorBattleComponent,
+	ULshPF_BattleComponent* CauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
+{
+	switch (BattleAttributeModifier.ModifierType)
+	{
+	case EModifierType::Damage:
+		return ApplyDamageToTarget(ModifierActorBattleComponent, CauserBattleComponent, BattleAttributeModifier);
+	case EModifierType::Cure:
+		return ApplyCureToTarget(ModifierActorBattleComponent, CauserBattleComponent, BattleAttributeModifier);
+	case EModifierType::Unknown:
+		break;
+	}
+	return -1.f;
 }
 
 float ULshPF_BattleComponent::ApplyDamageToTarget(ULshPF_BattleComponent* DamagedActorBattleComponent, ULshPF_BattleComponent* DamageCauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)

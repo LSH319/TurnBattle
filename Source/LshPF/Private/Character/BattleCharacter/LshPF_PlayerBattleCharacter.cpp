@@ -60,12 +60,6 @@ bool ALshPF_PlayerBattleCharacter::IsPlayerCharacter()
 	return true;
 }
 
-void ALshPF_PlayerBattleCharacter::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	TArray<ILshPF_BattleInterface*> TargetList = GetBattlePlayerController()->GetTargetList();
-	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList);
-}
-
 float ALshPF_PlayerBattleCharacter::GetBaseAttributeFromCurveTable(EAttributeType AttributeType, int32 Level)
 {
 	FRealCurve* Curve = nullptr;

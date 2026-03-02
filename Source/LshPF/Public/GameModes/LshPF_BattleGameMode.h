@@ -7,13 +7,15 @@
 #include "GameModes/LshPF_GameModeBase.h"
 #include "LshPF_BattleGameMode.generated.h"
 
+struct FBattleAttributeModifier;
 class ALshPF_BattleCharacter_Base;
 class UPlayerCharacterInfo;
 class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UEnemyMeshInfo;
 
-DECLARE_DELEGATE_OneParam(FMontageEndedEvent, TArray<ILshPF_BattleInterface*>);
+DECLARE_DELEGATE_TwoParams(FTriggerMontageEndedEvent, TArray<ULshPF_BattleComponent*>, FBattleAttributeModifier);
+DECLARE_DELEGATE(FReactMontageEndedEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatusUIReady);
 
 USTRUCT(BlueprintType)
@@ -72,8 +74,8 @@ public:
 	UPROPERTY(BlueprintCallable)
 	FStatusUIReady StatusUIReady;
 
-	FMontageEndedEvent TriggerMontageEndedEvent;
-	FMontageEndedEvent ReactMontageEndedEvent;
+	FTriggerMontageEndedEvent TriggerMontageEndedEvent;
+	FReactMontageEndedEvent ReactMontageEndedEvent;
 
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
 	
@@ -83,7 +85,9 @@ public:
 	 */
 	ILshPF_BattleInterface* GetEnemyCharacterByIndex(int32& Index) const;
 	ILshPF_BattleInterface* GetPlayerCharacterByIndex(int32& Index) const;
-	
+
+	TArray<ILshPF_BattleInterface*> GetEnemyCharacters() const;
+	TArray<ILshPF_BattleInterface*> GetPlayerCharacters() const;
 protected:
 	void SortTurnTable();
 	void SortEnemyList();
@@ -145,10 +149,10 @@ private:
 	//턴 캐릭터 행동 시 Trigger Montage 종료시 -> 타켓의 React -> 타켓의 React Montage 종료시 -> Turn End 흐
 	//턴 캐릭터 행동 시 Trigger 가 되는 Montage 종료시 사용하기 위한 Callback
 	//턴 캐릭터 행동 시 Trigger 가 되는 행동 : Attack, Skill, Item 사용
-	void TriggerMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces);
+	void TriggerMontageEndedCallback(TArray<ULshPF_BattleComponent*> TargetBattleComponents, FBattleAttributeModifier BattleAttributeModifier);
 	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React Montage 종료시 사용하기 위한 Callback
 	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React : HitReact, Death
-	void ReactMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces);
+	void ReactMontageEndedCallback();
 	
 	UFUNCTION()
 	void StatusUIReadyCallBack();

@@ -37,7 +37,7 @@ ALshPF_BattleCharacter_Base::ALshPF_BattleCharacter_Base()
 	TargetingParticle = CreateDefaultSubobject<UParticleSystemComponent>("TargetingParticle");
 	TargetingParticle->SetupAttachment(RootComponent);
 	TargetingParticle->bAutoActivate = false;
-	
+
 	GuardParticle = CreateDefaultSubobject<UParticleSystemComponent>("GuardParticle");
 	GuardParticle->SetupAttachment(RootComponent);
 	GuardParticle->bAutoActivate = false;
@@ -280,8 +280,20 @@ void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
 
 void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	TArray<ILshPF_BattleInterface*> TargetList = GetBattlePlayerController()->GetTargetList();
-	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList);
+	TArray<ULshPF_BattleComponent*> TargetList;
+	for (ILshPF_BattleInterface* TargetInterface : GetBattlePlayerController()->GetTargetList())
+	{
+		TargetList.Add(TargetInterface->GetBattleComponent());
+	}
+	
+	FBattleAttributeModifier BattleAttributeModifier =
+		GetBattleComponent()->CreateBattleAttributeModifier(
+			EAttributeType::CurrentHealth,
+			EAttributeType::CurrentAttack,
+			EModifierType::Damage,
+			1.f);
+
+	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList, BattleAttributeModifier);
 }
 
 void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -297,5 +309,5 @@ void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, boo
 	
 	TArray<ILshPF_BattleInterface*> TargetList;
 	TargetList.Add(this);
-	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound(TargetList);
+	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound();
 }

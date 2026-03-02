@@ -161,6 +161,16 @@ ILshPF_BattleInterface* ALshPF_BattleGameMode::GetPlayerCharacterByIndex(int32& 
 	return PlayerCharacterList[Index];
 }
 
+TArray<ILshPF_BattleInterface*> ALshPF_BattleGameMode::GetEnemyCharacters() const
+{
+	return EnemyCharacterList;
+}
+
+TArray<ILshPF_BattleInterface*> ALshPF_BattleGameMode::GetPlayerCharacters() const
+{
+	return PlayerCharacterList;
+}
+
 void ALshPF_BattleGameMode::SortTurnTable()
 {
 	TurnTable.Sort([](
@@ -324,29 +334,22 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 	}
 }
 
-void ALshPF_BattleGameMode::TriggerMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces)
+void ALshPF_BattleGameMode::TriggerMontageEndedCallback(TArray<ULshPF_BattleComponent*> TargetBattleComponents, FBattleAttributeModifier BattleAttributeModifier)
 {
 	ILshPF_BattleInterface* TurnCharacter = GetRecentOwingTurnCharacter();
 
 	//TargetBattleInterfaces 가 empty 인지 확인
-	if (TurnCharacter && !TargetBattleInterfaces.IsEmpty())
+	if (TurnCharacter && !TargetBattleComponents.IsEmpty())
 	{
-		for (ILshPF_BattleInterface* TargetBattleInterface : TargetBattleInterfaces)
+		for (ULshPF_BattleComponent* TargetBattleComponent : TargetBattleComponents)
 		{
-			if (TargetBattleInterface)
+			if (TargetBattleComponent)
 			{
-				//todo : 행동에 따라 Modifier 생성 혹은 받아 사용
-				FBattleAttributeModifier BattleAttributeModifier =
-					TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(
-						EAttributeType::CurrentHealth,
-						EAttributeType::CurrentAttack,
-						1.f);
-
 				//ApplyDamageToTarget 호출 시 Target 의 TakeDamageFromCursor 호출,
 				//Target 의 TakeDamageFromCursor 에서 Target 의 HitReact 재생
 				//Target 의 HitReact 종료 시 ReactMontageEndedCallback 호출
 				TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
-					TargetBattleInterface->GetBattleComponent(),
+					TargetBattleComponent,
 					TurnCharacter->GetBattleComponent(),
 					BattleAttributeModifier);
 			}
@@ -359,7 +362,7 @@ void ALshPF_BattleGameMode::TriggerMontageEndedCallback(TArray<ILshPF_BattleInte
 	}
 }
 
-void ALshPF_BattleGameMode::ReactMontageEndedCallback(TArray<ILshPF_BattleInterface*> TargetBattleInterfaces)
+void ALshPF_BattleGameMode::ReactMontageEndedCallback()
 {
 	GetRecentOwingTurnCharacter()->TurnEnd();
 }
