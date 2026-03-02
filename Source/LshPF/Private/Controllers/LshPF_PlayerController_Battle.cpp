@@ -38,15 +38,59 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Prev))
         {
-        	Command_ChangeTarget(true);
+	        switch (TargetType) {
+	        case ETargetType::EnemySingle:
+	        	Command_ChangeTarget_Enemy(true);
+		        break;
+	        case ETargetType::PlayerSingle:
+	        	Command_ChangeTarget_Player(false);
+		        break;
+	        case ETargetType::EnemyAll:
+	        case ETargetType::PlayerAll:
+	        case ETargetType::Unknown:
+		        break;
+	        }
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Next))
         {
-        	Command_ChangeTarget(false);
+        	switch (TargetType) {
+        	case ETargetType::EnemySingle:
+        		Command_ChangeTarget_Enemy(false);
+        		break;
+        	case ETargetType::PlayerSingle:
+        		Command_ChangeTarget_Player(true);
+        		break;
+        	case ETargetType::EnemyAll:
+			case ETargetType::PlayerAll:
+        	case ETargetType::Unknown:
+        		break;
+        	}
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_CharacterInfo))
         {
         	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_CharacterInfo);
+        }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_TargetTypeSwitch))
+        {
+        	ToggleTargetingAllTargets(false);
+        	
+	        switch (TargetType) {
+	        case ETargetType::EnemySingle:
+	        case ETargetType::EnemyAll:
+	        	TargetType = ETargetType::PlayerSingle;
+	        	CachedTargetByIndex(TargetingPlayerNum, false);
+		        break;
+	        case ETargetType::PlayerSingle:
+	        case ETargetType::PlayerAll:
+	        	TargetType = ETargetType::EnemySingle;
+	        	CachedTargetByIndex(TargetingEnemyNum, true);
+		        break;
+	        case ETargetType::Unknown:
+		        break;
+	        }
+        	
+        	ToggleTargetingAllTargets(true);
+        	OnTargetChange.Broadcast(TargetList[0]->GetBattleComponent());
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
         {
@@ -66,9 +110,10 @@ void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
 
 void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 {
-	SetCharacterRotationToTarget();
+	TargetType = ETargetType::EnemySingle;
 	
-	CachedTargetEnemyByIndex(TargetingEnemyNum);
+	CachedTargetByIndex(TargetingEnemyNum, true);
+	SetCharacterRotationToTarget();
 	ToggleTargetingAllTargets(true);
 }
 
@@ -92,6 +137,11 @@ void ALshPF_PlayerController_Battle::ResetViewTarget()
 	{
 		GetBattleGameMode()->GetRecentOwingTurnCharacter()->SetViewTargetSelf(true);
 	}
+}
+
+void ALshPF_PlayerController_Battle::SetTargetType(ETargetType InETargetType)
+{
+	TargetType = InETargetType;
 }
 
 void ALshPF_PlayerController_Battle::SetupInputComponent()
@@ -157,10 +207,18 @@ void ALshPF_PlayerController_Battle::ToggleTargetingAllTargets(bool IsActive)
 	}
 }
 
-void ALshPF_PlayerController_Battle::CachedTargetEnemyByIndex(int32& TargetIndex)
+void ALshPF_PlayerController_Battle::CachedTargetByIndex(int32& TargetIndex, bool IsTargetEnemy)
 {
 	TargetList.Empty();
-	ILshPF_BattleInterface* NewTarget = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetIndex);
+	ILshPF_BattleInterface* NewTarget;
+	if (IsTargetEnemy)
+	{
+		NewTarget = GetBattleGameMode()->GetEnemyCharacterByIndex(TargetIndex);
+	}
+	else
+	{
+		NewTarget = GetBattleGameMode()->GetPlayerCharacterByIndex(TargetIndex);
+	}
 	TargetList.Add(NewTarget);
 }
 
@@ -211,7 +269,7 @@ void ALshPF_PlayerController_Battle::Command_Guard()
 	}
 }
 
-void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
+void ALshPF_PlayerController_Battle::Command_ChangeTarget_Enemy(bool IsPrev)
 {
 	//타켓 파티클 Off
 	ToggleTargetingAllTargets(false);
@@ -225,10 +283,31 @@ void ALshPF_PlayerController_Battle::Command_ChangeTarget(bool IsPrev)
 		TargetingEnemyNum++;
 	}
 	
-	CachedTargetEnemyByIndex(TargetingEnemyNum);
+	CachedTargetByIndex(TargetingEnemyNum, true);
 	//타켓 파티클 On
 	ToggleTargetingAllTargets(true);
 
 	SetCharacterRotationToTarget();
+	OnTargetChange.Broadcast(TargetList[0]->GetBattleComponent());
+}
+
+void ALshPF_PlayerController_Battle::Command_ChangeTarget_Player(bool IsPrev)
+{
+	//타켓 파티클 Off
+	ToggleTargetingAllTargets(false);
+	
+	if (IsPrev)
+	{
+		TargetingPlayerNum--;
+	}
+	else
+	{
+		TargetingPlayerNum++;
+	}
+	
+	CachedTargetByIndex(TargetingPlayerNum, false);
+	//타켓 파티클 On
+	ToggleTargetingAllTargets(true);
+
 	OnTargetChange.Broadcast(TargetList[0]->GetBattleComponent());
 }

@@ -38,7 +38,8 @@ namespace LshPF_GameplayTags
 	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_InputAction_SelectTarget_Prev);
 	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_InputAction_SelectTarget_Next);
 	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_InputAction_CharacterInfo);
-
+	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_InputAction_TargetTypeSwitch);
+	
 	//Anim Montage
 	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_AnimMontage_Attack);
 	LSHPF_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(LshPF_AnimMontage_Skill);

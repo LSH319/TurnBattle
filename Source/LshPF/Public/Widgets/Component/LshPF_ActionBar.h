@@ -56,6 +56,8 @@ protected:
 	//~ Begin UUserWidget interface
 
 private:
+	void CreateDefaultEntry();
+	
 	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))
 	UDynamicEntryBox* ActionBar;

@@ -12,7 +12,9 @@ bool ULshPF_ActionBar::CreateActionBarEntry()
 {
 	ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer());
 	bool IsSuccess = true;
-	
+	ActionBar->Reset();
+
+	CreateDefaultEntry();
 	for (const FActionBarEntry Entry : ActionBarEntry)
 	{
 		ULshPF_NotFocusableButton* CreatedButton = ActionBar->CreateEntry<ULshPF_NotFocusableButton>();
@@ -37,6 +39,11 @@ void ULshPF_ActionBar::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	CreateDefaultEntry();
+}
+
+void ULshPF_ActionBar::CreateDefaultEntry()
+{
 	ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer());
 
 	if (ShowDefaultConfirmAction)

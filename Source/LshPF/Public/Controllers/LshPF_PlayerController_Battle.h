@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Controllers/LshPF_PlayerControllerBase.h"
+#include "LshPF_Types/LshPF_EnumTypes.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
 class ULshPF_BattleComponent;
@@ -44,6 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetViewTarget();
 
+	UFUNCTION(BlueprintCallable)
+	void SetTargetType(ETargetType InETargetType);
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnTargetChange OnTargetChange;
 	
@@ -54,11 +58,14 @@ protected:
 	ALshPF_BattleGameMode* GetBattleGameMode();
 
 	bool IsEnableInput = false;
+
+	ETargetType TargetType = ETargetType::EnemySingle;
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 
 	int32 TargetingEnemyNum = 0;
+	int32 TargetingPlayerNum = 0;
 	TArray<ILshPF_BattleInterface*> TargetList;
 	
 	/*
@@ -83,10 +90,11 @@ private:
 	 * Index 를 통해 Target Enemy 를 TargetList에 추가
 	 * 파라미터를 & 로 받아 값이 배열의 범위를 넘어가도 조정
 	 */
-	void CachedTargetEnemyByIndex(int32& TargetIndex);
+	void CachedTargetByIndex(int32& TargetIndex, bool IsTargetEnemy);
 	void SetCharacterRotationToTarget();
 	
 	void Command_Attack();
 	void Command_Guard();
-	void Command_ChangeTarget(bool IsPrev);
+	void Command_ChangeTarget_Enemy(bool IsPrev);
+	void Command_ChangeTarget_Player(bool IsPrev);
 };
