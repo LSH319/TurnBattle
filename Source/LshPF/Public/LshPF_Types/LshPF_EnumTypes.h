@@ -47,3 +47,21 @@ enum class EAttributeType : uint8
 	CurrentAbilityDefence,
 	Unknown UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class ETargetType  : uint8
+{
+	EnemySingle,
+	EnemyAll,
+	PlayerSingle,
+	PlayerAll,
+	Unknown UMETA(Hidden)
+};
+
+UENUM(BlueprintType)
+enum class EModifierType  : uint8
+{
+	Damage,
+	Cure,
+	Unknown UMETA(Hidden)
+};
