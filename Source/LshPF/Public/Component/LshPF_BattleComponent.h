@@ -148,6 +148,8 @@ public:
 	 */
 	bool GrantAbility(FName AbilityKey);
 	
+	TArray<ULshPF_Ability*> GetAbilityList();
+	
 	ILshPF_BattleInterface* GetOwnerBattleInterface();
 	
 protected:

@@ -4,7 +4,9 @@
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
 #include "Components/PanelWidget.h"
+#include "Controllers/LshPF_PlayerController_Battle.h"
 #include "GameFramework/PlayerInput.h"
+#include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 
 
@@ -135,6 +137,15 @@ FReply ULshPF_FocusableWidgetBase::NativeOnKeyDown(const FGeometry& InGeometry, 
 		//별도 처리 없이 사용할 경우 DPad 입력시 Enhanced Input 까지 전달되지 않아 추가한 코드
 		UpdateInputDevice();
 	}
+
+	if (ConsumeKey.Contains(Key))
+	{
+		//ConsumeKey 에 포함된 키일 경우 Controller 로 전달해 로직 수행
+		ALshPF_PlayerController_Battle* PlayerController = Cast<ALshPF_PlayerController_Battle>(UGameplayStatics::GetPlayerController(this, 0));
+		PlayerController->ExecuteInputActionByGameplayTag(ConsumeKey[Key]);
+		return FReply::Handled();
+	}
+	
 	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
 }
 

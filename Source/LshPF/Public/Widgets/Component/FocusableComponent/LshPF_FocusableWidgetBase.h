@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
 #include "LshPF_FocusableWidgetBase.generated.h"
 
@@ -74,6 +75,10 @@ protected:
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	//~ End UUserWidget Interface
+
+	//NativeKeyDown 에서 강제로 Consume 할 Key
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FKey, FGameplayTag> ConsumeKey;
 	
 	/** 
 	 * Desired Focus Widget 반환.

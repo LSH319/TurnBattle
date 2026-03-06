@@ -43,6 +43,8 @@ bool ULshPF_NotFocusableButton::SetInputActionTag(FGameplayTag InFGameplayTag)
 
 void ULshPF_NotFocusableButton::BindClickEvent()
 {
+	//다중 바인딩 방지를 위한 Remove
+	ButtonWidget->OnClicked.RemoveAll(this);
 	ButtonWidget->OnClicked.AddDynamic(this, &ThisClass::RequestExecuteInputActionToController);
 }
 

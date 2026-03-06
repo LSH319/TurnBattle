@@ -276,6 +276,18 @@ bool ULshPF_BattleComponent::GrantAbility(FName AbilityKey)
 	return true;
 }
 
+TArray<ULshPF_Ability*> ULshPF_BattleComponent::GetAbilityList()
+{
+	TArray<ULshPF_Ability*> AbilityList;
+
+	for (auto Ability : AbilityMap)
+	{
+		AbilityList.Add(Ability.Value);
+	}
+	
+	return AbilityList;
+}
+
 ILshPF_BattleInterface* ULshPF_BattleComponent::GetOwnerBattleInterface()
 {
 	if (!CachedOwnerBattleInterface)

@@ -13,6 +13,7 @@
 #include "Interface/LshPF_BattleInterface.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
+#include "Widgets/Component/FocusableComponent/LshPF_SkillScreen.h"
 
 void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGameplayTag TargetGameplayTag)
 {
@@ -30,7 +31,7 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenSkill))
         {
-        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Skill);
+        	AddSkillScreenToScreen();
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenItem))
         {
@@ -191,6 +192,27 @@ void ALshPF_PlayerController_Battle::AddWidgetToScreenByTag(FGameplayTag WidgetS
 	            {
             		WidgetToFocus->SetFocus();
 	            }
+			}
+			IsEnableInput = true;
+		});
+}
+
+void ALshPF_PlayerController_Battle::AddSkillScreenToScreen()
+{
+	IsEnableInput = false;
+	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
+
+	UISubsystem->PushSoftWidgetToStackAsync(
+		LshPF_GameplayTags::LshPF_WidgetStack_GameHud,
+		ULshPF_FunctionLibrary::GetSoftFocusableWidgetBaseClassByTag(LshPF_GameplayTags::LshPF_Widget_Skill),
+		[this](ULshPF_FocusableWidgetBase* PushedWidget)
+		{
+			ULshPF_SkillScreen* SkillScreen = CastChecked<ULshPF_SkillScreen>(PushedWidget);
+			SkillScreen->InitAbilityList(GetBattleGameMode()->GetRecentOwingTurnCharacter()->GetBattleComponent()->GetAbilityList());
+			SkillScreen->SetOwningPlayer(this);
+			if (UWidget* WidgetToFocus = SkillScreen->GetDesiredFocusTarget())
+			{
+				WidgetToFocus->SetFocus();
 			}
 			IsEnableInput = true;
 		});

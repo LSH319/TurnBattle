@@ -80,6 +80,7 @@ private:
 	 * IsWidgetGetFocus 추가 된 Widget 이 Focus 를 가질지 여부, Default true
 	 */
 	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
+	void AddSkillScreenToScreen();
 
 	/*
 	 * TargetList 에 포함된 요소들의 Targeting Toggle을 위한 함수

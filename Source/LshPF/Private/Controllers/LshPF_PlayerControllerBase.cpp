@@ -8,6 +8,7 @@
 #include "InputMappingContext.h"
 #include "LshPF_GameplayTags.h"
 #include "Data/InputActionGameplayTagInfo.h"
+#include "Interface/LshPF_WidgetInterface.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
@@ -82,6 +83,10 @@ void ALshPF_PlayerControllerBase::DefaultConfirmAction_Callback()
 		{
 			FocusTarget->WidgetConfirmAction();
 		}
+		else if (ILshPF_WidgetInterface* FocusWidget = Cast<ILshPF_WidgetInterface>(UISubsystem->GetFocusTargetWidget()))
+		{
+			FocusWidget->WidgetConfirmAction();
+		}
 	}
 }
 
@@ -92,6 +97,10 @@ void ALshPF_PlayerControllerBase::DefaultBackAction_Callback()
 		if (ULshPF_FocusableWidgetBase* FocusTarget = Cast<ULshPF_FocusableWidgetBase>(UISubsystem->GetFocusTargetWidget()))
 		{
 			FocusTarget->WidgetBackAction();
+		}
+		else if (ILshPF_WidgetInterface* FocusWidget = Cast<ILshPF_WidgetInterface>(UISubsystem->GetFocusTargetWidget()))
+		{
+			FocusWidget->WidgetBackAction();
 		}
 	}
 }

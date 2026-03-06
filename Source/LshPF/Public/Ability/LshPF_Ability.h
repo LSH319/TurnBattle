@@ -36,6 +36,11 @@ public:
 	 */
 	void CommitAbility();
 
+	FString GetDescription();
+
+	FText GetAbilityName();
+	FString GetCostAttributeType();
+	float GetAbilityCost();
 protected:
 	/*
 	 * Display 등에 사용될 Text
@@ -109,4 +114,6 @@ private:
 	
 	UPROPERTY()
 	TWeakObjectPtr<ULshPF_BattleComponent> OwnerBattleComponent;
+
+	FString EAttributeTypeToString(EAttributeType AttributeType);
 };

@@ -51,6 +51,62 @@ void ULshPF_Ability::CommitAbility()
 	}
 }
 
+FString ULshPF_Ability::GetDescription()
+{
+	FString Description = "";
+	
+	switch (AbilityType)
+	{
+	case EModifierType::Damage_Default:
+	case EModifierType::Damage_Ability:
+		Description.Append("Give damage to ");
+		break;
+	case EModifierType::Cure:
+		Description.Append("Give cure to ");
+		break;
+	default:
+		break;
+	}
+	
+	switch (TargetType)
+	{
+	case ETargetType::EnemySingle:
+		Description.Append("one enemy ");
+		break;
+	case ETargetType::EnemyAll:
+		Description.Append("all enemies ");
+		break;
+	case ETargetType::PlayerSingle:
+		Description.Append("one friend ");
+		break;
+	case ETargetType::PlayerAll:
+		Description.Append("all friends ");
+		break;
+	default:
+		break;
+	}
+
+	Description = Description + FString::Printf(TEXT("[%.0f%% of "), DamageRatio * 100);
+	Description.Append(EAttributeTypeToString(DamageRatioAttributeType) + "]");
+	
+	return Description;
+}
+
+FText ULshPF_Ability::GetAbilityName()
+{
+	return AbilityName;
+}
+
+FString ULshPF_Ability::GetCostAttributeType()
+{
+	return EAttributeTypeToString(CostAttributeType);
+}
+
+float ULshPF_Ability::GetAbilityCost()
+{
+	return AbilityCost;
+}
+
 void ULshPF_Ability::ActivateAbility()
 {
 	//todo : 사용시 로직 구현
@@ -110,4 +166,52 @@ ALshPF_PlayerController_Battle* ULshPF_Ability::GetBattlePlayerController()
 		CachedPlayerController = Cast<ALshPF_PlayerController_Battle>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	}
 	return CachedPlayerController.Get();
+}
+
+FString ULshPF_Ability::EAttributeTypeToString(EAttributeType AttributeType)
+{
+	FString ReturnString;
+	switch (AttributeType)
+	{
+	case EAttributeType::BaseHealth:
+	case EAttributeType::CurrentHealth:
+		ReturnString = "Health";
+		break;
+	case EAttributeType::BaseMaxHealth:
+	case EAttributeType::CurrentMaxHealth:
+		ReturnString = "MaxHealth";
+		break;
+	case EAttributeType::BaseMana:
+	case EAttributeType::CurrentMana:
+		ReturnString = "Mana";
+		break;
+	case EAttributeType::BaseMaxMana:
+	case EAttributeType::CurrentMaxMana:
+		ReturnString = "MaxMana";
+		break;
+	case EAttributeType::BaseSpeed:
+	case EAttributeType::CurrentSpeed:
+		ReturnString = "Speed";
+		break;
+	case EAttributeType::BaseAttack:
+	case EAttributeType::CurrentAttack:
+		ReturnString = "Attack";
+		break;
+	case EAttributeType::BaseDefence:
+	case EAttributeType::CurrentDefence:
+		ReturnString = "Defence";
+		break;
+	case EAttributeType::BaseAbilityAttack:
+	case EAttributeType::CurrentAbilityAttack:
+		ReturnString = "AbilityAttack";
+		break;
+	case EAttributeType::BaseAbilityDefence:
+	case EAttributeType::CurrentAbilityDefence:
+		ReturnString = "AbilityDefence";
+		break;
+	case EAttributeType::Unknown:
+	default:
+		break;
+	}
+	return ReturnString;
 }
