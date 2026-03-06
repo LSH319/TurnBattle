@@ -16,16 +16,15 @@ void ULshPF_Ability::SetOwnerBattleComponent(ULshPF_BattleComponent* OwnerBattle
 
 void ULshPF_Ability::InitAbilityData(FName AbilityKey)
 {
-	//todo : DT 를 통해 Data 초기화
-	//DT 에서 AbilityKey 를 통해 값을 가져온 뒤 사용
-	/*AbilityName;
-	DamageRatioAttributeType = EAttributeType::Unknown;
-	DamageRatio = 0.f;
-	TargetAttributeType
-	CostAttributeType = EAttributeType::Unknown;
-	AbilityCost = 0.f;
-	TargetType = ETargetType::Unknown;
-	AbilityType*/
+	FLshPF_AbilityInfoTableRow* AbilityInfo = GetBattleGameMode()->GetAbilityInfoByKeyName(AbilityKey);
+	AbilityName = AbilityInfo->AbilityName;
+	DamageRatioAttributeType = AbilityInfo->DamageRatioAttributeType;
+	DamageRatio = AbilityInfo->DamageRatio;
+	TargetAttributeType = AbilityInfo->TargetAttributeType;
+	CostAttributeType = AbilityInfo->CostAttributeType;
+	AbilityCost = AbilityInfo->AbilityCost;
+	TargetType = AbilityInfo->TargetType;
+	AbilityType = AbilityInfo->AbilityType;
 }
 
 bool ULshPF_Ability::IsCanActivate()
@@ -60,7 +59,7 @@ void ULshPF_Ability::ActivateAbility()
 
 	for (ULshPF_BattleComponent* TargetBattleComponent : TargetBattleComponents)
 	{
-		//GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetBattleComponents);
+		//OwnerBattleComponent->ApplyModifierToTarget(TargetBattleComponent, OwnerBattleComponent.Get(), AttributeModifier);
 		//OwnerBattleComponent->ApplyModifierToTarget(TargetBattleComponent, OwnerBattleComponent.Get(), AttributeModifier);
 		//UGameplayStatics::SpawnEmitterAttached()
     	//UGameplayStatics::SpawnEmitterAttached()

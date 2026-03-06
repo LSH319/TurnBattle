@@ -121,6 +121,14 @@ FEnemyAttribute* ALshPF_BattleGameMode::GetEnemyAttributeByKeyName(FName EnemyKe
 	return FindEnemyAttribute;
 }
 
+FLshPF_AbilityInfoTableRow* ALshPF_BattleGameMode::GetAbilityInfoByKeyName(FName AbilityKeyName) const
+{
+	FLshPF_AbilityInfoTableRow* FindAbilityData = AbilityData->FindRow<FLshPF_AbilityInfoTableRow>(AbilityKeyName, FString("AbilityKeyName Is Error"));
+	checkf(FindAbilityData, TEXT("AbilityKeyName is Error At EnemyAttributeData"));
+
+	return FindAbilityData;
+}
+
 void ALshPF_BattleGameMode::SetUIReady(bool NewIsUIReady)
 {
 	IsUIReady = NewIsUIReady;

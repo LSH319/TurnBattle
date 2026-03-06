@@ -7,6 +7,7 @@
 #include "LshPF_Types/LshPF_EnumTypes.h"
 #include "LshPF_BattleComponent.generated.h"
 
+class ULshPF_Ability;
 class ILshPF_BattleInterface;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, float);
@@ -135,11 +136,18 @@ public:
 	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화
 	 */
 	void SetAllCurrentAttributeToBaseAttribute();
+	
 	void SetIsGuard(bool NewIsGuard);
 	FText GetCharacterName();
 	void SetCharacterName(const FText& NewCharacterName);
 	bool IsDead();
-
+	/*
+	 * AbilityKey 를 기반으로 Ability 추가,
+	 * AbilityKey 가 이미 추가되어 있는경우 추가하지 않고 false 반환
+	 * 추가에 성공한 경우 true 반환
+	 */
+	bool GrantAbility(FName AbilityKey);
+	
 	ILshPF_BattleInterface* GetOwnerBattleInterface();
 	
 protected:
@@ -202,4 +210,6 @@ private:
 	bool IsGuard = false;
 
 	ILshPF_BattleInterface* CachedOwnerBattleInterface;
+	UPROPERTY()
+	TMap<FName, ULshPF_Ability*> AbilityMap;
 };

@@ -31,6 +31,14 @@ void ALshPF_PlayerBattleCharacter::PostInitializeComponents()
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityAttack, GetBaseAttributeFromCurveTable(EAttributeType::BaseAbilityAttack, CharacterLevel));
 	LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityDefence, GetBaseAttributeFromCurveTable(EAttributeType::BaseAbilityDefence, CharacterLevel)); 
 
+	//todo : 테스트용 삭제 후 로직 정립
+	LshPF_BattleComponent->GrantAbility("001");
+	LshPF_BattleComponent->GrantAbility("002");
+	LshPF_BattleComponent->GrantAbility("101");
+	LshPF_BattleComponent->GrantAbility("102");
+	LshPF_BattleComponent->GrantAbility("201");
+	LshPF_BattleComponent->GrantAbility("202");
+	
 	Super::PostInitializeComponents();
 }
 

@@ -4,6 +4,7 @@
 #include "Component/LshPF_BattleComponent.h"
 
 #include "LshPF_GameplayTags.h"
+#include "Ability/LshPF_Ability.h"
 #include "Interface/LshPF_BattleInterface.h"
 
 FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
@@ -261,6 +262,18 @@ void ULshPF_BattleComponent::SetCharacterName(const FText& NewCharacterName)
 bool ULshPF_BattleComponent::IsDead()
 {
 	return GetAttribute(EAttributeType::CurrentHealth) <= 0;
+}
+
+bool ULshPF_BattleComponent::GrantAbility(FName AbilityKey)
+{
+	//Ability 를 이미 보유한 경우 즉시 return
+	if (AbilityMap.Contains(AbilityKey)) return false;
+	
+	ULshPF_Ability* NewAbility = NewObject<ULshPF_Ability>(this);
+	NewAbility->SetOwnerBattleComponent(this);
+	NewAbility->InitAbilityData(AbilityKey);
+	AbilityMap.Add(AbilityKey, NewAbility);
+	return true;
 }
 
 ILshPF_BattleInterface* ULshPF_BattleComponent::GetOwnerBattleInterface()

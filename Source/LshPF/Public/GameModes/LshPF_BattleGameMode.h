@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/LshPF_AbilityInfoTableRow.h"
 #include "Data/LshPF_DataTableRow.h"
 #include "GameModes/LshPF_GameModeBase.h"
 #include "LshPF_BattleGameMode.generated.h"
@@ -62,6 +63,8 @@ public:
 	//Enemy 생성 시 DT 에서 Attribute 정보를 얻기 위한 함수
 	FEnemyAttribute* GetEnemyAttributeByKeyName(FName EnemyKeyName) const;
 
+	FLshPF_AbilityInfoTableRow* GetAbilityInfoByKeyName(FName AbilityKeyName) const;
+	
 	//Command 관련 Widget 준비여부 체크를 위한 함수, Status UI 와는 별도
 	UFUNCTION(BlueprintCallable)
 	void SetUIReady(bool NewIsUIReady);
@@ -118,6 +121,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EnemyInfo")
 	UEnemyMeshInfo* EnemyMeshInfo;
 
+	UPROPERTY(EditDefaultsOnly, Category="AbilityInfo")
+	UDataTable* AbilityData;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "PlayerInfo")
 	UPlayerCharacterInfo* PlayerCharacterInfo;
 	
