@@ -17,7 +17,7 @@ struct FBattleAttributeModifier
 	GENERATED_BODY()
 
 	FBattleAttributeModifier()
-	:TargetAttribute(EAttributeType::Unknown), ModifierType(EModifierType::Damage)
+	:TargetAttribute(EAttributeType::Unknown), ModifierType(EModifierType::Damage_Default)
 	{}
 	
 	FBattleAttributeModifier(float InModifyValue, EAttributeType InAttributeType, EModifierType InModifierType)

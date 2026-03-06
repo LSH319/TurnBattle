@@ -19,7 +19,8 @@ float ULshPF_BattleComponent::ApplyModifierToTarget(ULshPF_BattleComponent* Modi
 {
 	switch (BattleAttributeModifier.ModifierType)
 	{
-	case EModifierType::Damage:
+	case EModifierType::Damage_Default:
+	case EModifierType::Damage_Ability:
 		return ApplyDamageToTarget(ModifierActorBattleComponent, CauserBattleComponent, BattleAttributeModifier);
 	case EModifierType::Cure:
 		return ApplyCureToTarget(ModifierActorBattleComponent, CauserBattleComponent, BattleAttributeModifier);
@@ -54,12 +55,27 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 {
 	OnTakeDamageDelegate.Broadcast();
 	float ApplyDamage = BattleAttributeModifier.ModifyValue;
-
+	
 	if (IsGuard)
 	{//가드 중인경우 대미지 감소 30%
 		ApplyDamage = ApplyDamage * 0.7;
 	}
 
+	float DamageReduce = 0;
+	switch (BattleAttributeModifier.ModifierType)
+	{//공격 타입에 따른 방어력 적용
+	case EModifierType::Damage_Default:
+		DamageReduce = (100 - GetAttribute(EAttributeType::CurrentDefence)) / 100;
+		break;
+	case EModifierType::Damage_Ability:
+		DamageReduce = (100 - GetAttribute(EAttributeType::CurrentAbilityDefence)) / 100;
+		break;
+	default:
+		break;
+	}
+	DamageReduce = FMath::Clamp(DamageReduce, 0, 100);
+	ApplyDamage = ApplyDamage * DamageReduce;
+	
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) - ApplyDamage);
 
 	switch (BattleAttributeModifier.TargetAttribute)

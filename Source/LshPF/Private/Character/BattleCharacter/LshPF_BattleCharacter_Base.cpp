@@ -290,7 +290,7 @@ void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, b
 		GetBattleComponent()->CreateBattleAttributeModifier(
 			EAttributeType::CurrentHealth,
 			EAttributeType::CurrentAttack,
-			EModifierType::Damage,
+			EModifierType::Damage_Default,
 			1.f);
 
 	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList, BattleAttributeModifier);
@@ -307,7 +307,5 @@ void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, boo
 		}
 	}
 	
-	TArray<ILshPF_BattleInterface*> TargetList;
-	TargetList.Add(this);
 	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound();
 }

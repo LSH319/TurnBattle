@@ -84,7 +84,7 @@ void ALshPF_EnemyBattleCharacter::OnTriggerMontageEnded(UAnimMontage* Montage, b
 		GetBattleComponent()->CreateBattleAttributeModifier(
 			EAttributeType::CurrentHealth,
 			EAttributeType::CurrentAttack,
-			EModifierType::Damage,
+			EModifierType::Damage_Default,
 			1.f);
 	
 	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetComponents, BattleAttributeModifier);

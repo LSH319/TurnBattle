@@ -61,7 +61,8 @@ enum class ETargetType  : uint8
 UENUM(BlueprintType)
 enum class EModifierType  : uint8
 {
-	Damage,
+	Damage_Default,
+	Damage_Ability,
 	Cure,
 	Unknown UMETA(Hidden)
 };
