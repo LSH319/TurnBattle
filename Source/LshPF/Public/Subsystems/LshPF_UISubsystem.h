@@ -19,7 +19,7 @@ class ULshPF_PrimaryLayout;
 DECLARE_DELEGATE(FFindNewFocusWidget)
 DECLARE_MULTICAST_DELEGATE_OneParam(FInputDeviceChange, EInputDeviceType)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBattleComponentDelegate, ULshPF_BattleComponent*, BattleComponent);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdatedDelegate, ULshPF_FocusableButton*, BroadcastingButton, FText, DescriptionText);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnButtonDescriptionTextUpdatedDelegate, FText, DescriptionText);
 
 /**
  * 

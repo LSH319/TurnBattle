@@ -17,7 +17,7 @@ void ULshPF_FocusableButton::NativeOnAddedToFocusPath(const FFocusEvent& InFocus
 	ButtonText->SetColorAndOpacity(OnFocusTextSlateColor);
 	//Focus 를 흭득한 경우 Description Text 변경
 	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
-	UISubsystem->OnButtonDescriptionTextUpdated.Broadcast(this, ButtonDescriptionText);
+	UISubsystem->OnButtonDescriptionTextUpdated.Broadcast(ButtonDescriptionText);
 }
 
 void ULshPF_FocusableButton::NativeOnRemovedFromFocusPath(const FFocusEvent& InFocusEvent)

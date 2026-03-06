@@ -6,6 +6,8 @@
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 #include "LshPF_SkillScreen.generated.h"
 
+class UTextBlock;
+class ULshPF_ListView;
 class ULshPF_Ability;
 class UListView;
 /**
@@ -23,8 +25,14 @@ public:
 	UListView* GetSkillScreenListView();
 	
 private:
+	UFUNCTION()
+	void DescriptionTextUpdate(FText DescriptionText);
+	
 	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))
-	UListView* AbilityList;
+	ULshPF_ListView* AbilityList;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TextBlock_AbilityDescription;
 	//***** Bound Widgets ***** //
 };

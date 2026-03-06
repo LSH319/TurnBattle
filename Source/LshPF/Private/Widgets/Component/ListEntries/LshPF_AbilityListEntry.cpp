@@ -6,6 +6,7 @@
 #include "Ability/LshPF_Ability.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Subsystems/LshPF_UISubsystem.h"
 
 void ULshPF_AbilityListEntry::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
@@ -21,6 +22,10 @@ void ULshPF_AbilityListEntry::NativeOnItemSelectionChanged(bool bIsSelected)
 	if (bIsSelected)
 	{
 		Background->SetBrush(OnFocusBackgroundBrush);
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			UISubsystem->OnButtonDescriptionTextUpdated.Broadcast(DescriptionText);
+		}
 	}
 	else
 	{
@@ -32,17 +37,14 @@ void ULshPF_AbilityListEntry::InitListEntryData(ULshPF_Ability* AbilityData)
 {
 	TextBlock_AbilityName->SetText(AbilityData->GetAbilityName());
 	TextBlock_CostType->SetText(FText::FromString(AbilityData->GetCostAttributeType()));
-	FString StringCost = FString::SanitizeFloat(AbilityData->GetAbilityCost());
-	TextBlock_Cost->SetText(FText::FromString(StringCost));
+	int32 CostValue = FMath::TruncToInt(AbilityData->GetAbilityCost());
+	TextBlock_Cost->SetText(FText::AsNumber(CostValue));
+
+	DescriptionText = FText::FromString(AbilityData->GetDescription());
 }
 
 void ULshPF_AbilityListEntry::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 	Background->SetBrush(DefaultBackgroundBrush);
-}
-
-FText ULshPF_AbilityListEntry::GetDescriptionText(ULshPF_Ability* AbilityData)
-{
-	return FText::FromString(AbilityData->GetDescription());
 }

@@ -36,8 +36,8 @@ private:
 	virtual void NativePreConstruct() override;
 	//~ End UUserWidget Interface
 	
-	FText GetDescriptionText(ULshPF_Ability* AbilityData);
-
+	FText DescriptionText;
+	
 	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))
 	UImage* Background;
