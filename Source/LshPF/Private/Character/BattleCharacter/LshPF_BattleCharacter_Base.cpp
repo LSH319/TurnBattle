@@ -281,19 +281,27 @@ void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
 void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	TArray<ULshPF_BattleComponent*> TargetList;
-	for (ILshPF_BattleInterface* TargetInterface : GetBattlePlayerController()->GetTargetList())
+	for (ILshPF_BattleInterface* TargetInterface : GetTargetInterfaceList())
 	{
 		TargetList.Add(TargetInterface->GetBattleComponent());
 	}
 	
 	FBattleAttributeModifier BattleAttributeModifier =
-		GetBattleComponent()->CreateBattleAttributeModifier(
-			EAttributeType::CurrentHealth,
-			EAttributeType::CurrentAttack,
-			EModifierType::Damage_Default,
-			1.f);
+		GetBattleComponent()->GetDefaultAttackAttributeModifier();
 
-	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetList, BattleAttributeModifier);
+	for (ULshPF_BattleComponent* TargetBattleComponent : TargetList)
+	{
+		if (TargetBattleComponent)
+		{
+			//ApplyDamageToTarget 호출 시 Target 의 TakeDamageFromCursor 호출,
+			//Target 의 TakeDamageFromCursor 에서 Target 의 HitReact 재생
+			//Target 의 HitReact 종료 시 ReactMontageEndedCallback 호출
+			GetBattleComponent()->ApplyDamageToTarget(
+				TargetBattleComponent,
+				GetBattleComponent(),
+				BattleAttributeModifier);
+		}
+	}
 }
 
 void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -302,10 +310,14 @@ void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, boo
 	{
 		if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Pause"));
 			AnimInstance->Montage_Pause(Montage);
 		}
 	}
 	
 	GetBattleGameMode()->ReactMontageEndedEvent.ExecuteIfBound();
+}
+
+TArray<ILshPF_BattleInterface*> ALshPF_BattleCharacter_Base::GetTargetInterfaceList()
+{
+	return GetBattlePlayerController()->GetTargetList();
 }

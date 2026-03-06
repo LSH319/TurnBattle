@@ -44,7 +44,7 @@ protected:
 	void Action_Guard();
 	
 	//~ Begin ALshPF_BattleCharacter_Base Interface
-	virtual void OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted) override;
+	virtual TArray<ILshPF_BattleInterface*> GetTargetInterfaceList() override;
 	//~ End ALshPF_BattleCharacter_Base Interface
 	
 private:

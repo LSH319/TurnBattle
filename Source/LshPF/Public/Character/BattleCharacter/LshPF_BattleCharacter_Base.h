@@ -119,6 +119,8 @@ protected:
 
 	UFUNCTION()
 	virtual void OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	virtual TArray<ILshPF_BattleInterface*> GetTargetInterfaceList();
 	
 	int32 CharacterOrderPriority = 0;
 

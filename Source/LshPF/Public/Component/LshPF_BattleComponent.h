@@ -129,7 +129,8 @@ public:
 	 * + 를 원할경우 TakeCureFromCursor, - 를 원할경우 TakeDamageFromCursor 사용
 	 */
 	FBattleAttributeModifier CreateBattleAttributeModifier(EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, EModifierType ModifierType, float DamageRatio = 1.f);
-	
+
+	FBattleAttributeModifier GetDefaultAttackAttributeModifier();
 	/*
 	 * 모든 Current Attribute 값을 Base Attribute 값과 동기화
 	 */

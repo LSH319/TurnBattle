@@ -22,7 +22,6 @@ void ALshPF_BattleGameMode::PostInitializeComponents()
 	//Status UI 준비 완료시 CallBack 등록
 	StatusUIReady.AddDynamic(this, &ThisClass::StatusUIReadyCallBack);
 
-	TriggerMontageEndedEvent.BindUObject(this, &ThisClass::TriggerMontageEndedCallback);
 	ReactMontageEndedEvent.BindUObject(this, &ThisClass::ReactMontageEndedCallback);
 }
 
@@ -331,34 +330,6 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 		
 		//Spawn 위치를 Interval 만큼 이동
 		SpawnPoint.Y = SpawnPoint.Y + CharacterInterval;
-	}
-}
-
-void ALshPF_BattleGameMode::TriggerMontageEndedCallback(TArray<ULshPF_BattleComponent*> TargetBattleComponents, FBattleAttributeModifier BattleAttributeModifier)
-{
-	ILshPF_BattleInterface* TurnCharacter = GetRecentOwingTurnCharacter();
-
-	//TargetBattleInterfaces 가 empty 인지 확인
-	if (TurnCharacter && !TargetBattleComponents.IsEmpty())
-	{
-		for (ULshPF_BattleComponent* TargetBattleComponent : TargetBattleComponents)
-		{
-			if (TargetBattleComponent)
-			{
-				//ApplyDamageToTarget 호출 시 Target 의 TakeDamageFromCursor 호출,
-				//Target 의 TakeDamageFromCursor 에서 Target 의 HitReact 재생
-				//Target 의 HitReact 종료 시 ReactMontageEndedCallback 호출
-				TurnCharacter->GetBattleComponent()->ApplyDamageToTarget(
-					TargetBattleComponent,
-					TurnCharacter->GetBattleComponent(),
-					BattleAttributeModifier);
-			}
-		}
-	}
-	else
-	{
-		//TargetBattleInterfaces 가 empty인 경우 즉시 턴 종료
-		GetRecentOwingTurnCharacter()->TurnEnd();
 	}
 }
 

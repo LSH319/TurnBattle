@@ -72,20 +72,7 @@ void ALshPF_EnemyBattleCharacter::Action_Guard()
 	ToggleGuard(true);
 }
 
-void ALshPF_EnemyBattleCharacter::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+TArray<ILshPF_BattleInterface*> ALshPF_EnemyBattleCharacter::GetTargetInterfaceList()
 {
-	TArray<ULshPF_BattleComponent*> TargetComponents;
-	for (ILshPF_BattleInterface* TargetInterface : TargetList)
-	{
-		TargetComponents.Add(TargetInterface->GetBattleComponent());
-	}
-	
-	FBattleAttributeModifier BattleAttributeModifier =
-		GetBattleComponent()->CreateBattleAttributeModifier(
-			EAttributeType::CurrentHealth,
-			EAttributeType::CurrentAttack,
-			EModifierType::Damage_Default,
-			1.f);
-	
-	GetBattleGameMode()->TriggerMontageEndedEvent.ExecuteIfBound(TargetComponents, BattleAttributeModifier);
+	return TargetList;
 }

@@ -14,8 +14,17 @@ FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
 	return FBattleAttributeModifier(ApplyModifyValue, TargetAttributeType, ModifierType);
 }
 
+FBattleAttributeModifier ULshPF_BattleComponent::GetDefaultAttackAttributeModifier()
+{
+	return CreateBattleAttributeModifier(
+			EAttributeType::CurrentHealth,
+			EAttributeType::CurrentAttack,
+			EModifierType::Damage_Default,
+			1.f);
+}
+
 float ULshPF_BattleComponent::ApplyModifierToTarget(ULshPF_BattleComponent* ModifierActorBattleComponent,
-	ULshPF_BattleComponent* CauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
+                                                    ULshPF_BattleComponent* CauserBattleComponent, FBattleAttributeModifier BattleAttributeModifier)
 {
 	switch (BattleAttributeModifier.ModifierType)
 	{

@@ -14,7 +14,6 @@ class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UEnemyMeshInfo;
 
-DECLARE_DELEGATE_TwoParams(FTriggerMontageEndedEvent, TArray<ULshPF_BattleComponent*>, FBattleAttributeModifier);
 DECLARE_DELEGATE(FReactMontageEndedEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatusUIReady);
 
@@ -74,7 +73,6 @@ public:
 	UPROPERTY(BlueprintCallable)
 	FStatusUIReady StatusUIReady;
 
-	FTriggerMontageEndedEvent TriggerMontageEndedEvent;
 	FReactMontageEndedEvent ReactMontageEndedEvent;
 
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
@@ -146,10 +144,6 @@ private:
 
 	void SpawnPlayerCharacters();
 	
-	//턴 캐릭터 행동 시 Trigger Montage 종료시 -> 타켓의 React -> 타켓의 React Montage 종료시 -> Turn End 흐
-	//턴 캐릭터 행동 시 Trigger 가 되는 Montage 종료시 사용하기 위한 Callback
-	//턴 캐릭터 행동 시 Trigger 가 되는 행동 : Attack, Skill, Item 사용
-	void TriggerMontageEndedCallback(TArray<ULshPF_BattleComponent*> TargetBattleComponents, FBattleAttributeModifier BattleAttributeModifier);
 	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React Montage 종료시 사용하기 위한 Callback
 	//턴 캐릭터의 Trigger 가 되는 Montage 에 대한 React : HitReact, Death
 	void ReactMontageEndedCallback();
