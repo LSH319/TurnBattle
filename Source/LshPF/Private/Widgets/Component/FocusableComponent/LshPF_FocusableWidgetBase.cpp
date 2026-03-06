@@ -125,18 +125,15 @@ void ULshPF_FocusableWidgetBase::NativeConstruct()
 	SetIsFocusable(true);
 }
 
+FReply ULshPF_FocusableWidgetBase::NativeOnPreviewKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	UpdateInputDevice();
+	return Super::NativeOnPreviewKeyDown(InGeometry, InKeyEvent);
+}
+
 FReply ULshPF_FocusableWidgetBase::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
 	FKey Key = InKeyEvent.GetKey();
-	if (Key == EKeys::Gamepad_DPad_Up||
-		Key == EKeys::Gamepad_DPad_Down ||
-		Key == EKeys::Gamepad_DPad_Right ||
-		Key == EKeys::Gamepad_DPad_Left)
-	{
-		//GamePad 의 DPad 입력시 InputDevice 가 Update 되도록 추가
-		//별도 처리 없이 사용할 경우 DPad 입력시 Enhanced Input 까지 전달되지 않아 추가한 코드
-		UpdateInputDevice();
-	}
 
 	if (ConsumeKey.Contains(Key))
 	{
