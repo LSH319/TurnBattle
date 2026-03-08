@@ -58,9 +58,7 @@ void ALshPF_BattleGameMode::CharacterReady(ILshPF_BattleInterface* RequestBattle
 	{
 		//Enemy Character 리스트 에 추가
 		EnemyCharacterList.Add(RequestBattleInterface);
-
-		//todo : 테스트 완료 후 제거
-		//Test 를 위한 추가
+		
 		if (IsStatusUIReady)
 		{
 			if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
@@ -89,10 +87,18 @@ void ALshPF_BattleGameMode::CharacterDeath(ILshPF_BattleInterface* RemoveTarget)
 	if (RemoveTarget->IsPlayerCharacter())
 	{
 		PlayerCharacterList.Remove(RemoveTarget);
+		if (PlayerCharacterList.IsEmpty())
+		{
+			//todo : 패배처리
+		}
 	}
 	else
 	{
 		EnemyCharacterList.Remove(RemoveTarget);
+		if (EnemyCharacterList.IsEmpty())
+		{
+			//todo : 승리처리
+		}
 	}
 }
 

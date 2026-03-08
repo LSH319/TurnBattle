@@ -71,6 +71,7 @@ protected:
 
 	ETargetType TargetType = ETargetType::EnemySingle;
 private:
+	//todo : skill 등 사용 시 삭제를 위한 위젯 저장, 턴 종료 시 해당 위젯 제거 로직 추가
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 	
