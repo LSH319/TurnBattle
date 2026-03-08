@@ -56,8 +56,6 @@ void ULshPF_ActionBar::NativeConstruct()
         	0.1f,
         	true);
 	}
-	
-	//CreateDefaultEntry();
 }
 
 bool ULshPF_ActionBar::CreateDefaultEntry()

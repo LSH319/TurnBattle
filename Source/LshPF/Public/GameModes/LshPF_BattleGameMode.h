@@ -90,6 +90,9 @@ public:
 	TArray<ILshPF_BattleInterface*> GetEnemyCharacters() const;
 	TArray<ILshPF_BattleInterface*> GetPlayerCharacters() const;
 protected:
+	UFUNCTION(BlueprintNativeEvent, DisplayName = "GameEndEvent")
+	void BP_GameEndEvent(bool IsVictory);
+	
 	void SortTurnTable();
 	void SortEnemyList();
 	bool IsGameReady() const;

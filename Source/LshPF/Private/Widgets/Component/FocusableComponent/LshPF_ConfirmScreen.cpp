@@ -33,22 +33,41 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 	{
 		case EConfirmScreenType::Ok:
 			{//버튼 생성 로직
+				bool IsSuccess = true;
 				ULshPF_NotFocusableButton* OkButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				OkButton->SetButtonText(FText::FromString(TEXT("OK")));
 				if (LshPF_PlayerController)
 				{
-					OkButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+					IsSuccess = IsSuccess && OkButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+					
+					if (!IsSuccess)
+					{
+						GetWorld()->GetTimerManager().SetTimer(
+							TimerHandle,
+							FTimerDelegate::CreateLambda([this, OkButton]()
+								{
+								UE_LOG(LogTemp, Warning, TEXT("InitConfirmScreen"));	
+									if (bool ReTrySuccess = OkButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
+									{
+										GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+										GetDesiredFocusTarget()->SetFocus();
+									}
+								}),
+							0.1f,
+							true);
+					}
 				}
 				OkButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 				break;
 			}
 		case EConfirmScreenType::YesNo:
 			{//버튼 생성 로직
+				bool IsSuccess = true;
 				ULshPF_NotFocusableButton* YesButton = DynamicEntryBox_Buttons->CreateEntry<ULshPF_NotFocusableButton>();
 				YesButton->SetButtonText(FText::FromString(TEXT("YES")));
 				if (LshPF_PlayerController)
 				{
-					YesButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+					IsSuccess = IsSuccess && YesButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
 				}
 				YesButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_Yes);
 
@@ -56,10 +75,27 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 				NoButton->SetButtonText(FText::FromString(TEXT("NO")));
 				if (LshPF_PlayerController)
 				{
-					NoButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
+					IsSuccess = IsSuccess && NoButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
 				}
 				NoButton->GetButton()->OnClicked.AddDynamic(this, &ThisClass::ButtonClickedCallback_No);
-
+				if (!IsSuccess)
+				{
+					GetWorld()->GetTimerManager().SetTimer(
+						TimerHandle,
+						FTimerDelegate::CreateLambda([this, YesButton, NoButton]()
+							{
+								bool ReTrySuccess = true;
+								ReTrySuccess = ReTrySuccess && YesButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+								ReTrySuccess = ReTrySuccess && NoButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
+								if (ReTrySuccess)
+								{
+									GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+									GetDesiredFocusTarget()->SetFocus();
+								}
+							}),
+						0.1f,
+						true);
+				}
 				break;
 			}
 		case EConfirmScreenType::Unknown:

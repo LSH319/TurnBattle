@@ -38,6 +38,8 @@ private:
 	TFunction<void(EButtonType)> CachedCallbackFunction;
 	EConfirmScreenType CachedConfirmScreenType;
 
+	FTimerHandle TimerHandle;
+	
 	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextBlock_Title;

@@ -3,7 +3,9 @@
 
 #include "GameModes/LshPF_BattleGameMode.h"
 
+#include "LshPF_FunctionLibrary.h"
 #include "LshPF_GameInstance.h"
+#include "LshPF_GameplayTags.h"
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 #include "Character/BattleCharacter/LshPF_EnemyBattleCharacter.h"
 #include "Character/BattleCharacter/LshPF_PlayerBattleCharacter.h"
@@ -14,6 +16,7 @@
 #include "Interface/LshPF_BattleInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
+#include "Widgets/Component/FocusableComponent/LshPF_ConfirmScreen.h"
 
 void ALshPF_BattleGameMode::PostInitializeComponents()
 {
@@ -82,14 +85,16 @@ void ALshPF_BattleGameMode::CharacterDeath(ILshPF_BattleInterface* RemoveTarget)
 	{
 		return Data.TargetCharacter == RemoveTarget;
 	});
-
+	
+	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
+	
 	//CharacterList 에서 제거
 	if (RemoveTarget->IsPlayerCharacter())
 	{
 		PlayerCharacterList.Remove(RemoveTarget);
 		if (PlayerCharacterList.IsEmpty())
 		{
-			//todo : 패배처리
+			BP_GameEndEvent(false);
 		}
 	}
 	else
@@ -97,7 +102,7 @@ void ALshPF_BattleGameMode::CharacterDeath(ILshPF_BattleInterface* RemoveTarget)
 		EnemyCharacterList.Remove(RemoveTarget);
 		if (EnemyCharacterList.IsEmpty())
 		{
-			//todo : 승리처리
+			BP_GameEndEvent(true);
 		}
 	}
 }
@@ -182,6 +187,11 @@ TArray<ILshPF_BattleInterface*> ALshPF_BattleGameMode::GetEnemyCharacters() cons
 TArray<ILshPF_BattleInterface*> ALshPF_BattleGameMode::GetPlayerCharacters() const
 {
 	return PlayerCharacterList;
+}
+
+void ALshPF_BattleGameMode::BP_GameEndEvent_Implementation(bool IsVictory)
+{
+	
 }
 
 void ALshPF_BattleGameMode::SortTurnTable()
