@@ -30,7 +30,10 @@ protected:
 	FSlateBrush DefaultBackgroundBrush;
 	UPROPERTY(EditDefaultsOnly)
 	FSlateBrush OnFocusBackgroundBrush;
-	
+	UPROPERTY(EditDefaultsOnly)
+	FSlateColor AvailableTextColor;
+	UPROPERTY(EditDefaultsOnly)
+	FSlateColor UnavailableTextColor;
 private:
 	//~ Begin UUserWidget Interface
 	virtual void NativePreConstruct() override;

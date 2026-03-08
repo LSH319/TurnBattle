@@ -40,6 +40,19 @@ void ULshPF_AbilityListEntry::InitListEntryData(ULshPF_Ability* AbilityData)
 	int32 CostValue = FMath::TruncToInt(AbilityData->GetAbilityCost());
 	TextBlock_Cost->SetText(FText::AsNumber(CostValue));
 
+	if (AbilityData->IsCanActivate())
+	{
+		TextBlock_AbilityName->SetColorAndOpacity(AvailableTextColor);
+		TextBlock_CostType->SetColorAndOpacity(AvailableTextColor);
+		TextBlock_Cost->SetColorAndOpacity(AvailableTextColor);
+	}
+	else
+	{
+		TextBlock_AbilityName->SetColorAndOpacity(UnavailableTextColor);
+		TextBlock_CostType->SetColorAndOpacity(UnavailableTextColor);
+		TextBlock_Cost->SetColorAndOpacity(UnavailableTextColor);
+	}
+	
 	DescriptionText = FText::FromString(AbilityData->GetDescription());
 }
 
