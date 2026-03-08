@@ -146,6 +146,15 @@ void ALshPF_PlayerController_Battle::SetTargetType(ETargetType InETargetType)
 	TargetType = InETargetType;
 }
 
+void ALshPF_PlayerController_Battle::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("AllTarget"), FoundActors);
+	AllTargetViewTarget = FoundActors[0];
+}
+
 void ALshPF_PlayerController_Battle::SetupInputComponent()
 {
 	Super::SetupInputComponent();

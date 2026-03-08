@@ -52,7 +52,13 @@ public:
 	FOnTargetChange OnTargetChange;
 	
 protected:
+	//~ Begin AActor Interface
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
+	//~ Begin APlayerController Interface
 	virtual void SetupInputComponent() override;
+	//~ End APlayerController Interface
 
 	UFUNCTION(BlueprintPure)
 	ALshPF_BattleGameMode* GetBattleGameMode();
@@ -63,7 +69,10 @@ protected:
 private:
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
-
+	
+	UPROPERTY()
+	AActor* AllTargetViewTarget;
+	
 	int32 TargetingEnemyNum = 0;
 	int32 TargetingPlayerNum = 0;
 	TArray<ILshPF_BattleInterface*> TargetList;

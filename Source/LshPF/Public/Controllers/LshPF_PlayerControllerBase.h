@@ -34,7 +34,9 @@ public:
 	virtual UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
 	
 protected:
+	//~ Begin APlayerController Interface
 	virtual void SetupInputComponent() override;
+	//~ End APlayerController Interface
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input/Data")
 	UInputActionGameplayTagInfo* InputActionGameplayTagInfo;
