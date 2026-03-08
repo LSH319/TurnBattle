@@ -123,7 +123,7 @@ protected:
 	/**
 	 * Destroy 전 처리해야 할 이벤트들
 	 */
-	void BeforeDestroyedEvent();
+	virtual void BeforeDestroyedEvent();
 
 	/**
 	 * UISubsystem 에 InputDevice update 요청

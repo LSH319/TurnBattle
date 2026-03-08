@@ -27,6 +27,9 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	UListView* GetSkillScreenListView();
+
+protected:
+	virtual void BeforeDestroyedEvent() override;
 	
 private:
 	UFUNCTION()
