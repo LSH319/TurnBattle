@@ -5,6 +5,15 @@
 
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
+void ULshPF_ListView::WidgetConfirmAction()
+{
+	ULshPF_FocusableWidgetBase* ParentWidget = GetTypedOuter<ULshPF_FocusableWidgetBase>();
+	if (ParentWidget)
+	{
+		ParentWidget->WidgetConfirmAction();
+	}
+}
+
 void ULshPF_ListView::WidgetBackAction()
 {
 	ULshPF_FocusableWidgetBase* ParentWidget = GetTypedOuter<ULshPF_FocusableWidgetBase>();

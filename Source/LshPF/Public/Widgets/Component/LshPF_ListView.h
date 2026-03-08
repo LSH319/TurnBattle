@@ -17,6 +17,7 @@ class LSHPF_API ULshPF_ListView : public UListView, public ILshPF_WidgetInterfac
 
 public:
 	//~ Begin ILshPF_WidgetInterface Interface
+	virtual void WidgetConfirmAction() override;
 	virtual void WidgetBackAction() override;
 	//~ End ILshPF_WidgetInterface Interface
 };

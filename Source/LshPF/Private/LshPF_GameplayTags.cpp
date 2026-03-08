@@ -17,6 +17,7 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_Command, "LshPF.Widget.Command");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_Skill, "LshPF.Widget.Skill");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_Item, "LshPF.Widget.Item");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_TargetSelect, "LshPF.Widget.TargetSelect");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_CharacterInfo, "LshPF.Widget.CharacterInfo");
 	
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_MainMenu, "LshPF.Level.MainMenu");

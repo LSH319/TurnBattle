@@ -19,6 +19,10 @@ class LSHPF_API ULshPF_SkillScreen : public ULshPF_FocusableWidgetBase
 	GENERATED_BODY()
 	
 public:
+	//~ Begin ULshPF_FocusableWidgetBase Interface
+	virtual void WidgetConfirmAction() override;
+	//~ End ULshPF_FocusableWidgetBase Interface
+	
 	void InitAbilityList(TArray<ULshPF_Ability*> CharacterAbilityList);
 
 	UFUNCTION(BlueprintPure)

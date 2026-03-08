@@ -95,7 +95,7 @@ void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 
 	if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
 	{
-		if (HasFocusedDescendants() && UISubsystem->FindNewFocusWidget.IsBound())
+		if ((HasFocusedDescendants() || HasKeyboardFocus()) && UISubsystem->FindNewFocusWidget.IsBound())
 		{
 			//삭제되는 Widget 이 Focus 를 가지고 있는 경우 새로운 Focus Target 을 찾아 설정하도록 호출
 			UISubsystem->FindNewFocusWidget.Execute();
