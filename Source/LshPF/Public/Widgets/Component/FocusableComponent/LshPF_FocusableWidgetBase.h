@@ -17,10 +17,10 @@ struct FAdditionalInputMappingContext
 	GENERATED_BODY()
  
 	UPROPERTY(EditAnywhere)
-	UInputMappingContext* InputMappingContext;
+	UInputMappingContext* InputMappingContext = nullptr;
  
 	UPROPERTY(EditAnywhere)
-	int32 Priority;
+	int32 Priority = 0;
 };
 
 /**

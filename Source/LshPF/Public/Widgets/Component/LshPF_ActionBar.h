@@ -42,13 +42,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<FActionBarEntry> ActionBarEntry;
-
-	/*
-	 * ActionBar 에 Entry 추가
-	 * return 이미지 설정 실패
-	 */
-	UFUNCTION(BlueprintCallable)
-	bool CreateActionBarEntry();
 	
 protected:
 	//~ Begin UUserWidget interface
@@ -56,7 +49,14 @@ protected:
 	//~ Begin UUserWidget interface
 
 private:
-	void CreateDefaultEntry();
+	/*
+	 * ActionBar 에 Entry 추가
+	 * return 이미지 설정 실패
+	 */
+	bool CreateDefaultEntry();
+	bool CreateActionBarEntry();
+	
+	FTimerHandle TimerHandle;
 	
 	//***** Bound Widgets ***** //
 	UPROPERTY(meta = (BindWidget))

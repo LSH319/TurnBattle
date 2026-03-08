@@ -154,6 +154,8 @@ void ALshPF_PlayerController_Battle::SetupInputComponent()
 	
 	for (const TTuple<FGameplayTag, UInputAction*> Info : InputActionGameplayTagInfo->InputActionGameplayTagMap)
 	{
+		//중복 바인딩 방지
+		if (Info.Key.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultBack) || Info.Key.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm)) continue;
 		//InputActionGameplayTagInfo 의 Map 을 순회하면서 바인딩 실행
 		//FGameplayTag 를 매갭변수로 넘겨줘 동작 구분 시 사용
 		EnhancedInputComponent->BindAction(Info.Value, ETriggerEvent::Started, this, &ThisClass::ExecuteInputAction, Info.Key);

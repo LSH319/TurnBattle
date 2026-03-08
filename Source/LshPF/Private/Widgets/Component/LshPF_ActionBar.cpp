@@ -14,7 +14,7 @@ bool ULshPF_ActionBar::CreateActionBarEntry()
 	bool IsSuccess = true;
 	ActionBar->Reset();
 
-	CreateDefaultEntry();
+	IsSuccess = IsSuccess && CreateDefaultEntry();
 	for (const FActionBarEntry Entry : ActionBarEntry)
 	{
 		ULshPF_NotFocusableButton* CreatedButton = ActionBar->CreateEntry<ULshPF_NotFocusableButton>();
@@ -38,21 +38,39 @@ bool ULshPF_ActionBar::CreateActionBarEntry()
 void ULshPF_ActionBar::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	CreateDefaultEntry();
+	SetVisibility(ESlateVisibility::Hidden);
+	
+	bool IsSuccess = CreateActionBarEntry();
+	if (!IsSuccess)
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+        	TimerHandle,
+        	FTimerDelegate::CreateLambda([this]()
+        		{
+			        if (bool ReTrySuccess = CreateActionBarEntry())
+        			{
+			        	SetVisibility(ESlateVisibility::Visible);
+        				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+        			}
+        		}),
+        	0.1f,
+        	true);
+	}
+	
+	//CreateDefaultEntry();
 }
 
-void ULshPF_ActionBar::CreateDefaultEntry()
+bool ULshPF_ActionBar::CreateDefaultEntry()
 {
 	ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(GetOwningPlayer());
-
+	bool IsSuccess = true;
 	if (ShowDefaultConfirmAction)
 	{
 		ULshPF_NotFocusableButton* CreatedButton = ActionBar->CreateEntry<ULshPF_NotFocusableButton>();
 		CreatedButton->SetButtonText(FText::FromString(TEXT("OK")));
 		if (PlayerController)
 		{
-			CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
+			IsSuccess = IsSuccess && CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm);
 			CreatedButton->BindClickEvent();
 		}
 	}
@@ -63,8 +81,10 @@ void ULshPF_ActionBar::CreateDefaultEntry()
 		CreatedButton->SetButtonText(FText::FromString(TEXT("Back")));
 		if (PlayerController)
 		{
-			CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
+			IsSuccess = IsSuccess && CreatedButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultBack);
 			CreatedButton->BindClickEvent();
 		}
 	}
+
+	return IsSuccess;
 }
