@@ -3,6 +3,7 @@
 
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "Components/PanelWidget.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
 #include "GameFramework/PlayerInput.h"
@@ -85,6 +86,17 @@ void ULshPF_FocusableWidgetBase::BP_BindChildWidgetGetFocus(ULshPF_FocusableWidg
 void ULshPF_FocusableWidgetBase::BeforeDestroyedEvent()
 {
 	int32 Index = GetParent()->GetChildIndex(this);
+
+	if (!AdditionalImcInfoArray.IsEmpty())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			for (FAdditionalInputMappingContext AdditionalImcInfo : AdditionalImcInfoArray)
+			{
+				InputSystem->RemoveMappingContext(AdditionalImcInfo.InputMappingContext);
+			}
+		}
+	}
 	
 	if (OnWidgetDestroyed.IsBound())
 	{
@@ -123,6 +135,17 @@ void ULshPF_FocusableWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
 	SetIsFocusable(true);
+	
+	if (!AdditionalImcInfoArray.IsEmpty())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			for (FAdditionalInputMappingContext AdditionalImcInfo : AdditionalImcInfoArray)
+			{
+				InputSystem->AddMappingContext(AdditionalImcInfo.InputMappingContext, AdditionalImcInfo.Priority);
+			}
+		}
+	}
 }
 
 FReply ULshPF_FocusableWidgetBase::NativeOnPreviewKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)

@@ -7,8 +7,21 @@
 #include "Blueprint/UserWidget.h"
 #include "LshPF_FocusableWidgetBase.generated.h"
 
+class UInputMappingContext;
 DECLARE_DELEGATE_OneParam(FOnWidgetDestroyed, int32);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventDelegate);
+
+USTRUCT(BlueprintType)
+struct FAdditionalInputMappingContext
+{
+	GENERATED_BODY()
+ 
+	UPROPERTY(EditAnywhere)
+	UInputMappingContext* InputMappingContext;
+ 
+	UPROPERTY(EditAnywhere)
+	int32 Priority;
+};
 
 /**
  * 
@@ -80,6 +93,10 @@ protected:
 	//NativeKeyDown 에서 강제로 Consume 할 Key
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FKey, FGameplayTag> ConsumeKey;
+
+	//Widget 에서 사용할 IMC, 위젯 제거시 제거됨
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FAdditionalInputMappingContext> AdditionalImcInfoArray;
 	
 	/** 
 	 * Desired Focus Widget 반환.
