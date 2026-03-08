@@ -11,6 +11,7 @@
 #include "Data/InputActionGameplayTagInfo.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Interface/LshPF_BattleInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 #include "Widgets/Component/FocusableComponent/LshPF_SkillScreen.h"
@@ -110,13 +111,50 @@ void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
 	IsEnableInput = InIsEnableInput;
 }
 
-void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
+void ALshPF_PlayerController_Battle::SetBattleSettingDefault(bool IsTargetToggleActive)
 {
-	TargetType = ETargetType::EnemySingle;
+	ToggleTargetingAllTargets(false);
 	
+	TargetType = ETargetType::EnemySingle;
 	CachedTargetByIndex(TargetingEnemyNum, true);
 	SetCharacterRotationToTarget();
-	ToggleTargetingAllTargets(true);
+	ResetViewTarget();
+	if (IsTargetToggleActive)
+	{
+		ToggleTargetingAllTargets(true);
+	}
+}
+
+void ALshPF_PlayerController_Battle::SetTargetTypeWithSetViewTarget(ETargetType InETargetType)
+{
+	TargetType = InETargetType;
+	
+	switch (TargetType)
+	{
+	case ETargetType::EnemySingle:
+	    GetBattleGameMode()->GetEnemyCharacterByIndex(TargetingEnemyNum)->SetViewTargetSelf(true);
+	    break;
+	case ETargetType::PlayerSingle:
+	    GetBattleGameMode()->GetPlayerCharacterByIndex(TargetingPlayerNum)->SetViewTargetSelf(true);
+	    break;
+	case ETargetType::EnemyAll:
+	case ETargetType::PlayerAll:
+	    if (AllTargetViewTarget)
+	    {
+     		SetViewTarget(AllTargetViewTarget);
+	    }
+	    break;
+	case ETargetType::Unknown:
+	default:
+	    break;
+	}
+	
+	SetToggleByTargetType(InETargetType);
+}
+
+void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
+{
+	SetBattleSettingDefault(true);
 }
 
 TArray<ILshPF_BattleInterface*> ALshPF_PlayerController_Battle::GetTargetList()
@@ -239,6 +277,31 @@ void ALshPF_PlayerController_Battle::ToggleTargetingAllTargets(bool IsActive)
 			Target->ToggleTargeting(IsActive);
 		}
 	}
+}
+
+void ALshPF_PlayerController_Battle::SetToggleByTargetType(ETargetType InETargetType)
+{
+	ToggleTargetingAllTargets(false);
+	TargetList.Empty();
+	switch (TargetType)
+	{
+	case ETargetType::EnemySingle:
+		CachedTargetByIndex(TargetingEnemyNum, true);
+		break;
+	case ETargetType::PlayerSingle:
+		CachedTargetByIndex(TargetingPlayerNum, false);
+		break;
+	case ETargetType::EnemyAll:
+		TargetList = GetBattleGameMode()->GetEnemyCharacters();
+		break;
+	case ETargetType::PlayerAll:
+		TargetList = GetBattleGameMode()->GetPlayerCharacters();
+		break;
+	case ETargetType::Unknown:
+	default:
+		break;
+	}
+	ToggleTargetingAllTargets(true);
 }
 
 void ALshPF_PlayerController_Battle::CachedTargetByIndex(int32& TargetIndex, bool IsTargetEnemy)

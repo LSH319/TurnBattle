@@ -41,6 +41,7 @@ public:
 	FText GetAbilityName();
 	FString GetCostAttributeType();
 	float GetAbilityCost();
+	ETargetType GetTargetType();
 protected:
 	/*
 	 * Display 등에 사용될 Text

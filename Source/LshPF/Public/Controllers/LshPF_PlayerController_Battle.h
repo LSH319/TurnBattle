@@ -32,6 +32,10 @@ public:
 	virtual void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag) override;
 	
 	void SetIsEnableInput(bool InIsEnableInput);
+	
+	void SetBattleSettingDefault(bool IsTargetToggleActive);
+	void SetTargetTypeWithSetViewTarget(ETargetType InETargetType);
+	
 	/*
 	 * Player Turn 시작 시 Character 에서 호출하여 이벤트 처리를 위한 함수
 	 */
@@ -95,7 +99,7 @@ private:
 	 * TargetList 에 포함된 요소들의 Targeting Toggle을 위한 함수
 	 */
 	void ToggleTargetingAllTargets(bool IsActive);
-	
+	void SetToggleByTargetType(ETargetType InETargetType);
 	/*
 	 * Index 를 통해 Target Enemy 를 TargetList에 추가
 	 * 파라미터를 & 로 받아 값이 배열의 범위를 넘어가도 조정

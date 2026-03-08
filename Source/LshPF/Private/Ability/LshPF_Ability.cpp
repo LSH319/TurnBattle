@@ -107,6 +107,11 @@ float ULshPF_Ability::GetAbilityCost()
 	return AbilityCost;
 }
 
+ETargetType ULshPF_Ability::GetTargetType()
+{
+	return TargetType;
+}
+
 void ULshPF_Ability::ActivateAbility()
 {
 	//todo : 사용시 로직 구현
