@@ -32,8 +32,11 @@ public:
 	 * Button 의 Onclick 과 IA 의 동작을 통일하기위해 사용
 	 */
 	virtual void ExecuteInputActionByGameplayTag(FGameplayTag TargetGameplayTag) override;
+
+	void SetViewTargetToAllTarget();
 	
 	void SetIsEnableInput(bool InIsEnableInput);
+	ETargetType GetTargetType();
 	
 	void SetBattleSettingDefault(bool IsTargetToggleActive);
 	void SetTargetTypeWithSetViewTarget(ETargetType InETargetType);

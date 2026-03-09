@@ -106,9 +106,22 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
 	}
 }
 
+void ALshPF_PlayerController_Battle::SetViewTargetToAllTarget()
+{
+	if (AllTargetViewTarget)
+	{
+		SetViewTarget(AllTargetViewTarget);
+	}
+}
+
 void ALshPF_PlayerController_Battle::SetIsEnableInput(bool InIsEnableInput)
 {
 	IsEnableInput = InIsEnableInput;
+}
+
+ETargetType ALshPF_PlayerController_Battle::GetTargetType()
+{
+	return TargetType;
 }
 
 void ALshPF_PlayerController_Battle::SetBattleSettingDefault(bool IsTargetToggleActive)
@@ -143,7 +156,7 @@ void ALshPF_PlayerController_Battle::SetTargetTypeWithSetViewTarget(ETargetType 
 	case ETargetType::PlayerAll:
 	    if (AllTargetViewTarget)
 	    {
-     		SetViewTarget(AllTargetViewTarget);
+	    	SetViewTargetToAllTarget();
 	    }
 	    break;
 	case ETargetType::Unknown:

@@ -152,7 +152,29 @@ void ALshPF_BattleCharacter_Base::PlayAnimMontageByTag(FGameplayTag AnimMontageT
 {
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 	{
-		SetViewTargetSelf(true);
+		if (AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_HitReact||
+			AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Death||
+			AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Cure)
+		{//react montage 일 경우
+			switch (GetBattlePlayerController()->GetTargetType())
+			{//TargetType 에 따라 ViewTarget 설정
+			case ETargetType::EnemyAll:
+			case ETargetType::PlayerAll:
+				GetBattlePlayerController()->SetViewTargetToAllTarget();
+				break;
+			case ETargetType::EnemySingle:
+			case ETargetType::PlayerSingle:
+			case ETargetType::Unknown:
+			default:
+				SetViewTargetSelf(true);
+				break;
+			}
+		}
+		else
+		{
+			SetViewTargetSelf(true);
+		}
+		
 		UAnimMontage* CachedMontage = CharacterMontageMap.FindChecked(AnimMontageTag);
 		if (AnimInstance->Montage_Play(CachedMontage) > 0.f)
 		{
