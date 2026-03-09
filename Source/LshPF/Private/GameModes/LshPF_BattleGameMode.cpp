@@ -42,37 +42,11 @@ void ALshPF_BattleGameMode::CharacterReady(ILshPF_BattleInterface* RequestBattle
 	{
 		//Player Character 리스트 에 추가
 		PlayerCharacterList.Add(RequestBattleInterface);
-		
-		if (IsStatusUIReady)
-		{
-			//Status UI 가 준비된 경우, Subsystem Delegate 를 통해 UI에 추가되도록 Broadcast
-			if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-			{
-				UISubsystem->OnBattleComponentDelegate.Broadcast(RequestBattleInterface->GetBattleComponent());
-			}
-		}
-		else
-		{
-			//Status UI 가 준비되지 않은 경우 Queue 에 삽입하여 준비 완료 후 사용
-			WaitingRegisterComponents.Enqueue(RequestBattleInterface->GetBattleComponent());
-		}
 	}
 	else
 	{
 		//Enemy Character 리스트 에 추가
 		EnemyCharacterList.Add(RequestBattleInterface);
-		
-		if (IsStatusUIReady)
-		{
-			if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-			{
-				UISubsystem->OnBattleComponentDelegate.Broadcast(RequestBattleInterface->GetBattleComponent());
-			}
-		}
-		else
-		{
-			WaitingRegisterComponents.Enqueue(RequestBattleInterface->GetBattleComponent());
-		}
 	}
 
 	RequestAddTurnTable(RequestBattleInterface);
@@ -147,7 +121,9 @@ void ALshPF_BattleGameMode::SetUIReady(bool NewIsUIReady)
 	if (IsGameReady())
 	{
 		//준비 완료시 게임 시작
+		SortPlayerList();
 		SortEnemyList();
+		InitStatusUI();
 		GrantTurn();
 	}
 }
@@ -199,6 +175,50 @@ void ALshPF_BattleGameMode::BP_GameEndEvent_Implementation(bool IsVictory)
 	
 }
 
+void ALshPF_BattleGameMode::InitStatusUI()
+{
+	if (IsStatusUIReady)
+	{
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			for (ILshPF_BattleInterface* BattleInterface : PlayerCharacterList)
+			{
+				//Status UI 가 준비된 경우, Subsystem Delegate 를 통해 UI에 추가되도록 Broadcast
+				UISubsystem->OnBattleComponentDelegate.Broadcast(BattleInterface->GetBattleComponent());
+			}
+		}
+	}
+	else
+	{
+		for (ILshPF_BattleInterface* BattleInterface : PlayerCharacterList)
+		{
+			//Status UI 가 준비되지 않은 경우 Queue 에 삽입하여 준비 완료 후 사용
+			WaitingRegisterComponents.Enqueue(BattleInterface->GetBattleComponent());
+		}
+	}
+	
+	//todo : Enemy Status 표시, 추후 제거
+	if (IsStatusUIReady)
+	{
+		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
+		{
+			for (ILshPF_BattleInterface* BattleInterface : EnemyCharacterList)
+			{
+				//Status UI 가 준비된 경우, Subsystem Delegate 를 통해 UI에 추가되도록 Broadcast
+				UISubsystem->OnBattleComponentDelegate.Broadcast(BattleInterface->GetBattleComponent());
+			}
+		}
+	}
+	else
+	{
+		for (ILshPF_BattleInterface* BattleInterface : EnemyCharacterList)
+		{
+			//Status UI 가 준비되지 않은 경우 Queue 에 삽입하여 준비 완료 후 사용
+			WaitingRegisterComponents.Enqueue(BattleInterface->GetBattleComponent());
+		}
+	}
+}
+
 void ALshPF_BattleGameMode::SortTurnTable()
 {
 	TurnTable.Sort([](
@@ -211,8 +231,19 @@ void ALshPF_BattleGameMode::SortTurnTable()
 	{
 		//준비 완료시 게임 시작
 		SortEnemyList();
+		SortPlayerList();
+		InitStatusUI();
 		GrantTurn();
 	}
+}
+
+void ALshPF_BattleGameMode::SortPlayerList()
+{
+	PlayerCharacterList.Sort([](
+		const ILshPF_BattleInterface& A, const ILshPF_BattleInterface& B)
+		{
+			return A.GetCharacterOrderPriority() < B.GetCharacterOrderPriority();
+		});
 }
 
 void ALshPF_BattleGameMode::SortEnemyList()
@@ -354,6 +385,7 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 				//FinishSpawning 전 필요한 값 설정
 				SpawnedActor->SetCharacterKey(PlayerCharacterKeyName);
 				SpawnedActor->FinishSpawning(PlayerTransform);
+				SpawnedActor->SetCharacterOrderPriority(PlayerCharacterInfo->GetCharacterOrderPriorityByKeyName(PlayerCharacterKeyName));
 			})
 		);
 		

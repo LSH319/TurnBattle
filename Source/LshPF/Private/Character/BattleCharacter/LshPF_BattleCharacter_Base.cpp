@@ -164,7 +164,8 @@ void ALshPF_BattleCharacter_Base::PlayAnimMontageByTag(FGameplayTag AnimMontageT
 				EndDelegate.BindUObject(this, &ALshPF_BattleCharacter_Base::OnTriggerMontageEnded);
 			}
 			else if (AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_HitReact||
-					 AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Death)
+					 AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Death||
+					 AnimMontageTag == LshPF_GameplayTags::LshPF_AnimMontage_Cure)
 			{
 				EndDelegate.BindUObject(this, &ALshPF_BattleCharacter_Base::OnReactMontageEnded);
 			}
@@ -260,7 +261,7 @@ ALshPF_PlayerController_Battle* ALshPF_BattleCharacter_Base::GetBattlePlayerCont
 bool ALshPF_BattleCharacter_Base::IsCharacterReady()
 {
 	//Montage 로드 및 저장 완료 && 캐릭터의 BeginPlay 호출 이후 체크
-	return IsMontageReady && IsBeginPlay;
+	return IsMontageReady && IsBeginPlay && IsSpawnMontageEnded;
 }
 
 void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
@@ -276,6 +277,17 @@ void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
 		BackCameraComponent->SetActive(true);
 	}
 	GetBattlePlayerController()->SetViewTarget(this);
+}
+
+void ALshPF_BattleCharacter_Base::SetSpawnMontageEnd(bool IsEnded)
+{
+	IsSpawnMontageEnded = IsEnded;
+
+	if (IsCharacterReady())
+	{
+		//캐릭터의 준비 완료 시 GM 으로 전송
+		GetBattleGameMode()->CharacterReady(this);
+	}
 }
 
 void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -295,7 +307,7 @@ void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, b
 			//ApplyDamageToTarget 호출 시 Target 의 TakeDamageFromCursor 호출,
 			//Target 의 TakeDamageFromCursor 에서 Target 의 HitReact 재생
 			//Target 의 HitReact 종료 시 ReactMontageEndedCallback 호출
-			GetBattleComponent()->ApplyDamageToTarget(
+			GetBattleComponent()->ApplyModifierToTarget(
 				TargetBattleComponent,
 				GetBattleComponent(),
 				BattleAttributeModifier);

@@ -64,6 +64,9 @@ public:
 	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) override;
 	//~ End LshPF_BattleInterface Interface
 
+	UFUNCTION(BlueprintCallable)
+	void SetSpawnMontageEnd(bool IsEnded);
+	
 	UPROPERTY(BlueprintAssignable)
 	FTurnDelegate OnTurnStartDelegate;
 	UPROPERTY(BlueprintAssignable)
@@ -123,7 +126,8 @@ protected:
 
 	virtual TArray<ILshPF_BattleInterface*> GetTargetInterfaceList();
 	virtual FBattleAttributeModifier GetTargetModifier();
-	
+
+	UPROPERTY(EditDefaultsOnly)
 	int32 CharacterOrderPriority = 0;
 
 	ALshPF_PlayerController_Battle* GetBattlePlayerController();
@@ -131,6 +135,7 @@ protected:
 	
 	bool IsMontageReady = false;
 	bool IsBeginPlay = false;
+	bool IsSpawnMontageEnded = false;
 	
 private:
 	UPROPERTY()

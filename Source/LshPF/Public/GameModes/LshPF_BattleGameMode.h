@@ -93,8 +93,11 @@ public:
 protected:
 	UFUNCTION(BlueprintNativeEvent, DisplayName = "GameEndEvent")
 	void BP_GameEndEvent(bool IsVictory);
+
+	void InitStatusUI();
 	
 	void SortTurnTable();
+	void SortPlayerList();
 	void SortEnemyList();
 	bool IsGameReady() const;
 	

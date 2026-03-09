@@ -38,4 +38,5 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Skill, "LshPF.AnimMontage.Skill");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Death, "LshPF.AnimMontage.Death");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_HitReact, "LshPF.AnimMontage.HitReact");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Cure, "LshPF.AnimMontage.Cure");
 }

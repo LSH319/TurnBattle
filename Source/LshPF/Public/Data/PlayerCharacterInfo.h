@@ -7,6 +7,19 @@
 #include "PlayerCharacterInfo.generated.h"
 
 class ALshPF_PlayerBattleCharacter;
+
+USTRUCT(BlueprintType)
+struct FPlayerBattleCharacterInfo
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSoftClassPtr<ALshPF_PlayerBattleCharacter> PlayerCharacterClass;
+	
+	UPROPERTY(EditDefaultsOnly)
+	int16 CharacterOrderPriority;
+};
+
 /**
  * 
  */
@@ -17,7 +30,9 @@ class LSHPF_API UPlayerCharacterInfo : public UDataAsset
 
 public:
 	TSoftClassPtr<ALshPF_PlayerBattleCharacter> GetPlayerCharacterClassByKeyName(FName EnemyKeyName);
+	int16 GetCharacterOrderPriorityByKeyName(FName EnemyKeyName);
 	
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FName, TSoftClassPtr<ALshPF_PlayerBattleCharacter>> PlayerCharacterClassInfoMap;
+	TMap<FName, FPlayerBattleCharacterInfo> PlayerCharacterClassInfoMap;
+	//TMap<FName, TSoftClassPtr<ALshPF_PlayerBattleCharacter>> PlayerCharacterClassInfoMap;
 };
