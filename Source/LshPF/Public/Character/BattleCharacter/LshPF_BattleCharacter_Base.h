@@ -6,6 +6,7 @@
 #include "GameplayTagContainer.h"
 #include "Character/LshPF_CharacterBase.h"
 #include "Interface/LshPF_BattleInterface.h"
+#include "LshPF_Types/LshPF_Structs.h"
 #include "LshPF_BattleCharacter_Base.generated.h"
 
 class USpringArmComponent;
@@ -121,6 +122,7 @@ protected:
 	virtual void OnReactMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	virtual TArray<ILshPF_BattleInterface*> GetTargetInterfaceList();
+	virtual FBattleAttributeModifier GetTargetModifier();
 	
 	int32 CharacterOrderPriority = 0;
 

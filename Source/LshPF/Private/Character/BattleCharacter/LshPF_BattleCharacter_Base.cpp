@@ -285,9 +285,8 @@ void ALshPF_BattleCharacter_Base::OnTriggerMontageEnded(UAnimMontage* Montage, b
 	{
 		TargetList.Add(TargetInterface->GetBattleComponent());
 	}
-	
-	FBattleAttributeModifier BattleAttributeModifier =
-		GetBattleComponent()->GetDefaultAttackAttributeModifier();
+	GetBattleGameMode()->SetTriggerCharacter(this);
+	FBattleAttributeModifier BattleAttributeModifier = GetTargetModifier();
 
 	for (ULshPF_BattleComponent* TargetBattleComponent : TargetList)
 	{
@@ -320,4 +319,9 @@ void ALshPF_BattleCharacter_Base::OnReactMontageEnded(UAnimMontage* Montage, boo
 TArray<ILshPF_BattleInterface*> ALshPF_BattleCharacter_Base::GetTargetInterfaceList()
 {
 	return GetBattlePlayerController()->GetTargetList();
+}
+
+FBattleAttributeModifier ALshPF_BattleCharacter_Base::GetTargetModifier()
+{
+	return GetBattlePlayerController()->GetTargetModifier();
 }

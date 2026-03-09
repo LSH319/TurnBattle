@@ -5,42 +5,13 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "LshPF_Types/LshPF_EnumTypes.h"
+#include "LshPF_Types/LshPF_Structs.h"
 #include "LshPF_BattleComponent.generated.h"
 
 class ULshPF_Ability;
 class ILshPF_BattleInterface;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, float);
-
-USTRUCT(BlueprintType)
-struct FBattleAttributeModifier
-{
-	GENERATED_BODY()
-
-	FBattleAttributeModifier()
-	:TargetAttribute(EAttributeType::Unknown), ModifierType(EModifierType::Damage_Default)
-	{}
-	
-	FBattleAttributeModifier(float InModifyValue, EAttributeType InAttributeType, EModifierType InModifierType)
-	:ModifyValue(InModifyValue), IsCritical(false), TargetAttribute(InAttributeType), ModifierType(InModifierType)
-	{
-	}
-
-	//변경할 값
-	UPROPERTY()
-	float ModifyValue = 0;
-
-	//크리티컬 여부
-	UPROPERTY()
-	bool IsCritical = false;
-
-	//변경할 Attribute
-	UPROPERTY()
-	EAttributeType TargetAttribute;
-	
-	UPROPERTY()
-	EModifierType ModifierType;
-};
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LSHPF_API ULshPF_BattleComponent : public UActorComponent

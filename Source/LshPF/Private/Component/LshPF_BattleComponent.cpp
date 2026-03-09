@@ -114,7 +114,8 @@ float ULshPF_BattleComponent::TakeCureFromCursor(ULshPF_BattleComponent* CureCau
 	OnTakeHealDelegate.Broadcast();
 	float ApplyCure = BattleAttributeModifier.ModifyValue;
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) + ApplyCure);
-	
+	//todo : 치유 시 애님몽타주로 변경
+	GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_HitReact);
 	return ApplyCure;
 }
 

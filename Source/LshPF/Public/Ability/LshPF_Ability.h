@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LshPF_Types/LshPF_EnumTypes.h"
+#include "LshPF_Types/LshPF_Structs.h"
 #include "UObject/NoExportTypes.h"
 #include "LshPF_Ability.generated.h"
 
@@ -36,6 +37,8 @@ public:
 	 */
 	void CommitAbility();
 
+	FBattleAttributeModifier GetAbilityModifier();
+	
 	FString GetDescription();
 
 	FText GetAbilityName();

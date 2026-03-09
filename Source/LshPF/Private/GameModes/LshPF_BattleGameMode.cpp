@@ -157,6 +157,11 @@ ILshPF_BattleInterface* ALshPF_BattleGameMode::GetRecentOwingTurnCharacter() con
 	return RecentOwingTurnCharacter;
 }
 
+void ALshPF_BattleGameMode::SetTriggerCharacter(ILshPF_BattleInterface* NewTriggerCharacter)
+{
+	TriggerCharacter = NewTriggerCharacter;
+}
+
 ILshPF_BattleInterface* ALshPF_BattleGameMode::GetEnemyCharacterByIndex(int32& Index) const
 {
 	if (EnemyCharacterList.IsEmpty())
@@ -359,7 +364,10 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 
 void ALshPF_BattleGameMode::ReactMontageEndedCallback()
 {
-	GetRecentOwingTurnCharacter()->TurnEnd();
+	if (TriggerCharacter == RecentOwingTurnCharacter)
+	{
+		GetRecentOwingTurnCharacter()->TurnEnd();
+	}
 }
 
 void ALshPF_BattleGameMode::StatusUIReadyCallBack()

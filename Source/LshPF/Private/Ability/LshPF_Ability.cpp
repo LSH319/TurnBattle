@@ -3,6 +3,7 @@
 
 #include "Ability/LshPF_Ability.h"
 
+#include "LshPF_GameplayTags.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
 #include "GameModes/LshPF_BattleGameMode.h"
@@ -49,6 +50,18 @@ void ULshPF_Ability::CommitAbility()
 		OwnerBattleComponent->SetAttribute(CostAttributeType, OwnerBattleComponent->GetAttribute(CostAttributeType) - AbilityCost);
 		ActivateAbility();
 	}
+}
+
+void ULshPF_Ability::ActivateAbility()
+{
+	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
+	TurnCharacter->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Skill);
+}
+
+FBattleAttributeModifier ULshPF_Ability::GetAbilityModifier()
+{
+	ILshPF_BattleInterface* TurnCharacter = GetBattleGameMode()->GetRecentOwingTurnCharacter();
+	return TurnCharacter->GetBattleComponent()->CreateBattleAttributeModifier(TargetAttributeType, DamageRatioAttributeType, AbilityType, DamageRatio);
 }
 
 FString ULshPF_Ability::GetDescription()
@@ -110,22 +123,6 @@ float ULshPF_Ability::GetAbilityCost()
 ETargetType ULshPF_Ability::GetTargetType()
 {
 	return TargetType;
-}
-
-void ULshPF_Ability::ActivateAbility()
-{
-	//todo : 사용시 로직 구현
-	TArray<ULshPF_BattleComponent*> TargetBattleComponents = GetTargetBattleComponents();
-	FBattleAttributeModifier AttributeModifier = OwnerBattleComponent->CreateBattleAttributeModifier(TargetAttributeType, DamageRatioAttributeType, AbilityType, DamageRatio);
-
-	for (ULshPF_BattleComponent* TargetBattleComponent : TargetBattleComponents)
-	{
-		//OwnerBattleComponent->ApplyModifierToTarget(TargetBattleComponent, OwnerBattleComponent.Get(), AttributeModifier);
-		//OwnerBattleComponent->ApplyModifierToTarget(TargetBattleComponent, OwnerBattleComponent.Get(), AttributeModifier);
-		//UGameplayStatics::SpawnEmitterAttached()
-    	//UGameplayStatics::SpawnEmitterAttached()
-	}
-	
 }
 
 TArray<ULshPF_BattleComponent*> ULshPF_Ability::GetTargetBattleComponents()

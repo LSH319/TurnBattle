@@ -119,6 +119,8 @@ void ALshPF_PlayerController_Battle::SetBattleSettingDefault(bool IsTargetToggle
 	CachedTargetByIndex(TargetingEnemyNum, true);
 	SetCharacterRotationToTarget();
 	ResetViewTarget();
+	TargetModifier = GetBattleGameMode()->GetRecentOwingTurnCharacter()->GetBattleComponent()->GetDefaultAttackAttributeModifier();
+	
 	if (IsTargetToggleActive)
 	{
 		ToggleTargetingAllTargets(true);
@@ -164,6 +166,17 @@ void ALshPF_PlayerController_Battle::RemoveOnTurnEndRemoveWidget(ULshPF_Focusabl
 		return Target == TargetWidget;
 	});
 }
+
+void ALshPF_PlayerController_Battle::SetTargetModifier(FBattleAttributeModifier NewTargetModifier)
+{
+	TargetModifier = NewTargetModifier;
+}
+
+FBattleAttributeModifier ALshPF_PlayerController_Battle::GetTargetModifier()
+{
+	return TargetModifier;
+}
+
 void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 {
 	SetBattleSettingDefault(true);

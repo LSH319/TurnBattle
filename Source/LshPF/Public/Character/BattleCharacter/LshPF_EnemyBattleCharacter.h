@@ -45,6 +45,7 @@ protected:
 	
 	//~ Begin ALshPF_BattleCharacter_Base Interface
 	virtual TArray<ILshPF_BattleInterface*> GetTargetInterfaceList() override;
+	virtual FBattleAttributeModifier GetTargetModifier() override;
 	//~ End ALshPF_BattleCharacter_Base Interface
 	
 private:

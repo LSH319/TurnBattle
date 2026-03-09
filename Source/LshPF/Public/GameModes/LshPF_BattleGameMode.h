@@ -68,7 +68,7 @@ public:
 	//Command 관련 Widget 준비여부 체크를 위한 함수, Status UI 와는 별도
 	UFUNCTION(BlueprintCallable)
 	void SetUIReady(bool NewIsUIReady);
-
+	
 	/*
 	 * Status UI 준비 완료여부 확인을 위한 Delegate
 	 * Status UI 가 UI Subsystem 에서 OnBattleComponentDelegate 에 대한 bind 완료 후 호출할것
@@ -79,6 +79,7 @@ public:
 	FReactMontageEndedEvent ReactMontageEndedEvent;
 
 	ILshPF_BattleInterface* GetRecentOwingTurnCharacter() const;
+	void SetTriggerCharacter(ILshPF_BattleInterface* NewTriggerCharacter);
 	
 	/*
 	 * Index로 List 에서 요소 반환
@@ -142,10 +143,11 @@ private:
 	TQueue<ULshPF_BattleComponent*> WaitingRegisterComponents;
 	//가장 최근 Turn을 시작한 캐릭터
 	ILshPF_BattleInterface* RecentOwingTurnCharacter;
+	ILshPF_BattleInterface* TriggerCharacter;
 	bool IsStatusUIReady = false;
 	bool IsTurnGranted = false;
 	bool IsUIReady = false;
-
+	
 	/*
 	 * Enemy Spawn 을 위한 함수
 	 */

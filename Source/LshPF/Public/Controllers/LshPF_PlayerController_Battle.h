@@ -6,6 +6,7 @@
 #include "GameplayTagContainer.h"
 #include "Controllers/LshPF_PlayerControllerBase.h"
 #include "LshPF_Types/LshPF_EnumTypes.h"
+#include "LshPF_Types/LshPF_Structs.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
 class ULshPF_FocusableWidgetBase;
@@ -40,6 +41,8 @@ public:
 	void AddOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget);
 	void RemoveOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget);
 	
+	void SetTargetModifier(FBattleAttributeModifier NewTargetModifier);
+	FBattleAttributeModifier GetTargetModifier();
 	/*
 	 * Player Turn 시작 시 Character 에서 호출하여 이벤트 처리를 위한 함수
 	 */
@@ -75,7 +78,6 @@ protected:
 
 	ETargetType TargetType = ETargetType::EnemySingle;
 private:
-	//todo : skill 등 사용 시 삭제를 위한 위젯 저장, 턴 종료 시 해당 위젯 제거 로직 추가
 	UPROPERTY()
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 	
@@ -88,6 +90,7 @@ private:
 	int32 TargetingEnemyNum = 0;
 	int32 TargetingPlayerNum = 0;
 	TArray<ILshPF_BattleInterface*> TargetList;
+	FBattleAttributeModifier TargetModifier;
 	
 	/*
 	 * FInputActionValue 의 값을 사용하기 위해 IA 에 바인딩 될 함수

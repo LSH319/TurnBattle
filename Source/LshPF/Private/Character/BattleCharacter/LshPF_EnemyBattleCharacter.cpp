@@ -76,3 +76,8 @@ TArray<ILshPF_BattleInterface*> ALshPF_EnemyBattleCharacter::GetTargetInterfaceL
 {
 	return TargetList;
 }
+
+FBattleAttributeModifier ALshPF_EnemyBattleCharacter::GetTargetModifier()
+{
+	return LshPF_BattleComponent->GetDefaultAttackAttributeModifier();
+}
