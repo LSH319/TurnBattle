@@ -23,6 +23,9 @@ public:
 	
 	void SetSelectAbility(ULshPF_Ability* SelectedAbility);
 
+protected:
+	virtual void BeforeDestroyedEvent() override;
+	
 private:
 	UPROPERTY()
 	TWeakObjectPtr<ULshPF_Ability> CachedAbility;

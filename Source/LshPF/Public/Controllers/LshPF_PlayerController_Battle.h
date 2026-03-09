@@ -8,6 +8,7 @@
 #include "LshPF_Types/LshPF_EnumTypes.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
+class ULshPF_FocusableWidgetBase;
 class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
 class UInputActionGameplayTagInfo;
@@ -35,6 +36,9 @@ public:
 	
 	void SetBattleSettingDefault(bool IsTargetToggleActive);
 	void SetTargetTypeWithSetViewTarget(ETargetType InETargetType);
+
+	void AddOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget);
+	void RemoveOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget);
 	
 	/*
 	 * Player Turn 시작 시 Character 에서 호출하여 이벤트 처리를 위한 함수
@@ -77,6 +81,9 @@ private:
 	
 	UPROPERTY()
 	AActor* AllTargetViewTarget;
+
+	UPROPERTY()
+	TArray<ULshPF_FocusableWidgetBase*> OnTurnEndRemoveWidget;
 	
 	int32 TargetingEnemyNum = 0;
 	int32 TargetingPlayerNum = 0;

@@ -152,6 +152,18 @@ void ALshPF_PlayerController_Battle::SetTargetTypeWithSetViewTarget(ETargetType 
 	SetToggleByTargetType(InETargetType);
 }
 
+void ALshPF_PlayerController_Battle::AddOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget)
+{
+	OnTurnEndRemoveWidget.AddUnique(TargetWidget);
+}
+
+void ALshPF_PlayerController_Battle::RemoveOnTurnEndRemoveWidget(ULshPF_FocusableWidgetBase* TargetWidget)
+{
+	OnTurnEndRemoveWidget.RemoveAll([TargetWidget](const ULshPF_FocusableWidgetBase* Target)
+	{
+		return Target == TargetWidget;
+	});
+}
 void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 {
 	SetBattleSettingDefault(true);
@@ -260,6 +272,7 @@ void ALshPF_PlayerController_Battle::AddSkillScreenToScreen()
 			ULshPF_SkillScreen* SkillScreen = CastChecked<ULshPF_SkillScreen>(PushedWidget);
 			SkillScreen->InitAbilityList(GetBattleGameMode()->GetRecentOwingTurnCharacter()->GetBattleComponent()->GetAbilityList());
 			SkillScreen->SetOwningPlayer(this);
+			AddOnTurnEndRemoveWidget(SkillScreen);
 			if (UWidget* WidgetToFocus = SkillScreen->GetDesiredFocusTarget())
 			{
 				WidgetToFocus->SetFocus();
@@ -335,6 +348,13 @@ void ALshPF_PlayerController_Battle::PlayerCharacterTurnEndEvent()
 {
 	//Player 턴 종료를 위해 함수, 필요한 이벤트 처리
 	ToggleTargetingAllTargets(false);
+	
+	for (ULshPF_FocusableWidgetBase* Widget : OnTurnEndRemoveWidget)
+	{
+		Widget->RemoveFromParentStack();
+	}
+	
+	OnTurnEndRemoveWidget.Empty();
 	TargetList.Empty();
 }
 

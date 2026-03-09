@@ -64,6 +64,7 @@ void ULshPF_SkillScreen::BeforeDestroyedEvent()
 	Super::BeforeDestroyedEvent();
 	ALshPF_PlayerController_Battle* CachedPlayerController= Cast<ALshPF_PlayerController_Battle>(GetOwningPlayer());
 	CachedPlayerController->SetBattleSettingDefault(true);
+	CachedPlayerController->RemoveOnTurnEndRemoveWidget(this);
 }
 
 void ULshPF_SkillScreen::DescriptionTextUpdate(FText DescriptionText)

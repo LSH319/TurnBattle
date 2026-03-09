@@ -32,4 +32,14 @@ void ULshPF_SelectTarget::SetSelectAbility(ULshPF_Ability* SelectedAbility)
 
 	ALshPF_PlayerController_Battle* CachedPlayerController= Cast<ALshPF_PlayerController_Battle>(GetOwningPlayer());
 	CachedPlayerController->SetTargetTypeWithSetViewTarget(CachedAbility->GetTargetType());
+	CachedPlayerController->SetTargetModifier(CachedAbility->GetAbilityModifier());
+	CachedPlayerController->AddOnTurnEndRemoveWidget(this);
+}
+
+void ULshPF_SelectTarget::BeforeDestroyedEvent()
+{
+	Super::BeforeDestroyedEvent();
+	
+	ALshPF_PlayerController_Battle* CachedPlayerController= Cast<ALshPF_PlayerController_Battle>(GetOwningPlayer());
+	CachedPlayerController->RemoveOnTurnEndRemoveWidget(this);
 }
