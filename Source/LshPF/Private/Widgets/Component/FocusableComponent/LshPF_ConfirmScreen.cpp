@@ -46,7 +46,6 @@ void ULshPF_ConfirmScreen::InitConfirmScreen(EConfirmScreenType InScreenType, co
 							TimerHandle,
 							FTimerDelegate::CreateLambda([this, OkButton]()
 								{
-								UE_LOG(LogTemp, Warning, TEXT("InitConfirmScreen"));	
 									if (bool ReTrySuccess = OkButton->SetInputActionTag(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
 									{
 										GetWorld()->GetTimerManager().ClearTimer(TimerHandle);

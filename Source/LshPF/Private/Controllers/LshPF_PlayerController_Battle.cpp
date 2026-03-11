@@ -95,6 +95,10 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         	ToggleTargetingAllTargets(true);
         	OnTargetChange.Broadcast(TargetList[0]->GetBattleComponent());
         }
+        else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_PauseGame))
+        {
+        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameMenu, LshPF_GameplayTags::LshPF_Widget_PauseGame);
+        }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_DefaultConfirm))
         {
         	DefaultConfirmAction_Callback();

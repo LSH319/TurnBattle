@@ -19,6 +19,7 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_Item, "LshPF.Widget.Item");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_TargetSelect, "LshPF.Widget.TargetSelect");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_CharacterInfo, "LshPF.Widget.CharacterInfo");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_PauseGame, "LshPF.Widget.PauseGame");
 	
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_MainMenu, "LshPF.Level.MainMenu");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_Battle, "LshPF.Level.Battle");
@@ -33,6 +34,7 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_SelectTarget_Next, "LshPF.InputAction.SelectTarget.Next");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_CharacterInfo, "LshPF.InputAction.CharacterInfo");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_TargetTypeSwitch, "LshPF.InputAction.TargetTypeSwitch");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_InputAction_PauseGame, "LshPF.InputAction.PauseGame");
 	
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Attack, "LshPF.AnimMontage.Attack");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_AnimMontage_Skill, "LshPF.AnimMontage.Skill");

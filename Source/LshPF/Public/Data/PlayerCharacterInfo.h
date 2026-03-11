@@ -17,7 +17,7 @@ struct FPlayerBattleCharacterInfo
 	TSoftClassPtr<ALshPF_PlayerBattleCharacter> PlayerCharacterClass;
 	
 	UPROPERTY(EditDefaultsOnly)
-	int16 CharacterOrderPriority;
+	int16 CharacterOrderPriority = 0;
 };
 
 /**
