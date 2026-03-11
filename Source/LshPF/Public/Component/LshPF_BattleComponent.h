@@ -11,7 +11,7 @@
 class ULshPF_Ability;
 class ILshPF_BattleInterface;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTakeDamageDelegate);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, float);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangedDelegate, EAttributeType, AttributeType, float, NewAttribute);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LSHPF_API ULshPF_BattleComponent : public UActorComponent
@@ -87,7 +87,7 @@ public:
 	FOnTakeDamageDelegate OnTakeDamageDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnTakeDamageDelegate OnTakeHealDelegate;
-
+	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedDelegate AttributeChangedDelegate;
 	
 	/*

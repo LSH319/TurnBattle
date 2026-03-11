@@ -6,6 +6,7 @@
 #include "Character/BattleCharacter/LshPF_BattleCharacter_Base.h"
 #include "LshPF_EnemyBattleCharacter.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -19,13 +20,18 @@ public:
 	
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
+	virtual void BeginPlay() override;
 	//~ End ACharacter Interface
 
 	//~ Begin LshPF_BattleInterface Interface
 	virtual void TurnStart() override;
+	virtual void CharacterDeath() override;
 	//~ End LshPF_BattleInterface Interface
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
+	
 	/*
 	 * TargetList 를 초기화 후, 무작위 PlayerCharacter 를 선택해 TargetList 에 삽입
 	 */

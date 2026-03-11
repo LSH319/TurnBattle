@@ -26,6 +26,7 @@ private:
 	UPROPERTY()
 	ULshPF_BattleComponent* CachedBattleComponent;
 
+	UFUNCTION()
 	void AttributeChangedCallback(EAttributeType AttributeType, float NewAttribute);
 	
 	//***** Bound Widgets ***** //

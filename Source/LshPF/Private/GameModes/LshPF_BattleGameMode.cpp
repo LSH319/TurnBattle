@@ -196,27 +196,6 @@ void ALshPF_BattleGameMode::InitStatusUI()
 			WaitingRegisterComponents.Enqueue(BattleInterface->GetBattleComponent());
 		}
 	}
-	
-	//todo : Enemy Status 표시, 추후 제거
-	if (IsStatusUIReady)
-	{
-		if (ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld()))
-		{
-			for (ILshPF_BattleInterface* BattleInterface : EnemyCharacterList)
-			{
-				//Status UI 가 준비된 경우, Subsystem Delegate 를 통해 UI에 추가되도록 Broadcast
-				UISubsystem->OnBattleComponentDelegate.Broadcast(BattleInterface->GetBattleComponent());
-			}
-		}
-	}
-	else
-	{
-		for (ILshPF_BattleInterface* BattleInterface : EnemyCharacterList)
-		{
-			//Status UI 가 준비되지 않은 경우 Queue 에 삽입하여 준비 완료 후 사용
-			WaitingRegisterComponents.Enqueue(BattleInterface->GetBattleComponent());
-		}
-	}
 }
 
 void ALshPF_BattleGameMode::SortTurnTable()

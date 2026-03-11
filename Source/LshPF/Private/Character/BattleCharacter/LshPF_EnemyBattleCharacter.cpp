@@ -8,13 +8,18 @@
 #include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Components/SlateWrapperTypes.h"
+#include "Components/WidgetComponent.h"
 #include "GameModes/LshPF_BattleGameMode.h"
 #include "Subsystems/LshPF_UISubsystem.h"
+#include "Widgets/LshPF_CharacterWidget.h"
 
 ALshPF_EnemyBattleCharacter::ALshPF_EnemyBattleCharacter()
 {
 	BackCameraComponent->SetActive(false);
 	FrontCameraComponent->SetActive(true);
+	
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
@@ -22,15 +27,15 @@ void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 	if(GetBattleGameMode())
 	{
 		if (const FEnemyAttribute* EnemyAttribute = GetBattleGameMode()->GetEnemyAttributeByKeyName(CharacterKey))
-        	{
-        		LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxHealth, EnemyAttribute->BaseMaxHealth);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxMana, EnemyAttribute->BaseMaxMana);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseSpeed, EnemyAttribute->BaseSpeed);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAttack, EnemyAttribute->BaseAttack);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseDefence, EnemyAttribute->BaseDefence);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityAttack, EnemyAttribute->BaseAbilityAttack);
-                LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityDefence, EnemyAttribute->BaseAbilityDefence);
-        	}
+		{
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxHealth, EnemyAttribute->BaseMaxHealth);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseMaxMana, EnemyAttribute->BaseMaxMana);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseSpeed, EnemyAttribute->BaseSpeed);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAttack, EnemyAttribute->BaseAttack);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseDefence, EnemyAttribute->BaseDefence);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityAttack, EnemyAttribute->BaseAbilityAttack);
+			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityDefence, EnemyAttribute->BaseAbilityDefence);
+		}
 	}
 	
 	Super::PostInitializeComponents();
@@ -46,6 +51,14 @@ void ALshPF_EnemyBattleCharacter::TurnStart()
 	}
 	SetViewTargetSelf(true);
 	TargetList.Empty();
+}
+
+void ALshPF_EnemyBattleCharacter::CharacterDeath()
+{
+	HealthBar->SetVisibility(false);
+	HealthBar->RemoveFromRoot();
+	
+	Super::CharacterDeath();
 }
 
 void ALshPF_EnemyBattleCharacter::SetRandomTargetInTargetList()
@@ -80,4 +93,14 @@ TArray<ILshPF_BattleInterface*> ALshPF_EnemyBattleCharacter::GetTargetInterfaceL
 FBattleAttributeModifier ALshPF_EnemyBattleCharacter::GetTargetModifier()
 {
 	return LshPF_BattleComponent->GetDefaultAttackAttributeModifier();
+}
+
+void ALshPF_EnemyBattleCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (ULshPF_CharacterWidget* CastHealthBar = Cast<ULshPF_CharacterWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		CastHealthBar->SetOwnerBattleComponent(LshPF_BattleComponent);
+	}
 }

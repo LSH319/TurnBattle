@@ -12,7 +12,7 @@ void ULshPF_NotFocusableWidget_Status::SetBattleComponent(ULshPF_BattleComponent
 	CachedBattleComponent = BattleComponent;
 
 	//Attribute 변경에 대한 Delegate 등록
-	BattleComponent->AttributeChangedDelegate.AddUObject(this, &ThisClass::AttributeChangedCallback);
+	BattleComponent->AttributeChangedDelegate.AddDynamic(this, &ThisClass::AttributeChangedCallback);
 	NameText->SetText(CachedBattleComponent->GetCharacterName());
 	HealthBar->SetPercent(CachedBattleComponent->GetAttribute(EAttributeType::CurrentHealth)/CachedBattleComponent->GetAttribute(EAttributeType::CurrentMaxHealth));
 	ManaBar->SetPercent(CachedBattleComponent->GetAttribute(EAttributeType::CurrentMana)/CachedBattleComponent->GetAttribute(EAttributeType::CurrentMaxMana));
