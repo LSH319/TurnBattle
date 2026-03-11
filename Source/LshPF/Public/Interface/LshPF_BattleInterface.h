@@ -39,4 +39,5 @@ public:
 	virtual void SetLookAtRotation(FVector TargetLocation) = 0;
 	virtual void CharacterDeath() = 0;
 	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) = 0;
+	virtual void ShowApplyValue(int ApplyValue, bool IsDamage) = 0;
 };

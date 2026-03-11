@@ -9,6 +9,7 @@
 #include "LshPF_Types/LshPF_Structs.h"
 #include "LshPF_BattleCharacter_Base.generated.h"
 
+class ULshPF_ShowTextWidgetComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class ALshPF_PlayerController_Battle;
@@ -62,6 +63,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) override;
+	virtual void ShowApplyValue(int ApplyValue, bool IsDamage) override;
 	//~ End LshPF_BattleInterface Interface
 
 	UFUNCTION(BlueprintCallable)
@@ -105,6 +107,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* BackCameraBoom;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ULshPF_ShowTextWidgetComponent> DamageComponentClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName CharacterKey = "001";

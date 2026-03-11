@@ -6,6 +6,7 @@
 #include "LshPF_GameplayTags.h"
 #include "Camera/CameraComponent.h"
 #include "Component/LshPF_BattleComponent.h"
+#include "Component/LshPF_ShowTextWidgetComponent.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
 #include "Engine/AssetManager.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -299,6 +300,18 @@ void ALshPF_BattleCharacter_Base::SetViewTargetSelf(bool TargetIsFrontCamera)
 		BackCameraComponent->SetActive(true);
 	}
 	GetBattlePlayerController()->SetViewTarget(this);
+}
+
+void ALshPF_BattleCharacter_Base::ShowApplyValue(int ApplyValue, bool IsDamage)
+{
+	if (DamageComponentClass)
+	{
+		ULshPF_ShowTextWidgetComponent* DamageText = NewObject<ULshPF_ShowTextWidgetComponent>(this, DamageComponentClass);
+        DamageText->RegisterComponent();
+        DamageText->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+        DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetApplyText(FString::FromInt(ApplyValue), IsDamage);
+	}
 }
 
 void ALshPF_BattleCharacter_Base::SetSpawnMontageEnd(bool IsEnded)

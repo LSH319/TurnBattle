@@ -104,6 +104,7 @@ float ULshPF_BattleComponent::TakeDamageFromCursor(ULshPF_BattleComponent* Damag
 		default:
 			break;
 	}
+	GetOwnerBattleInterface()->ShowApplyValue(FMath::RoundToInt(ApplyDamage), true);
 	
 	return ApplyDamage;
 }
@@ -115,6 +116,7 @@ float ULshPF_BattleComponent::TakeCureFromCursor(ULshPF_BattleComponent* CureCau
 	float ApplyCure = BattleAttributeModifier.ModifyValue;
 	SetAttribute(BattleAttributeModifier.TargetAttribute, GetAttribute(BattleAttributeModifier.TargetAttribute) + ApplyCure);
 	GetOwnerBattleInterface()->PlayAnimMontageByTag(LshPF_GameplayTags::LshPF_AnimMontage_Cure);
+	GetOwnerBattleInterface()->ShowApplyValue(FMath::RoundToInt(ApplyCure), false);
 	return ApplyCure;
 }
 
