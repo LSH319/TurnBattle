@@ -37,6 +37,8 @@ void ALshPF_EnemyBattleCharacter::PostInitializeComponents()
 			LshPF_BattleComponent->SetAttribute(EAttributeType::BaseAbilityDefence, EnemyAttribute->BaseAbilityDefence);
 		}
 	}
+
+	HealthBar->SetVisibility(false);
 	
 	Super::PostInitializeComponents();
 }
@@ -59,6 +61,20 @@ void ALshPF_EnemyBattleCharacter::CharacterDeath()
 	HealthBar->RemoveFromRoot();
 	
 	Super::CharacterDeath();
+}
+
+void ALshPF_EnemyBattleCharacter::ToggleTargeting(bool IsActive)
+{
+	Super::ToggleTargeting(IsActive);
+
+	if (IsActive)
+	{
+		HealthBar->SetVisibility(true);
+	}
+	else
+	{
+		HealthBar->SetVisibility(false);
+	}
 }
 
 void ALshPF_EnemyBattleCharacter::SetRandomTargetInTargetList()

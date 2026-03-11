@@ -37,7 +37,8 @@ public:
 	
 	void SetIsEnableInput(bool InIsEnableInput);
 	ETargetType GetTargetType();
-	
+
+	UFUNCTION(BlueprintCallable)
 	void SetBattleSettingDefault(bool IsTargetToggleActive);
 	void SetTargetTypeWithSetViewTarget(ETargetType InETargetType);
 

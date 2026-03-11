@@ -26,6 +26,7 @@ public:
 	//~ Begin LshPF_BattleInterface Interface
 	virtual void TurnStart() override;
 	virtual void CharacterDeath() override;
+	virtual void ToggleTargeting(bool IsActive) override;
 	//~ End LshPF_BattleInterface Interface
 
 protected:
