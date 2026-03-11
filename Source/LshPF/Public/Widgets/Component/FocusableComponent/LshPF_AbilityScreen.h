@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
-#include "LshPF_SkillScreen.generated.h"
+#include "LshPF_AbilityScreen.generated.h"
 
 class UTextBlock;
 class ULshPF_ListView;
@@ -14,7 +14,7 @@ class UListView;
  * 
  */
 UCLASS()
-class LSHPF_API ULshPF_SkillScreen : public ULshPF_FocusableWidgetBase
+class LSHPF_API ULshPF_AbilityScreen : public ULshPF_FocusableWidgetBase
 {
 	GENERATED_BODY()
 	
@@ -26,7 +26,7 @@ public:
 	void InitAbilityList(TArray<ULshPF_Ability*> CharacterAbilityList);
 
 	UFUNCTION(BlueprintPure)
-	UListView* GetSkillScreenListView();
+	UListView* GetAbilityListView();
 
 protected:
 	virtual void BeforeDestroyedEvent() override;

@@ -14,7 +14,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
-#include "Widgets/Component/FocusableComponent/LshPF_SkillScreen.h"
+#include "Widgets/Component/FocusableComponent/LshPF_AbilityScreen.h"
 
 void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGameplayTag TargetGameplayTag)
 {
@@ -295,7 +295,7 @@ void ALshPF_PlayerController_Battle::AddSkillScreenToScreen()
 		ULshPF_FunctionLibrary::GetSoftFocusableWidgetBaseClassByTag(LshPF_GameplayTags::LshPF_Widget_Skill),
 		[this](ULshPF_FocusableWidgetBase* PushedWidget)
 		{
-			ULshPF_SkillScreen* SkillScreen = CastChecked<ULshPF_SkillScreen>(PushedWidget);
+			ULshPF_AbilityScreen* SkillScreen = CastChecked<ULshPF_AbilityScreen>(PushedWidget);
 			SkillScreen->InitAbilityList(GetBattleGameMode()->GetRecentOwingTurnCharacter()->GetBattleComponent()->GetAbilityList());
 			SkillScreen->SetOwningPlayer(this);
 			AddOnTurnEndRemoveWidget(SkillScreen);

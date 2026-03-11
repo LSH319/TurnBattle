@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Widgets/Component/FocusableComponent/LshPF_SkillScreen.h"
+#include "Widgets/Component/FocusableComponent/LshPF_AbilityScreen.h"
 
 #include "LshPF_FunctionLibrary.h"
 #include "LshPF_GameplayTags.h"
@@ -13,7 +13,7 @@
 #include "Widgets/Component/LshPF_ListView.h"
 #include "Widgets/Component/FocusableComponent/LshPF_SelectTarget.h"
 
-void ULshPF_SkillScreen::WidgetConfirmAction()
+void ULshPF_AbilityScreen::WidgetConfirmAction()
 {
 	Super::WidgetConfirmAction();
 	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
@@ -40,7 +40,7 @@ void ULshPF_SkillScreen::WidgetConfirmAction()
 	}
 }
 
-void ULshPF_SkillScreen::InitAbilityList(TArray<ULshPF_Ability*> CharacterAbilityList)
+void ULshPF_AbilityScreen::InitAbilityList(TArray<ULshPF_Ability*> CharacterAbilityList)
 {
 	for (ULshPF_Ability* Ability : CharacterAbilityList)
 	{
@@ -54,12 +54,12 @@ void ULshPF_SkillScreen::InitAbilityList(TArray<ULshPF_Ability*> CharacterAbilit
 	}
 }
 
-UListView* ULshPF_SkillScreen::GetSkillScreenListView()
+UListView* ULshPF_AbilityScreen::GetAbilityListView()
 {
 	return AbilityList;
 }
 
-void ULshPF_SkillScreen::BeforeDestroyedEvent()
+void ULshPF_AbilityScreen::BeforeDestroyedEvent()
 {
 	Super::BeforeDestroyedEvent();
 	ALshPF_PlayerController_Battle* CachedPlayerController= Cast<ALshPF_PlayerController_Battle>(GetOwningPlayer());
@@ -67,7 +67,7 @@ void ULshPF_SkillScreen::BeforeDestroyedEvent()
 	CachedPlayerController->RemoveOnTurnEndRemoveWidget(this);
 }
 
-void ULshPF_SkillScreen::DescriptionTextUpdate(FText DescriptionText)
+void ULshPF_AbilityScreen::DescriptionTextUpdate(FText DescriptionText)
 {
 	TextBlock_AbilityDescription->SetText(DescriptionText);
 }
