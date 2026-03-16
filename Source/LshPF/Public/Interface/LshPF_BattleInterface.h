@@ -37,6 +37,7 @@ public:
 	virtual int32 GetCharacterOrderPriority() const = 0;
 	virtual FVector GetBattleCharacterLocation() = 0;
 	virtual void SetLookAtRotation(FVector TargetLocation) = 0;
+	virtual void SetRotationToDefault() = 0;
 	virtual void CharacterDeath() = 0;
 	virtual void SetViewTargetSelf(bool TargetIsFrontCamera) = 0;
 	virtual void ShowApplyValue(int ApplyValue, bool IsDamage) = 0;

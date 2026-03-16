@@ -67,6 +67,7 @@ void ALshPF_BattleCharacter_Base::PostInitializeComponents()
 void ALshPF_BattleCharacter_Base::BeginPlay()
 {
 	IsBeginPlay = true;
+	DefaultRotator = GetActorRotation();
 	Super::BeginPlay();
 
 	if (IsCharacterReady())
@@ -97,6 +98,7 @@ void ALshPF_BattleCharacter_Base::TurnEnd()
 {
 	IsCharacterHaveTurn = false;
 	OnTurnEndDelegate.Broadcast();
+	SetActorRotation(DefaultRotator);
 	GetBattleGameMode()->TargetTurnEnd(this);
 }
 
@@ -254,6 +256,11 @@ void ALshPF_BattleCharacter_Base::SetLookAtRotation(FVector TargetLocation)
 {
 	FRotator LookAtRotator = UKismetMathLibrary::FindLookAtRotation(GetBattleCharacterLocation(), TargetLocation);
 	SetActorRotation(LookAtRotator);
+}
+
+void ALshPF_BattleCharacter_Base::SetRotationToDefault()
+{
+	SetActorRotation(DefaultRotator);
 }
 
 void ALshPF_BattleCharacter_Base::CharacterDeath()

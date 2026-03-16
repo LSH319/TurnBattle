@@ -9,6 +9,8 @@
 #include "Components/ListView.h"
 #include "Components/TextBlock.h"
 #include "Controllers/LshPF_PlayerController_Battle.h"
+#include "GameModes/LshPF_BattleGameMode.h"
+#include "Interface/LshPF_BattleInterface.h"
 #include "Subsystems/LshPF_UISubsystem.h"
 #include "Widgets/Component/LshPF_ListView.h"
 #include "Widgets/Component/FocusableComponent/LshPF_SelectTarget.h"
@@ -29,6 +31,11 @@ void ULshPF_AbilityScreen::WidgetConfirmAction()
 				{
 					if (ULshPF_SelectTarget* SelectTargetWidget = Cast<ULshPF_SelectTarget>(PushedWidget))
 					{
+						ALshPF_BattleGameMode* GameMode = Cast<ALshPF_BattleGameMode>(GetWorld()->GetAuthGameMode());
+						if (GameMode)
+						{
+							GameMode->GetRecentOwingTurnCharacter()->SetRotationToDefault();
+						}
 						SelectTargetWidget->SetSelectAbility(SelectedAbility);
 					}
 					if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusTarget())

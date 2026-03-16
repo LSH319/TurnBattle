@@ -74,6 +74,7 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_CharacterInfo))
         {
+        	GetBattleGameMode()->GetRecentOwingTurnCharacter()->SetRotationToDefault();
         	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_CharacterInfo);
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_TargetTypeSwitch))

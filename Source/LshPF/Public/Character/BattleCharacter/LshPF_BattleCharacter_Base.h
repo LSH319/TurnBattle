@@ -56,6 +56,7 @@ public:
 	virtual int32 GetCharacterOrderPriority() const override;
 	virtual FVector GetBattleCharacterLocation() override;
 	virtual void SetLookAtRotation(FVector TargetLocation) override;
+	virtual void SetRotationToDefault() override;
 	virtual void CharacterDeath() override;
 	/*
 	 * PlayerController 의 SetViewTarget 호출 파라미터로 this 사용
@@ -147,4 +148,6 @@ private:
 	ALshPF_BattleGameMode* CachedBattleGameMode;
 
 	FTimerHandle TimerHandle;
+
+	FRotator DefaultRotator;
 };
