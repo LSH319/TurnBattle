@@ -9,6 +9,7 @@
 #include "LshPF_Types/LshPF_Structs.h"
 #include "LshPF_PlayerController_Battle.generated.h"
 
+class ULshPF_Ability;
 class ULshPF_FocusableWidgetBase;
 class ULshPF_BattleComponent;
 class ILshPF_BattleInterface;
@@ -78,6 +79,9 @@ protected:
 	UFUNCTION(BlueprintPure)
 	ALshPF_BattleGameMode* GetBattleGameMode();
 
+	UPROPERTY(EditDefaultsOnly, Category="ItemInfo")
+	UDataTable* ItemData;
+	
 	bool IsEnableInput = false;
 
 	ETargetType TargetType = ETargetType::EnemySingle;
@@ -90,6 +94,9 @@ private:
 
 	UPROPERTY()
 	TArray<ULshPF_FocusableWidgetBase*> OnTurnEndRemoveWidget;
+
+	UPROPERTY()
+	TMap<FName, ULshPF_Ability*> ItemBox;
 	
 	int32 TargetingEnemyNum = 0;
 	int32 TargetingPlayerNum = 0;
@@ -109,7 +116,8 @@ private:
 	 */
 	void AddWidgetToScreenByTag(FGameplayTag WidgetStackTag, FGameplayTag WidgetTag, bool IsWidgetGetFocus = true);
 	void AddSkillScreenToScreen();
-
+	void AddItemScreenToScreen();
+	
 	/*
 	 * TargetList 에 포함된 요소들의 Targeting Toggle을 위한 함수
 	 */

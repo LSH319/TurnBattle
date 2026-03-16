@@ -8,6 +8,7 @@
 #include "UObject/NoExportTypes.h"
 #include "LshPF_Ability.generated.h"
 
+struct FLshPF_AbilityInfoTableRow;
 class ALshPF_PlayerController_Battle;
 class ALshPF_BattleGameMode;
 class ULshPF_BattleComponent;
@@ -27,7 +28,8 @@ public:
 	/*
 	 * AbilityKey 를 통해 Ability 의 내부 Data 초기화
 	 */
-	void InitAbilityData(FName AbilityKey);
+	void InitAbilityData(FName InAbilityKey);
+	void InitAbilityData(FName InAbilityKey, FLshPF_AbilityInfoTableRow* AbilityInfo);
 	/*
 	 * AbilityCost 와 실제 값을 비교해 사용 가능여부 반환
 	 */
@@ -46,6 +48,7 @@ public:
 	float GetAbilityCost();
 	ETargetType GetTargetType();
 protected:
+	FName AbilityKey;
 	/*
 	 * Display 등에 사용될 Text
 	 */

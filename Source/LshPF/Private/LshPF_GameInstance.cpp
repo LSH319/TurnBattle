@@ -23,3 +23,15 @@ void ULshPF_GameInstance::SetEnemyCharacterCount(int32 NewEnemyCharacterCount)
 {
 	EnemyCharacterCount = NewEnemyCharacterCount;
 }
+
+TMap<FName, int32> ULshPF_GameInstance::GetItemBoxInfo()
+{
+	SetItemBoxForTest();
+	return ItemBoxInfo;
+}
+
+void ULshPF_GameInstance::SetItemBoxForTest()
+{
+	ItemBoxInfo.Add("Item_001", 3);;
+	ItemBoxInfo.Add("Item_002", 3);;
+}

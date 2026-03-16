@@ -45,6 +45,8 @@ enum class EAttributeType : uint8
 	CurrentAbilityAttack,
 	BaseAbilityDefence,
 	CurrentAbilityDefence,
+	FixedValue,
+	ItemBox,
 	Unknown UMETA(Hidden)
 };
 

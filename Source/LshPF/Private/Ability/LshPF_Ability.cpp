@@ -15,9 +15,23 @@ void ULshPF_Ability::SetOwnerBattleComponent(ULshPF_BattleComponent* OwnerBattle
 	OwnerBattleComponent = OwnerBattleComponentPointer;
 }
 
-void ULshPF_Ability::InitAbilityData(FName AbilityKey)
+void ULshPF_Ability::InitAbilityData(FName InAbilityKey)
 {
-	FLshPF_AbilityInfoTableRow* AbilityInfo = GetBattleGameMode()->GetAbilityInfoByKeyName(AbilityKey);
+	FLshPF_AbilityInfoTableRow* AbilityInfo = GetBattleGameMode()->GetAbilityInfoByKeyName(InAbilityKey);
+	AbilityKey = InAbilityKey;
+	AbilityName = AbilityInfo->AbilityName;
+	DamageRatioAttributeType = AbilityInfo->DamageRatioAttributeType;
+	DamageRatio = AbilityInfo->DamageRatio;
+	TargetAttributeType = AbilityInfo->TargetAttributeType;
+	CostAttributeType = AbilityInfo->CostAttributeType;
+	AbilityCost = AbilityInfo->AbilityCost;
+	TargetType = AbilityInfo->TargetType;
+	AbilityType = AbilityInfo->AbilityType;
+}
+
+void ULshPF_Ability::InitAbilityData(FName InAbilityKey, FLshPF_AbilityInfoTableRow* AbilityInfo)
+{
+	AbilityKey = InAbilityKey;
 	AbilityName = AbilityInfo->AbilityName;
 	DamageRatioAttributeType = AbilityInfo->DamageRatioAttributeType;
 	DamageRatio = AbilityInfo->DamageRatio;
@@ -32,6 +46,10 @@ bool ULshPF_Ability::IsCanActivate()
 {
 	if (OwnerBattleComponent.IsValid())
 	{
+		if (CostAttributeType == EAttributeType::ItemBox)
+		{
+			return AbilityCost > 0;
+		}
 		if (OwnerBattleComponent->GetAttribute(CostAttributeType) >= AbilityCost)
 		{
 			//Attribute 가 Cost 보다 높은경우, True
@@ -47,7 +65,14 @@ void ULshPF_Ability::CommitAbility()
 	if (IsCanActivate())
 	{//IsCanActivate 에서 true 인 경우는 OwnerBattleComponent 의 Valid 체크도 통과한 경우
 		//Attribute 를 Cost 만큼 감소
-		OwnerBattleComponent->SetAttribute(CostAttributeType, OwnerBattleComponent->GetAttribute(CostAttributeType) - AbilityCost);
+		if (CostAttributeType == EAttributeType::ItemBox)
+		{
+			AbilityCost--;
+		}
+		else
+		{
+			OwnerBattleComponent->SetAttribute(CostAttributeType, OwnerBattleComponent->GetAttribute(CostAttributeType) - AbilityCost);
+		}
 		ActivateAbility();
 	}
 }
@@ -99,6 +124,12 @@ FString ULshPF_Ability::GetDescription()
 		break;
 	}
 
+	if (CostAttributeType == EAttributeType::ItemBox)
+	{
+		Description = Description + FString::Printf(TEXT("%d"), FMath::TruncToInt(DamageRatio));
+		return Description;
+	}
+	
 	Description = Description + FString::Printf(TEXT("[%.0f%% of "), DamageRatio * 100);
 	Description.Append(EAttributeTypeToString(DamageRatioAttributeType) + "]");
 	

@@ -10,7 +10,15 @@
 FBattleAttributeModifier ULshPF_BattleComponent::CreateBattleAttributeModifier(
 	EAttributeType TargetAttributeType, EAttributeType BaseAttributeType, EModifierType ModifierType, float DamageRatio)
 {
-	float ApplyModifyValue = GetAttribute(BaseAttributeType) * DamageRatio;
+	float ApplyModifyValue;
+	if (BaseAttributeType == EAttributeType::FixedValue)
+	{
+		ApplyModifyValue = DamageRatio;
+	}
+	else
+	{
+		ApplyModifyValue = GetAttribute(BaseAttributeType) * DamageRatio;
+	}
 	
 	return FBattleAttributeModifier(ApplyModifyValue, TargetAttributeType, ModifierType);
 }

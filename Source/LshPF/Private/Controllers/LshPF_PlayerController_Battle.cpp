@@ -6,7 +6,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "LshPF_FunctionLibrary.h"
+#include "LshPF_GameInstance.h"
 #include "LshPF_GameplayTags.h"
+#include "Ability/LshPF_Ability.h"
 #include "Component/LshPF_BattleComponent.h"
 #include "Data/InputActionGameplayTagInfo.h"
 #include "GameModes/LshPF_BattleGameMode.h"
@@ -37,7 +39,8 @@ void ALshPF_PlayerController_Battle::ExecuteInputActionByGameplayTag(const FGame
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_OpenItem))
         {
-        	AddWidgetToScreenByTag(LshPF_GameplayTags::LshPF_WidgetStack_GameHud, LshPF_GameplayTags::LshPF_Widget_Item);
+        	ToggleTargetingAllTargets(false);
+        	AddItemScreenToScreen();
         }
         else if (TargetGameplayTag.MatchesTagExact(LshPF_GameplayTags::LshPF_InputAction_SelectTarget_Prev))
         {
@@ -197,6 +200,11 @@ FBattleAttributeModifier ALshPF_PlayerController_Battle::GetTargetModifier()
 void ALshPF_PlayerController_Battle::PlayerCharacterTurnStartEvent()
 {
 	SetBattleSettingDefault(true);
+
+	for (auto Item : ItemBox)
+	{
+		Item.Value->SetOwnerBattleComponent(GetBattleGameMode()->GetRecentOwingTurnCharacter()->GetBattleComponent());
+	}
 }
 
 TArray<ILshPF_BattleInterface*> ALshPF_PlayerController_Battle::GetTargetList()
@@ -233,6 +241,22 @@ void ALshPF_PlayerController_Battle::BeginPlay()
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("AllTarget"), FoundActors);
 	AllTargetViewTarget = FoundActors[0];
+	
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		for (auto ItemInfo :GameInstance->GetItemBoxInfo())
+		{
+			if (ItemBox.Contains(ItemInfo.Key)) continue;
+	
+			ULshPF_Ability* NewAbility = NewObject<ULshPF_Ability>(this);
+			FLshPF_AbilityInfoTableRow* AbilityInfo = ItemData->FindRow<FLshPF_AbilityInfoTableRow>(ItemInfo.Key, FString("AbilityKeyName Is Error"));
+			AbilityInfo->AbilityCost = ItemInfo.Value;
+			
+			NewAbility->InitAbilityData(ItemInfo.Key, AbilityInfo);
+			ItemBox.Add(ItemInfo.Key, NewAbility);
+		}
+	}
 }
 
 void ALshPF_PlayerController_Battle::SetupInputComponent()
@@ -304,6 +328,34 @@ void ALshPF_PlayerController_Battle::AddSkillScreenToScreen()
 			SkillScreen->SetOwningPlayer(this);
 			AddOnTurnEndRemoveWidget(SkillScreen);
 			if (UWidget* WidgetToFocus = SkillScreen->GetDesiredFocusTarget())
+			{
+				WidgetToFocus->SetFocus();
+			}
+			IsEnableInput = true;
+		});
+}
+
+void ALshPF_PlayerController_Battle::AddItemScreenToScreen()
+{
+	IsEnableInput = false;
+	ULshPF_UISubsystem* UISubsystem = ULshPF_UISubsystem::Get(GetWorld());
+
+	UISubsystem->PushSoftWidgetToStackAsync(
+		LshPF_GameplayTags::LshPF_WidgetStack_GameHud,
+		ULshPF_FunctionLibrary::GetSoftFocusableWidgetBaseClassByTag(LshPF_GameplayTags::LshPF_Widget_Skill),
+		[this](ULshPF_FocusableWidgetBase* PushedWidget)
+		{
+			TArray<ULshPF_Ability*> ItemList;
+			for (auto Item : ItemBox)
+			{
+				ItemList.Add(Item.Value);
+			}
+			
+			ULshPF_AbilityScreen* ItemScreen = CastChecked<ULshPF_AbilityScreen>(PushedWidget);
+			ItemScreen->InitAbilityList(ItemList);
+			ItemScreen->SetOwningPlayer(this);
+			AddOnTurnEndRemoveWidget(ItemScreen);
+			if (UWidget* WidgetToFocus = ItemScreen->GetDesiredFocusTarget())
 			{
 				WidgetToFocus->SetFocus();
 			}

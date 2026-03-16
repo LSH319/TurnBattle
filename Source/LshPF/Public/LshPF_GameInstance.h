@@ -21,9 +21,15 @@ public:
 	int32 GetEnemyCharacterCount() const;
 	
 	void SetEnemyCharacterCount(int32 NewEnemyCharacterCount);
+	
+	TMap<FName, int32> GetItemBoxInfo();
 
+protected:
+	void SetItemBoxForTest();
+	
 private:
 	//todo : test 를 위해 설정, 추후 수정필요
 	TArray<FName> PlayerCharacterKeyNames = {"001","002","003","004"};
+	TMap<FName, int32> ItemBoxInfo;
 	int32 EnemyCharacterCount = 4;
 };
