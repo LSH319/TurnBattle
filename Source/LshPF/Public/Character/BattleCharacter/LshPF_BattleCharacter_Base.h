@@ -81,7 +81,8 @@ public:
 	void AddSoftAnimMontageMap(TMap<FGameplayTag, TSoftObjectPtr<UAnimMontage>> MontageMap);
 
 	void SetCharacterOrderPriority(int32 NewCharacterOrderPriority);
-
+	void SetAbilityKeyList(TArray<FName> InAbilityKeyList);
+	
 protected:
 	ALshPF_BattleGameMode* GetBattleGameMode();
 	
@@ -142,6 +143,8 @@ protected:
 	bool IsMontageReady = false;
 	bool IsBeginPlay = false;
 	bool IsSpawnMontageEnded = false;
+
+	TArray<FName> AbilityKeyList;
 	
 private:
 	UPROPERTY()

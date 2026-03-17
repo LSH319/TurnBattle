@@ -15,21 +15,18 @@ class LSHPF_API ULshPF_GameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	int32 GetAllCharacterCount() const;
-
-	TArray<FName> GetPlayerCharacterKeyNames() const;
+	TMap<FName, TArray<FName>> GetPlayerCharacterInfo();
 	int32 GetEnemyCharacterCount() const;
-	
-	void SetEnemyCharacterCount(int32 NewEnemyCharacterCount);
-	
+	int32 GetAllCharacterCount() const;
 	TMap<FName, int32> GetItemBoxInfo();
 
-protected:
-	void SetItemBoxForTest();
+	void SetPlayerCharacterInfo(TMap<FName, TArray<FName>> InPlayerCharacterInfo);
+	void SetEnemyCharacterCount(int32 NewEnemyCharacterCount);
+	void SetItemInItemBox(FName ItemKey, int32 ItemCount);
 	
 private:
 	//todo : test 를 위해 설정, 추후 수정필요
-	TArray<FName> PlayerCharacterKeyNames = {"001","002","003","004"};
+	TMap<FName, TArray<FName>> PlayerCharacterInfo;
 	TMap<FName, int32> ItemBoxInfo;
 	int32 EnemyCharacterCount = 4;
 };

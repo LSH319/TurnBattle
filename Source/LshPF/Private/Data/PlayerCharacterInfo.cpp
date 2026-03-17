@@ -12,3 +12,8 @@ int16 UPlayerCharacterInfo::GetCharacterOrderPriorityByKeyName(FName EnemyKeyNam
 {
 	return PlayerCharacterClassInfoMap.FindChecked(EnemyKeyName).CharacterOrderPriority;
 }
+
+FText UPlayerCharacterInfo::GetCharacterNameByKeyName(FName EnemyKeyName)
+{
+	return PlayerCharacterClassInfoMap.FindChecked(EnemyKeyName).CharacterName;
+}

@@ -62,6 +62,11 @@ void ALshPF_BattleCharacter_Base::PostInitializeComponents()
 
 	//Current 값을 Base 값과 동기화
 	LshPF_BattleComponent->SetAllCurrentAttributeToBaseAttribute();
+
+	for (auto AbilityKey : AbilityKeyList)
+	{
+		LshPF_BattleComponent->GrantAbility(AbilityKey);
+	}
 }
 
 void ALshPF_BattleCharacter_Base::BeginPlay()
@@ -69,7 +74,7 @@ void ALshPF_BattleCharacter_Base::BeginPlay()
 	IsBeginPlay = true;
 	DefaultRotator = GetActorRotation();
 	Super::BeginPlay();
-
+	
 	if (IsCharacterReady())
 	{
 		//캐릭터의 준비 완료 시 GM 으로 전송
@@ -240,6 +245,11 @@ void ALshPF_BattleCharacter_Base::AddSoftAnimMontageMap(TMap<FGameplayTag, TSoft
 void ALshPF_BattleCharacter_Base::SetCharacterOrderPriority(int32 NewCharacterOrderPriority)
 {
 	CharacterOrderPriority = NewCharacterOrderPriority;
+}
+
+void ALshPF_BattleCharacter_Base::SetAbilityKeyList(TArray<FName> InAbilityKeyList)
+{
+	AbilityKeyList = InAbilityKeyList;
 }
 
 int32 ALshPF_BattleCharacter_Base::GetCharacterOrderPriority() const

@@ -18,6 +18,9 @@ struct FPlayerBattleCharacterInfo
 	
 	UPROPERTY(EditDefaultsOnly)
 	int16 CharacterOrderPriority = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	FText CharacterName = FText::FromString(TEXT(""));
 };
 
 /**
@@ -31,8 +34,8 @@ class LSHPF_API UPlayerCharacterInfo : public UDataAsset
 public:
 	TSoftClassPtr<ALshPF_PlayerBattleCharacter> GetPlayerCharacterClassByKeyName(FName EnemyKeyName);
 	int16 GetCharacterOrderPriorityByKeyName(FName EnemyKeyName);
+	FText GetCharacterNameByKeyName(FName EnemyKeyName);
 	
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FName, FPlayerBattleCharacterInfo> PlayerCharacterClassInfoMap;
-	//TMap<FName, TSoftClassPtr<ALshPF_PlayerBattleCharacter>> PlayerCharacterClassInfoMap;
 };

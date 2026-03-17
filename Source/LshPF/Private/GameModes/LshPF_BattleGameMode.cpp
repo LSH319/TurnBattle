@@ -21,7 +21,7 @@
 void ALshPF_BattleGameMode::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
+	
 	//Status UI 준비 완료시 CallBack 등록
 	StatusUIReady.AddDynamic(this, &ThisClass::StatusUIReadyCallBack);
 
@@ -242,7 +242,7 @@ bool ALshPF_BattleGameMode::IsGameReady() const
 	if (
 		/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
 		GameInstance->GetAllCharacterCount() == TurnTable.Num() &&*/
-		GameInstance->GetPlayerCharacterKeyNames().Num() + TestEnemyCount == TurnTable.Num() &&
+		GameInstance->GetPlayerCharacterInfo().Num() + TestEnemyCount == TurnTable.Num() &&
 		!IsTurnGranted &&
 		IsUIReady)
 	{
@@ -334,8 +334,8 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 	FVector SpawnPoint = FoundPoints[0]->GetActorLocation();
 	
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
-	TArray<FName> PlayerCharacterKeyNames = GameInstance->GetPlayerCharacterKeyNames();
-	int32 PlayerCharacterCount = PlayerCharacterKeyNames.Num();
+	TMap<FName, TArray<FName>> CharacterInfo = GameInstance->GetPlayerCharacterInfo();
+	int32 PlayerCharacterCount = CharacterInfo.Num();
 	
 	//Spawn 시 시작지점 계산
 	SpawnPoint.Y = SpawnPoint.Y - (CharacterInterval * (PlayerCharacterCount/2));
@@ -345,26 +345,28 @@ void ALshPF_BattleGameMode::SpawnPlayerCharacters()
 	}
 
 	//Count 숫자만큼 Spawn 실행
-	for (FName PlayerCharacterKeyName : PlayerCharacterKeyNames)
+	for (auto Info : CharacterInfo)
 	{
 		FTransform PlayerTransform;
 		PlayerTransform.SetLocation(SpawnPoint);
 		PlayerTransform.SetRotation(PlayerSpawnQuat);
 
 		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
-			PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(PlayerCharacterKeyName).ToSoftObjectPath(),
+			PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(Info.Key).ToSoftObjectPath(),
 		FStreamableDelegate::CreateLambda(
-			[this, PlayerCharacterKeyName, PlayerTransform]
+			[this, Info, PlayerTransform]
 			{
 				ALshPF_BattleCharacter_Base* SpawnedActor = GetWorld()->SpawnActorDeferred<ALshPF_BattleCharacter_Base>(
-					PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(PlayerCharacterKeyName).Get(),
+					PlayerCharacterInfo->GetPlayerCharacterClassByKeyName(Info.Key).Get(),
 					PlayerTransform
 				);
 				
 				//FinishSpawning 전 필요한 값 설정
-				SpawnedActor->SetCharacterKey(PlayerCharacterKeyName);
+				SpawnedActor->SetCharacterKey(Info.Key);
+				SpawnedActor->SetAbilityKeyList(Info.Value);
+				SpawnedActor->SetCharacterOrderPriority(PlayerCharacterInfo->GetCharacterOrderPriorityByKeyName(Info.Key));
+				SpawnedActor->GetBattleComponent()->SetCharacterName(PlayerCharacterInfo->GetCharacterNameByKeyName(Info.Key));
 				SpawnedActor->FinishSpawning(PlayerTransform);
-				SpawnedActor->SetCharacterOrderPriority(PlayerCharacterInfo->GetCharacterOrderPriorityByKeyName(PlayerCharacterKeyName));
 			})
 		);
 		

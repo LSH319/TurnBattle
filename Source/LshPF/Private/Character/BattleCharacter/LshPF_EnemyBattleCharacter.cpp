@@ -82,7 +82,7 @@ void ALshPF_EnemyBattleCharacter::SetRandomTargetInTargetList()
 	TargetList.Empty();
 	
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
-	int TargetIndex = FMath::RandRange(0, GameInstance->GetPlayerCharacterKeyNames().Num() - 1);
+	int TargetIndex = FMath::RandRange(0, GameInstance->GetPlayerCharacterInfo().Num() - 1);
 	
 	TargetList.Add(GetBattleGameMode()->GetPlayerCharacterByIndex(TargetIndex));
 }
