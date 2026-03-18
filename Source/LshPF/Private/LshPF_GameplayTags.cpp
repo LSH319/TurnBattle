@@ -20,6 +20,8 @@ namespace LshPF_GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_TargetSelect, "LshPF.Widget.TargetSelect");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_CharacterInfo, "LshPF.Widget.CharacterInfo");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_PauseGame, "LshPF.Widget.PauseGame");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_CharacterSetting, "LshPF.Widget.CharacterSetting");
+	UE_DEFINE_GAMEPLAY_TAG(LshPF_Widget_BattleSetting, "LshPF.Widget.BattleSetting");
 	
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_MainMenu, "LshPF.Level.MainMenu");
 	UE_DEFINE_GAMEPLAY_TAG(LshPF_Level_Battle, "LshPF.Level.Battle");

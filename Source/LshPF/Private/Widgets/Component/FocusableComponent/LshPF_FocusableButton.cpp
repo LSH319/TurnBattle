@@ -41,6 +41,11 @@ void ULshPF_FocusableButton::SetButtonText(FText Text)
 	ButtonText->SetText(Text);
 }
 
+ULshPF_Button* ULshPF_FocusableButton::GetButton()
+{
+	return ButtonWidget;
+}
+
 void ULshPF_FocusableButton::NativePreConstruct()
 {
 	Super::NativePreConstruct();

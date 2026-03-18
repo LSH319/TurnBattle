@@ -41,7 +41,11 @@ void ULshPF_ActionBar::NativeConstruct()
 	SetVisibility(ESlateVisibility::Hidden);
 	
 	bool IsSuccess = CreateActionBarEntry();
-	if (!IsSuccess)
+	if (IsSuccess)
+	{
+		SetVisibility(ESlateVisibility::Visible);
+	}
+	else
 	{
 		GetWorld()->GetTimerManager().SetTimer(
         	TimerHandle,

@@ -8,6 +8,26 @@ int32 ULshPF_GameInstance::GetAllCharacterCount() const
 	return PlayerCharacterInfo.Num() + EnemyCharacterCount;
 }
 
+int32 ULshPF_GameInstance::BP_GetEnemyCharacterCount() const
+{
+	return GetEnemyCharacterCount();
+}
+
+TMap<FName, int32> ULshPF_GameInstance::BP_GetItemBoxInfo() const
+{
+	return GetItemBoxInfo();
+}
+
+void ULshPF_GameInstance::BP_SetEnemyCharacterCount(int32 NewEnemyCharacterCount)
+{
+	SetEnemyCharacterCount(NewEnemyCharacterCount);
+}
+
+void ULshPF_GameInstance::BP_SetItemInItemBox(FName ItemKey, int32 ItemCount)
+{
+	SetItemInItemBox(ItemKey, ItemCount);
+}
+
 TMap<FName, TArray<FName>> ULshPF_GameInstance::GetPlayerCharacterInfo()
 {
 	//todo : 테스트용, 삭제 필요 삭제 후 const
@@ -24,7 +44,6 @@ int32 ULshPF_GameInstance::GetEnemyCharacterCount() const
 	return EnemyCharacterCount;
 }
 
-
 void ULshPF_GameInstance::SetEnemyCharacterCount(int32 NewEnemyCharacterCount)
 {
 	EnemyCharacterCount = NewEnemyCharacterCount;
@@ -35,11 +54,8 @@ void ULshPF_GameInstance::SetItemInItemBox(FName ItemKey, int32 ItemCount)
 	ItemBoxInfo.Add(ItemKey, ItemCount);
 }
 
-TMap<FName, int32> ULshPF_GameInstance::GetItemBoxInfo()
+TMap<FName, int32> ULshPF_GameInstance::GetItemBoxInfo() const
 {
-	//todo : 테스트용, 삭제 필요 삭제 후 const
-	ItemBoxInfo.Add("Item_001", 3);
-	ItemBoxInfo.Add("Item_002", 3);
 	return ItemBoxInfo;
 }
 

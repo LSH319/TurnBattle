@@ -29,6 +29,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText Text);
+
+	ULshPF_Button* GetButton();
 	
 private:
 	//~ Begin UUserWidget Interface

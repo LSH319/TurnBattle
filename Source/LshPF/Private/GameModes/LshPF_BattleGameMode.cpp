@@ -240,9 +240,7 @@ bool ALshPF_BattleGameMode::IsGameReady() const
 {
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
 	if (
-		/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
-		GameInstance->GetAllCharacterCount() == TurnTable.Num() &&*/
-		GameInstance->GetPlayerCharacterInfo().Num() + TestEnemyCount == TurnTable.Num() &&
+		GameInstance->GetPlayerCharacterInfo().Num() + GameInstance->GetEnemyCharacterCount() == TurnTable.Num() &&
 		!IsTurnGranted &&
 		IsUIReady)
 	{
@@ -267,11 +265,9 @@ void ALshPF_BattleGameMode::SpawnEnemies()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), EnemySpawnPointActorTag, FoundPoints);
 	checkf(!FoundPoints.IsEmpty(), TEXT("EnemySpawnPointActorTag Is Error"));
 	FVector SpawnPoint = FoundPoints[0]->GetActorLocation();
-
-	/*todo : 테스트용 TestEnemyCount 사용중, 테스트 후 변경
+	
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
-	int32 EnemyCount = GameInstance->GetEnemyCharacterCount();*/
-	int32 EnemyCount = TestEnemyCount;
+	int32 EnemyCount = GameInstance->GetEnemyCharacterCount();
 
 	//Enemy Spawn 시 시작지점 계산
 	SpawnPoint.Y = SpawnPoint.Y - (CharacterInterval * (EnemyCount/2));

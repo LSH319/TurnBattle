@@ -349,7 +349,10 @@ void ALshPF_PlayerController_Battle::AddItemScreenToScreen()
 			TArray<ULshPF_Ability*> ItemList;
 			for (auto Item : ItemBox)
 			{
-				ItemList.Add(Item.Value);
+				if (Item.Value->GetAbilityCost() > 0)
+				{
+					ItemList.Add(Item.Value);
+				}
 			}
 			
 			ULshPF_AbilityScreen* ItemScreen = CastChecked<ULshPF_AbilityScreen>(PushedWidget);

@@ -102,10 +102,6 @@ protected:
 	bool IsGameReady() const;
 	
 	void GrantTurn();
-
-	//todo : 테스트용, 삭제 후 game instance 값으로 사용할것
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 TestEnemyCount = 3;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float TurnStartTP = 100.f;

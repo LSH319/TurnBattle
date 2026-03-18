@@ -18,6 +18,11 @@ UButton* ULshPF_NotFocusableButton::GetButton()
 	return ButtonWidget;
 }
 
+UImage* ULshPF_NotFocusableButton::GetButtonImage()
+{
+	return ButtonImage;
+}
+
 void ULshPF_NotFocusableButton::SetButtonText(FText Text)
 {
 	ButtonText->SetText(Text);

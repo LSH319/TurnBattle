@@ -19,7 +19,6 @@ public:
 	
 	//~ Begin ACharacter Interface
 	virtual void PostInitializeComponents() override;
-	virtual void BeginPlay() override;
 	//~ End ACharacter Interface
 
 	//~ Begin LshPF_BattleInterface Interface
