@@ -27,7 +27,7 @@ void ULshPF_FocusableCheckBox::WidgetBackAction()
 {
 	ULshPF_FocusableWidgetBase* ParentWidget = GetTypedOuter<ULshPF_FocusableWidgetBase>();
 	if (ParentWidget)
-	{
+	{//부모로 포커스 변경 및 처리
 		ParentWidget->SetFocus();
 		ParentWidget->SetDesiredFocusTargetSelf();
 	}

@@ -26,6 +26,7 @@ void ULshPF_CharacterCheckList::NativeOnRemovedFromFocusPath(const FFocusEvent& 
 
 void ULshPF_CharacterCheckList::WidgetConfirmAction()
 {
+	//내부 체크박스 위젯으로 포커스 이동
 	IsCharacterUse->SetFocus();
 }
 
@@ -48,7 +49,7 @@ void ULshPF_CharacterCheckList::SetTargetCharacter(FName CharacterKey, FPlayerBa
 		TArray<FName> AbilityKeys = AbilityData->GetRowNames();
         
 		for (FName AbilityKey : AbilityKeys)
-		{
+		{//DT 의 RowNames 에 따라 위젯 생성
 			ULshPF_FocusableCheckBox* CheckBox = DynamicEntryBox_SkillSetting->CreateEntry<ULshPF_FocusableCheckBox>();
 			FLshPF_AbilityInfoTableRow* FindRow = AbilityData->FindRow<FLshPF_AbilityInfoTableRow>(AbilityKey, FString("AbilityKeyName Is Error"));
 			CheckBox->InitCheckBox(FindRow);
@@ -73,16 +74,16 @@ TTuple<FName, TArray<FName>> ULshPF_CharacterCheckList::GetTargetCharacterInfo()
 	TArray<UUserWidget*> AbilityCheckers = DynamicEntryBox_SkillSetting->GetAllEntries();
 
 	for (UUserWidget* AbilityChecker : AbilityCheckers)
-	{
+	{//각 스킬 사용 여부에 따른 위젯들
 		if (ULshPF_FocusableCheckBox* CheckBox = Cast<ULshPF_FocusableCheckBox>(AbilityChecker))
-		{
+		{//Cast 해여 확인
 			if (CheckBox->IsChecked())
-			{
+			{//사용으로 설정되어 있을경우 배열에 추가
 				AbilityKeys.Add(CheckBox->GetCheckBoxKey());
 			}
 		}
 	}
-	
+	//취합된 배열로 Value 설정 후 반환
 	Result.Value = AbilityKeys;
 	return Result;
 }
@@ -102,7 +103,7 @@ void ULshPF_CharacterCheckList::NativeConstruct()
 	Super::NativeConstruct();
 
 	IsCharacterUse->ChangedDelegate.BindLambda([this](bool IsChecked)
-	{
+	{//캐릭터를 사용하지 않을 경우 DynamicEntryBox 설정을 변경하여 체크하지 못하도록 설정
 		if (IsChecked)
 		{
 			DynamicEntryBox_SkillSetting->SetVisibility(ESlateVisibility::Visible);
@@ -127,12 +128,12 @@ bool ULshPF_CharacterCheckList::AbilityIsUseInInstance(FName InAbilityKey)
 	TMap<FName, TArray<FName>> CharacterInfo = GameInstance->GetPlayerCharacterInfo();
 
 	if (CharacterInfo.Contains(TargetCharacterKey))
-	{
+	{//관리하는 캐릭터가 사용 캐릭터에 포함되어있는지 확인
 		for (FName UseAbilityKey : CharacterInfo[TargetCharacterKey])
-		{
-			if (UseAbilityKey == InAbilityKey) return true;
+		{//사용할 경우 InAbilityKey 를 사용하는지 체크
+			if (UseAbilityKey == InAbilityKey) return true;//사용할 경우 true
 		}
 	}
-	
+	//캐릭터 미사용 || 해당 어빌리티 미사용시 false
 	return false;
 }

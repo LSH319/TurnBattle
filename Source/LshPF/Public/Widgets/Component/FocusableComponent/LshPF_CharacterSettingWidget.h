@@ -18,6 +18,10 @@ class LSHPF_API ULshPF_CharacterSettingWidget : public ULshPF_FocusableWidgetBas
 	GENERATED_BODY()
 
 public:
+	/*
+	 * 내부 위젯들의 데이터를 취합해 GameInatance 의 PlayerCharacterInfo 를 설정
+	 * return : 사용 캐릭터가 Empty 일 경우 False
+	 */
 	UFUNCTION(BlueprintCallable)
 	bool SetPlayerCharacterInfoInInstance();
 	

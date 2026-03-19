@@ -25,7 +25,7 @@ public:
 	void BP_SetItemInItemBox(FName ItemKey, int32 ItemCount);
 	
 	int32 GetAllCharacterCount() const;
-	TMap<FName, TArray<FName>> GetPlayerCharacterInfo();
+	TMap<FName, TArray<FName>> GetPlayerCharacterInfo() const;
 	int32 GetEnemyCharacterCount() const;
 	TMap<FName, int32> GetItemBoxInfo() const;
 
@@ -34,7 +34,6 @@ public:
 	void SetItemInItemBox(FName ItemKey, int32 ItemCount);
 	
 private:
-	//todo : test 를 위해 설정, 추후 수정필요
 	TMap<FName, TArray<FName>> PlayerCharacterInfo;
 	TMap<FName, int32> ItemBoxInfo;
 	int32 EnemyCharacterCount = 4;

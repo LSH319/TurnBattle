@@ -15,11 +15,12 @@ bool ULshPF_CharacterSettingWidget::SetPlayerCharacterInfoInInstance()
 	
 	TArray<UUserWidget*> CharacterSettings = DynamicEntryBox_CharacterSetting->GetAllEntries();
 	for (auto CharacterSetting : CharacterSettings)
-	{
+	{// 각 위젯은 캐릭터 1개의 사용여부, 부여할 Ability 정보를 소유
 		if (ULshPF_CharacterCheckList* CheckList = Cast<ULshPF_CharacterCheckList>(CharacterSetting))
 		{
-			if (CheckList->IsTargetCharacterUse())
+			if (CheckList->IsTargetCharacterUse())//캐릭터를 사용할 경우
 			{
+				//해당 위젯의 데이터를 받아 저장
 				PlayerCharacterInfo.Add(CheckList->GetTargetCharacterInfo());
 			}
 		}
@@ -28,6 +29,7 @@ bool ULshPF_CharacterSettingWidget::SetPlayerCharacterInfoInInstance()
 	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
 	GameInstance->SetPlayerCharacterInfo(PlayerCharacterInfo);
 
+	//사용 캐릭터가 없을경우 False 반환
 	return !PlayerCharacterInfo.IsEmpty();
 }
 
@@ -39,7 +41,7 @@ void ULshPF_CharacterSettingWidget::NativeConstruct()
 	if (CharacterInfo)
 	{
 		for (auto Info : CharacterInfo->PlayerCharacterClassInfoMap)
-		{
+		{//DA 의 캐릭터 데이터를 받아 위젯 생성
 			ULshPF_CharacterCheckList* CharacterCheckList = DynamicEntryBox_CharacterSetting->CreateEntry<ULshPF_CharacterCheckList>();
 			CharacterCheckList->SetTargetCharacter(Info.Key, Info.Value);
 			CharacterCheckList->SetIsCharacterUse(GameInstance->GetPlayerCharacterInfo().Contains(Info.Key));

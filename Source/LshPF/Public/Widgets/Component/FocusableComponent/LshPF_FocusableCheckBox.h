@@ -28,9 +28,18 @@ public:
 	virtual void WidgetConfirmAction() override;
 	virtual void WidgetBackAction() override;
 	//~ End ULshPF_FocusableWidgetBase Interface
-	
+
+	/*
+	 * Table Row 를 받아 위젯 초기화
+	 */
 	void InitCheckBox(FLshPF_AbilityInfoTableRow* TargetRow);
+	/*
+	 * 체크 박스가 가르키는 목표 Key
+	 */
 	void SetCheckBoxKey(FName NewCheckBoxKey);
+	/*
+	 * 체크박스 체크 여부 설정
+	 */
 	void SetIsCheck(bool InIsCheck);
 
 	UPROPERTY(EditDefaultsOnly)
@@ -41,6 +50,9 @@ public:
 	bool IsChecked() const;
 	FName GetCheckBoxKey() const;
 
+	/*
+	 * Check 여부 변경시 사용할 Delegate
+	 */
 	IsChangedDelegate ChangedDelegate;
 protected:
 	//~ Begin UUserWidget Interface
@@ -51,6 +63,9 @@ private:
 	bool IsCheck = false;
 	FName CheckBoxKey;
 
+	/*
+	 * 체크박스 상호작용 함수
+	 */
 	UFUNCTION()
 	void OnClickEvent();
 	
