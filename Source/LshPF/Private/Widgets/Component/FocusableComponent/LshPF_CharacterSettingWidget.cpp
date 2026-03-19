@@ -7,6 +7,7 @@
 #include "Components/DynamicEntryBox.h"
 #include "Data/PlayerCharacterInfo.h"
 #include "Widgets/Component/FocusableComponent/LshPF_CharacterCheckList.h"
+#include "Widgets/Component/FocusableComponent/LshPF_FocusableButton.h"
 
 bool ULshPF_CharacterSettingWidget::SetPlayerCharacterInfoInInstance()
 {
@@ -33,14 +34,18 @@ bool ULshPF_CharacterSettingWidget::SetPlayerCharacterInfoInInstance()
 void ULshPF_CharacterSettingWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	
 	if (CharacterInfo)
 	{
 		for (auto Info : CharacterInfo->PlayerCharacterClassInfoMap)
 		{
 			ULshPF_CharacterCheckList* CharacterCheckList = DynamicEntryBox_CharacterSetting->CreateEntry<ULshPF_CharacterCheckList>();
 			CharacterCheckList->SetTargetCharacter(Info.Key, Info.Value);
+			CharacterCheckList->SetIsCharacterUse(GameInstance->GetPlayerCharacterInfo().Contains(Info.Key));
 			BP_BindChildWidgetGetFocus(CharacterCheckList);
 		}
 	}
+
+	BP_BindChildWidgetGetFocus(NextButton);
 }

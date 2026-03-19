@@ -31,6 +31,7 @@ public:
 	
 	void InitCheckBox(FLshPF_AbilityInfoTableRow* TargetRow);
 	void SetCheckBoxKey(FName NewCheckBoxKey);
+	void SetIsCheck(bool InIsCheck);
 
 	UPROPERTY(EditDefaultsOnly)
 	FLinearColor CheckLinearColor;

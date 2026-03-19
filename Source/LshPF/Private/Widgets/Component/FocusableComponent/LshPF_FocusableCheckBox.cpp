@@ -43,6 +43,14 @@ void ULshPF_FocusableCheckBox::SetCheckBoxKey(FName NewCheckBoxKey)
 	CheckBoxKey = NewCheckBoxKey;
 }
 
+void ULshPF_FocusableCheckBox::SetIsCheck(bool InIsCheck)
+{
+	IsCheck = InIsCheck;
+
+	CheckImage->SetColorAndOpacity(IsCheck ? CheckLinearColor : UnCheckLinearColor);
+	ChangedDelegate.ExecuteIfBound(IsCheck);
+}
+
 bool ULshPF_FocusableCheckBox::IsChecked() const
 {
 	return IsCheck;

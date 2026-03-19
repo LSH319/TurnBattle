@@ -3,6 +3,7 @@
 
 #include "Widgets/Component/FocusableComponent/LshPF_CharacterCheckList.h"
 
+#include "LshPF_GameInstance.h"
 #include "Components/DynamicEntryBox.h"
 #include "Components/Image.h"
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableCheckBox.h"
@@ -41,6 +42,21 @@ void ULshPF_CharacterCheckList::SetTargetCharacter(FName CharacterKey, FPlayerBa
 {
 	TargetCharacterKey = CharacterKey;
 	IsCharacterUse->SetButtonText(CharacterInfo.CharacterName);
+
+	if (AbilityData)
+	{
+		TArray<FName> AbilityKeys = AbilityData->GetRowNames();
+        
+		for (FName AbilityKey : AbilityKeys)
+		{
+			ULshPF_FocusableCheckBox* CheckBox = DynamicEntryBox_SkillSetting->CreateEntry<ULshPF_FocusableCheckBox>();
+			FLshPF_AbilityInfoTableRow* FindRow = AbilityData->FindRow<FLshPF_AbilityInfoTableRow>(AbilityKey, FString("AbilityKeyName Is Error"));
+			CheckBox->InitCheckBox(FindRow);
+			CheckBox->SetCheckBoxKey(AbilityKey);
+			CheckBox->SetIsCheck(AbilityIsUseInInstance(AbilityKey));
+			BP_BindChildWidgetGetFocus(CheckBox);
+		}
+	}
 }
 
 ULshPF_FocusableCheckBox* ULshPF_CharacterCheckList::GetIsCharacterUse() const
@@ -76,30 +92,14 @@ bool ULshPF_CharacterCheckList::IsTargetCharacterUse() const
 	return IsCharacterUse->IsChecked();
 }
 
+void ULshPF_CharacterCheckList::SetIsCharacterUse(bool InIsCharacterUse)
+{
+	IsCharacterUse->SetIsCheck(InIsCharacterUse);
+}
+
 void ULshPF_CharacterCheckList::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	DynamicEntryBox_SkillSetting->SetVisibility(ESlateVisibility::Hidden);
-	
-	DesiredFocusTarget = this;
-	BP_BindChildWidgetGetFocus(IsCharacterUse);
-	
-	if (AbilityData)
-	{
-		TArray<FName> AbilityKeys = AbilityData->GetRowNames();
-        
-        for (FName AbilityKey : AbilityKeys)
-        {
-        	ULshPF_FocusableCheckBox* CheckBox = DynamicEntryBox_SkillSetting->CreateEntry<ULshPF_FocusableCheckBox>();
-        	FLshPF_AbilityInfoTableRow* FindRow = AbilityData->FindRow<FLshPF_AbilityInfoTableRow>(AbilityKey, FString("AbilityKeyName Is Error"));
-        	CheckBox->InitCheckBox(FindRow);
-        	CheckBox->SetCheckBoxKey(AbilityKey);
-        	BP_BindChildWidgetGetFocus(CheckBox);
-        }
-	}
-
-	BackgroundImage->SetColorAndOpacity(DefaultBackgroundColor);
 
 	IsCharacterUse->ChangedDelegate.BindLambda([this](bool IsChecked)
 	{
@@ -112,4 +112,27 @@ void ULshPF_CharacterCheckList::NativeConstruct()
 			DynamicEntryBox_SkillSetting->SetVisibility(ESlateVisibility::Hidden);
 		}
 	});
+	
+	DynamicEntryBox_SkillSetting->SetVisibility(ESlateVisibility::Hidden);
+	
+	DesiredFocusTarget = this;
+	BP_BindChildWidgetGetFocus(IsCharacterUse);
+
+	BackgroundImage->SetColorAndOpacity(DefaultBackgroundColor);
+}
+
+bool ULshPF_CharacterCheckList::AbilityIsUseInInstance(FName InAbilityKey)
+{
+	ULshPF_GameInstance* GameInstance = Cast<ULshPF_GameInstance>(GetGameInstance());
+	TMap<FName, TArray<FName>> CharacterInfo = GameInstance->GetPlayerCharacterInfo();
+
+	if (CharacterInfo.Contains(TargetCharacterKey))
+	{
+		for (FName UseAbilityKey : CharacterInfo[TargetCharacterKey])
+		{
+			if (UseAbilityKey == InAbilityKey) return true;
+		}
+	}
+	
+	return false;
 }

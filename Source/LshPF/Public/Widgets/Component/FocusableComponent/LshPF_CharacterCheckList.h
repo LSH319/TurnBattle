@@ -41,10 +41,14 @@ public:
 
 	TTuple<FName, TArray<FName>> GetTargetCharacterInfo();
 	bool IsTargetCharacterUse() const;
+
+	void SetIsCharacterUse(bool InIsCharacterUse);
 	
 protected:
 	virtual void NativeConstruct() override;
 
+	bool AbilityIsUseInInstance(FName InAbilityKey);
+	
 	UPROPERTY(EditDefaultsOnly, Category="AbilityInfo")
 	UDataTable* AbilityData;
 private:

@@ -6,6 +6,7 @@
 #include "Widgets/Component/FocusableComponent/LshPF_FocusableWidgetBase.h"
 #include "LshPF_CharacterSettingWidget.generated.h"
 
+class ULshPF_FocusableButton;
 class UDynamicEntryBox;
 class UPlayerCharacterInfo;
 /**
@@ -31,5 +32,8 @@ protected:
 	//***** Bound Widgets ***** //
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UDynamicEntryBox* DynamicEntryBox_CharacterSetting;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	ULshPF_FocusableButton* NextButton;
 	//***** Bound Widgets ***** //
 };
