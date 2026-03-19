@@ -81,6 +81,8 @@ public:
 	FOnEventDelegate OnConfirmActionDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnEventDelegate OnBackActionDelegate;
+
+	void SetDesiredFocusTargetSelf();
 	
 protected:
 	//~ Begin UUserWidget Interface

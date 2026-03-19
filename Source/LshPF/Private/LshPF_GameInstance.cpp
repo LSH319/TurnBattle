@@ -31,11 +31,11 @@ void ULshPF_GameInstance::BP_SetItemInItemBox(FName ItemKey, int32 ItemCount)
 TMap<FName, TArray<FName>> ULshPF_GameInstance::GetPlayerCharacterInfo()
 {
 	//todo : 테스트용, 삭제 필요 삭제 후 const
-	PlayerCharacterInfo.Add("001", {"001","101"});
+	/*PlayerCharacterInfo.Add("001", {"001","101"});
 	PlayerCharacterInfo.Add("002", {"002","102"});
 	PlayerCharacterInfo.Add("003", {"201","202"});
-	PlayerCharacterInfo.Add("004", {"001","002","101","102","201","202"});
-	
+	PlayerCharacterInfo.Add("004", {"001","002","101","102","201","202"});*/
+
 	return PlayerCharacterInfo;
 }
 

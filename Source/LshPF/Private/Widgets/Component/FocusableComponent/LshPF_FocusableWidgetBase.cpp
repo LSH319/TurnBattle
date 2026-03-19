@@ -131,6 +131,11 @@ void ULshPF_FocusableWidgetBase::SetDesiredFocusTarget(ULshPF_FocusableWidgetBas
 	}
 }
 
+void ULshPF_FocusableWidgetBase::SetDesiredFocusTargetSelf()
+{
+	DesiredFocusTarget = this;
+}
+
 void ULshPF_FocusableWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -161,7 +166,7 @@ FReply ULshPF_FocusableWidgetBase::NativeOnKeyDown(const FGeometry& InGeometry, 
 	if (ConsumeKey.Contains(Key))
 	{
 		//ConsumeKey 에 포함된 키일 경우 Controller 로 전달해 로직 수행
-		ALshPF_PlayerController_Battle* PlayerController = Cast<ALshPF_PlayerController_Battle>(UGameplayStatics::GetPlayerController(this, 0));
+		ALshPF_PlayerControllerBase* PlayerController = Cast<ALshPF_PlayerControllerBase>(UGameplayStatics::GetPlayerController(this, 0));
 		PlayerController->ExecuteInputActionByGameplayTag(ConsumeKey[Key]);
 		return FReply::Handled();
 	}

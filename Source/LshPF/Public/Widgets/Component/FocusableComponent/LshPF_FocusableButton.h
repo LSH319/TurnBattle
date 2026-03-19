@@ -31,19 +31,19 @@ public:
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText Text);
 
 	ULshPF_Button* GetButton();
+protected:
+	//***** Bound Widgets ***** //
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	ULshPF_Button* ButtonWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ButtonText;
+	//***** Bound Widgets ***** //
 	
 private:
 	//~ Begin UUserWidget Interface
 	virtual void NativePreConstruct() override;
 	//~ End UUserWidget Interface
-	
-	//***** Bound Widgets ***** //
-    UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess))
-    ULshPF_Button* ButtonWidget;
-
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ButtonText;
-    //***** Bound Widgets ***** //
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LshPF FocusableButton" ,meta = (AllowPrivateAccess = "true"))
 	FText ButtonDisplayText;

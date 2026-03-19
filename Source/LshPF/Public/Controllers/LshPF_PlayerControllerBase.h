@@ -32,7 +32,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	virtual UInputAction* GetInputActionByGameplayTag(FGameplayTag TargetGameplayTag);
-	
+
 protected:
 	//~ Begin APlayerController Interface
 	virtual void SetupInputComponent() override;
