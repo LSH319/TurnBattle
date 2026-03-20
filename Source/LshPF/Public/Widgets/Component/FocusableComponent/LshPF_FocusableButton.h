@@ -9,6 +9,8 @@
 class UTextBlock;
 class ULshPF_Button;
 
+DECLARE_DELEGATE(FOnActionDelegate);
+
 /**
  * 
  */
@@ -31,6 +33,10 @@ public:
 	void SetButtonText(UPARAM(ref, DisplayName = "ButtonText") FText Text);
 
 	ULshPF_Button* GetButton();
+
+	FOnActionDelegate ConfirmActionDelegate;
+	FOnActionDelegate BackActionDelegate;
+	
 protected:
 	//***** Bound Widgets ***** //
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
