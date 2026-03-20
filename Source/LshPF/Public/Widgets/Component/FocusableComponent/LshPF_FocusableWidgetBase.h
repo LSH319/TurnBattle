@@ -137,8 +137,7 @@ protected:
 	 */
 	UPROPERTY(BlueprintReadOnly)
 	ULshPF_FocusableWidgetBase* DesiredFocusTarget;
-
-private:
+	
 	UFUNCTION()
-	void SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
+	virtual void SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
 };
