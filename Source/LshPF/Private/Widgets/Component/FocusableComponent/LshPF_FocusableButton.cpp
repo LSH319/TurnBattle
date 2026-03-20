@@ -30,12 +30,10 @@ void ULshPF_FocusableButton::NativeOnRemovedFromFocusPath(const FFocusEvent& InF
 void ULshPF_FocusableButton::WidgetConfirmAction()
 {
 	ButtonWidget->OnClicked.Broadcast();
-	ConfirmActionDelegate.ExecuteIfBound();
 }
 
 void ULshPF_FocusableButton::WidgetBackAction()
 {
-	BackActionDelegate.ExecuteIfBound();
 }
 
 void ULshPF_FocusableButton::SetButtonText(FText Text)

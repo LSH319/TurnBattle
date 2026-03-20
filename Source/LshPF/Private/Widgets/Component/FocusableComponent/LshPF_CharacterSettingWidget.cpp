@@ -50,17 +50,4 @@ void ULshPF_CharacterSettingWidget::NativeConstruct()
 	}
 
 	BP_BindChildWidgetGetFocus(NextButton);
-	NextButton->BackActionDelegate.BindLambda([this]()
-	{
-		RemoveFromParentStack();
-	});
-}
-
-void ULshPF_CharacterSettingWidget::SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
-{
-	Super::SetDesiredFocusTarget(InFocusTargetWidget);
-	if (ULshPF_CharacterCheckList* EntryBoxFocusTarget = Cast<ULshPF_CharacterCheckList>(InFocusTargetWidget))
-	{
-		DynamicEntryBoxFocusTarget = EntryBoxFocusTarget;
-	}
 }
