@@ -50,4 +50,8 @@ void ULshPF_CharacterSettingWidget::NativeConstruct()
 	}
 
 	BP_BindChildWidgetGetFocus(NextButton);
+	NextButton->BackActionDelegate.BindLambda([this]()
+	{
+		RemoveFromParentStack();
+	});
 }
