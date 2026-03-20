@@ -55,3 +55,12 @@ void ULshPF_CharacterSettingWidget::NativeConstruct()
 		RemoveFromParentStack();
 	});
 }
+
+void ULshPF_CharacterSettingWidget::SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget)
+{
+	Super::SetDesiredFocusTarget(InFocusTargetWidget);
+	if (ULshPF_CharacterCheckList* BoxFocusTarget = Cast<ULshPF_CharacterCheckList>(InFocusTargetWidget))
+	{
+		DynamicEntryBoxFocusTarget = BoxFocusTarget;
+	}
+}

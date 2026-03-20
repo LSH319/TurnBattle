@@ -29,10 +29,15 @@ protected:
 	//~ Begin UUserWidget Interface
 	virtual void NativeConstruct() override;
 	//~ End UUserWidget Interface
+
+	virtual void SetDesiredFocusTarget(ULshPF_FocusableWidgetBase* InFocusTargetWidget);
 	
 	UPROPERTY(EditDefaultsOnly)
 	UPlayerCharacterInfo* CharacterInfo;
 
+	UPROPERTY(BlueprintReadOnly)
+	ULshPF_FocusableWidgetBase* DynamicEntryBoxFocusTarget;
+	
 	//***** Bound Widgets ***** //
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UDynamicEntryBox* DynamicEntryBox_CharacterSetting;
