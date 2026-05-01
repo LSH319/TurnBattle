@@ -5,6 +5,19 @@
 
 [![Video Label](http://img.youtube.com/vi/WryUAEmEzMU/0.jpg)](https://youtu.be/WryUAEmEzMU)
 [![YouTube](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=WryUAEmEzMU)
+
+---
+맵 변경 시연
+
+[![Video Label](http://img.youtube.com/vi/5zeT_xj88tU/0.jpg)](https://youtu.be/5zeT_xj88tU)
+[![YouTube](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=5zeT_xj88tU)
+
+### 맵 변경 시 수정사항
+1. 게임모드 변경
+2. Player, Enemy 스폰 지점 세팅
+3. 카메라 세팅
+4. 프로젝트 세팅에서 사용하는 맵 변경
+
 ---
 ## 프로젝트 개요
 
