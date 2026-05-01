@@ -1,13 +1,13 @@
 # Turn Based Battle System
 > Unreal Engine 5로 구현한 턴제 전투 시스템 포트폴리오
 
-데모 영상
+## 데모 영상
 
 [![Video Label](http://img.youtube.com/vi/WryUAEmEzMU/0.jpg)](https://youtu.be/WryUAEmEzMU)
 [![YouTube](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=WryUAEmEzMU)
 
 ---
-맵 변경 시연
+## 맵 변경 시연
 
 [![Video Label](http://img.youtube.com/vi/5zeT_xj88tU/0.jpg)](https://youtu.be/5zeT_xj88tU)
 [![YouTube](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=5zeT_xj88tU)
